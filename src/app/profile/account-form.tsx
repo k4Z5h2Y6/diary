@@ -1,11 +1,11 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import { Database } from "../../consts/database.types";
 import {
   User,
   createClientComponentClient,
 } from "@supabase/auth-helpers-nextjs";
-import Avatar from "./avatar";
+import { Database } from "@/consts/database.types";
+// import Avatar from "./avatar";
 
 export default function AccountForm({ user }: { user: User | null }) {
   const supabase = createClientComponentClient<Database>();
@@ -79,7 +79,7 @@ export default function AccountForm({ user }: { user: User | null }) {
   return (
     <div className="form-widget">
       {/* Add to the body */}
-      <Avatar
+      {/* <Avatar
         uid={user!.id}
         url={avatar_url}
         size={150}
@@ -87,7 +87,7 @@ export default function AccountForm({ user }: { user: User | null }) {
           setAvatarUrl(url);
           updateProfile({ fullname, username, website, avatar_url: url });
         }}
-      />
+      /> */}
       {/* ... */}
       <div>
         <label htmlFor="email">Email</label>

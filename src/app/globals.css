@@ -8,6 +8,14 @@ html {
   background-color: var(--lightGrey);
 }
 
+a {
+  text-decoration: none;
+}
+
+p {
+  margin: 0;
+}
+
 /* layout.tsx */
 
 .supabaseListenerO {

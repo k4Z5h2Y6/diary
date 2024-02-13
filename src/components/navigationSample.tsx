@@ -5,12 +5,9 @@ import { usePathname, useRouter } from "next/navigation";
 import ModalCore from "./modalCore";
 import { ModalType } from "./modalType";
 
-const Navigation = ({ session }: { session: Session | null }) => {
+const NavigationSample = ({ session }: { session: Session | null }) => {
   const pathname = usePathname();
   const router = useRouter();
-  // if (session === null && pathname?.includes("/profile")) {
-  //   router.push("/");
-  // }
   if (session === null) {
     router.push("/login");
   }
@@ -58,4 +55,6 @@ const Navigation = ({ session }: { session: Session | null }) => {
   );
 };
 
-export default Navigation;
+export default NavigationSample;
+
+

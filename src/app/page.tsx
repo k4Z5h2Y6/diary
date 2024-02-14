@@ -1,4 +1,4 @@
-import SleepOnsetButton from "@/components/sleepOnsetButton";
+import { LatestSleepsListener } from "@/components/latestSleepsListener";
 import { Database } from "@/consts/database.types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
@@ -10,14 +10,10 @@ export default async function Home() {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  
 
   return (
     <>
-      <SleepOnsetButton user={user} />
-      <div>
-        <button>起床</button>
-      </div>
+      <LatestSleepsListener user={user} />
     </>
   );
 }

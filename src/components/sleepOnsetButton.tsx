@@ -3,9 +3,15 @@ import { SleepsType } from "@/consts/database.types";
 import { User, createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { time } from "console";
 import { string } from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function SleepOnsetButton({ user }: { user: User | null }) {
+export default function SleepOnsetButton({ 
+  user,
+  isSleeping,
+}: { 
+  user: User | null
+  isSleeping: boolean
+}) {
 
   const supabase = createClientComponentClient<SleepsType>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -34,7 +40,7 @@ export default function SleepOnsetButton({ user }: { user: User | null }) {
   return (
     <>
       <div>
-        <button onClick={() => createSleepOnset()}>入眠</button>
+        <button disabled={isSleeping} onClick={() => createSleepOnset()}>入眠</button>
       </div>
     </>
   );

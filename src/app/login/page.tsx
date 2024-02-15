@@ -30,13 +30,8 @@ export default function Login() {
           </Link>
         </div>
         <div>
-          <button>サインイン</button>
+          <button>ログイン</button>
         </div>
-      </form>
-      <form action="/auth/signout" method="post">
-        <button className="button block" type="submit">
-          Sign out
-        </button>
       </form>
     </>
   );

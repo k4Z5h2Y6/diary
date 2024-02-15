@@ -1,3 +1,11 @@
 export default function Setting() {
-  return <div>設定</div>
+  return (
+    <>
+      <form action="/auth/signout" method="post">
+        <button className="button block" type="submit">
+          ログアウト
+        </button>
+      </form>
+    </>
+  );
 }

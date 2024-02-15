@@ -76,6 +76,14 @@ export interface SleepsType {
           sleep_onset_at?: string | null
           wake_up_at?: string | null
         }
+        Delete: {
+          id: number
+          user_id: string | null
+          created_at?: string | null
+          update_at?: string | null
+          sleep_onset_at?: string | null
+          wake_up_at?: string | null
+        }
       }
     }
     Views: {

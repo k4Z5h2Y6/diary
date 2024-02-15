@@ -7,6 +7,7 @@ import SleepOnsetButton from "./sleepOnsetButton";
 import { SleepsType } from "@/consts/database.types";
 import { useEffect, useState } from "react";
 import WakeUpButton from "./wakeUpButton";
+import { readLatestSleep } from "@/hooks/sleeps";
 
 export const LatestSleepsListener = ({ user }: { user: User | null }) => {
   const supabase = createClientComponentClient<SleepsType>();
@@ -25,7 +26,7 @@ export const LatestSleepsListener = ({ user }: { user: User | null }) => {
         },
         (payload) => {
           // 変更後のデータに対しての処理を記載
-          fetchLatestSleep();
+          readLatestSleep(setIsSleeping);
         }
       )
       .subscribe();
@@ -36,27 +37,8 @@ export const LatestSleepsListener = ({ user }: { user: User | null }) => {
     };
   }, []); // 最初のマウント時にのみ実行
 
-  async function fetchLatestSleep() {
-    // "sleeps" テーブルから作成日が最新の行を取得するクエリを定義します
-    const { data, error } = await supabase
-      .from("sleeps")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(1);
-    if (error) {
-      console.error("Error fetching data:", error.message);
-      return;
-    }
-
-    if (data[0].sleep_onset_at !== null && data[0].wake_up_at === null) {
-      setIsSleeping(true);
-    } else {
-      setIsSleeping(false);
-    }
-  }
-
   useEffect(() => {
-    fetchLatestSleep();
+    readLatestSleep(setIsSleeping);
   }, []);
 
   return (
@@ -66,3 +48,4 @@ export const LatestSleepsListener = ({ user }: { user: User | null }) => {
     </>
   );
 };
+

@@ -11,6 +11,11 @@ export default async function Home() {
     data: { user },
   } = await supabase.auth.getUser()
 
+  //喫煙本数/日ベースのDBを作成
+  //Listenerは必要なし
+  //cigarette counter
+  //
+
   return (
     <>
       <LatestSleepsListener user={user} />

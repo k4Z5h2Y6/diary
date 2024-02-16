@@ -4,10 +4,10 @@ import {
   createClientComponentClient,
 } from "@supabase/auth-helpers-nextjs";
 import SleepOnsetButton from "./sleepOnsetButton";
-import { SleepsType } from "@/consts/database.types";
 import { useEffect, useState } from "react";
 import WakeUpButton from "./wakeUpButton";
 import { readLatestSleep } from "@/hooks/sleeps";
+import { SleepsType } from "@/consts/sleeps.types";
 
 export const LatestSleepsListener = ({ user }: { user: User | null }) => {
   const supabase = createClientComponentClient<SleepsType>();

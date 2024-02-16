@@ -1,4 +1,4 @@
-import { SleepsList } from "@/components/sleepsList";
+import { SleepsList } from "@/components/sleeps/sleepsList";
 import { Database } from "@/consts/database.types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";

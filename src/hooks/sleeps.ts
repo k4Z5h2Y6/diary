@@ -1,4 +1,4 @@
-import { SleepsType, UpdateWakeupType } from "@/consts/database.types";
+import { SleepsType, UpdateWakeupType } from "@/consts/sleeps.types";
 import { User, createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Dispatch, SetStateAction } from "react";
 
@@ -44,9 +44,9 @@ export async function readLatestSleep(
 }
 
 export async function updateWakeUp(
-  newData: UpdateWakeupType,
   userId: string,
   setLoading: Dispatch<SetStateAction<boolean>>,
+  newData: UpdateWakeupType,
   ) {
   try {
     setLoading(true);

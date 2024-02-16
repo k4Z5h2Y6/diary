@@ -1,4 +1,4 @@
-import SupabaseListener from "@/components/supabaseListener";
+import SupabaseListener from "@/components/navigation/supabaseListener";
 import "./globals.css";
 import { Navigation } from "@/components/navigation/navigation";
 

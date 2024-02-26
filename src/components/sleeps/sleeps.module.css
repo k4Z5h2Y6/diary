@@ -1,0 +1,9 @@
+.sleepsO {
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonO {
+  display: flex;
+  justify-content: center;
+}

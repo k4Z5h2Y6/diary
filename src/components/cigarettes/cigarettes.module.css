@@ -1,0 +1,9 @@
+.cigarettesO {
+  display: flex;
+  justify-content: center;
+}
+
+.cigarettesI {
+  display: flex;
+  flex-direction: row;
+}

@@ -8,10 +8,11 @@ import { useEffect, useState } from "react";
 import CountUpButton from "./countUpButton";
 import { readLatestCigarettes } from "@/hooks/cigarettes";
 import CountDownButton from "./countDownButton";
+import styles from "./cigarettes.module.css";
 
 export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
   const supabase = createClientComponentClient<CigarettesType>();
-  const [currentId, setCurrentId] = useState<number | null>(null)
+  const [currentId, setCurrentId] = useState<number | null>(null);
   const [cigarettesCounter, setCigarettesCounter] = useState<number>(0);
 
   useEffect(() => {
@@ -44,10 +45,17 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
 
   return (
     <>
-      <div>
-        <CountDownButton user={user} cigarettesCounter={cigarettesCounter} setCigarettesCounter={setCigarettesCounter} currentId={currentId}/>
-        <div>{cigarettesCounter}</div>
-        <CountUpButton user={user} cigarettesCounter={cigarettesCounter}/>
+      <div className={styles.cigarettesO}>
+        <div className={styles.cigarettesI}>
+          <CountDownButton
+            user={user}
+            cigarettesCounter={cigarettesCounter}
+            setCigarettesCounter={setCigarettesCounter}
+            currentId={currentId}
+          />
+          <div>　{cigarettesCounter}　</div>
+          <CountUpButton user={user} cigarettesCounter={cigarettesCounter} />
+        </div>
       </div>
     </>
   );

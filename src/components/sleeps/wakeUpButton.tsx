@@ -4,6 +4,7 @@ import { UpdateWakeupType } from "@/consts/sleeps.types";
 import { updateWakeUp } from "@/hooks/sleeps";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
+import styles from "./sleeps.module.css";
 
 export default function WakeUpButton({
   user,
@@ -27,9 +28,9 @@ export default function WakeUpButton({
 
   return (
     <>
-      <div>
+      <div className={styles.buttonO}>
         <button disabled={!isSleeping || loading} onClick={handleWakeUpClick}>
-          起床
+          　起床　
         </button>
       </div>
     </>

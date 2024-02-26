@@ -2,6 +2,7 @@
 import { createSleepOnset } from "@/hooks/sleeps";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
+import styles from "./sleeps.module.css";
 
 export default function SleepOnsetButton({
   user,
@@ -14,12 +15,12 @@ export default function SleepOnsetButton({
 
   return (
     <>
-      <div>
+      <div className={styles.buttonO}>
         <button
           disabled={isSleeping}
           onClick={() => createSleepOnset(user, setLoading)}
         >
-          入眠
+          　入眠　
         </button>
       </div>
     </>

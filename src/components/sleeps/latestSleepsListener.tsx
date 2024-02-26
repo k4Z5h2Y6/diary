@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import WakeUpButton from "./wakeUpButton";
 import { readLatestSleep } from "@/hooks/sleeps";
 import { SleepsType } from "@/consts/sleeps.types";
+import styles from "./sleeps.module.css";
 
 export const LatestSleepsListener = ({ user }: { user: User | null }) => {
   const supabase = createClientComponentClient<SleepsType>();
@@ -43,9 +44,10 @@ export const LatestSleepsListener = ({ user }: { user: User | null }) => {
 
   return (
     <>
-      <SleepOnsetButton user={user} isSleeping={isSleeping} />
-      <WakeUpButton user={user} isSleeping={isSleeping} />
+      <div className={styles.sleepsO}>
+        <SleepOnsetButton user={user} isSleeping={isSleeping} />
+        <WakeUpButton user={user} isSleeping={isSleeping} />
+      </div>
     </>
   );
 };
-

@@ -1,4 +1,5 @@
 import { LatestCigarettesListener } from "@/components/cigarettes/latestCigarettesListener";
+import Diaries from "@/components/diaries/diaries";
 import { LatestSleepsListener } from "@/components/sleeps/latestSleepsListener";
 import { Database } from "@/consts/database.types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -15,7 +16,11 @@ export default async function Home() {
   return (
     <>
       <LatestSleepsListener user={user} />
+      <hr />
       <LatestCigarettesListener user={user} />
+      <hr />
+      <Diaries user={user} />
+      <hr />
     </>
   );
 }

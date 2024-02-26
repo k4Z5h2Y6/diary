@@ -56,7 +56,6 @@ export const SleepsList = ({ user }: { user: User | null }) => {
 
   return (
     <>
-      <div>Sleeps List</div>
       {sleepsList ? (
         <>
           <table border={1}>

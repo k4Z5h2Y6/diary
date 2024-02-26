@@ -23,3 +23,55 @@ export async function createDiary(
     setLoading(false);
   }
 }
+
+export async function readDiariesList(
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  setDiariesList: Dispatch<SetStateAction<any[]>>,
+) {
+  try {
+    setLoading(true);
+    let { data, error, status } = await supabase
+    .from("diaries")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(3);
+
+    if (error && status !== 406) {
+      throw error;
+    }
+
+    if (data) {
+      console.log(data);
+      setDiariesList(data);
+    }
+  } catch (error) {
+    alert("Error loading user diaries list!");
+  } finally {
+    setLoading(false);
+  }
+}
+
+export async function deleteDiaries(
+  id: string,
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  setDiariesList: Dispatch<SetStateAction<any[]>>,
+) {
+  try {
+    setLoading(true);
+    const { error } = await supabase.from("diaries").delete().eq("id", id);
+
+    if (error) {
+      throw error;
+    }
+
+    // 削除が成功したら、sleepsList からも該当する id のデータを削除します
+    setDiariesList((prevSleepsList) =>
+      prevSleepsList.filter((sl) => sl.id !== id)
+    );
+  } catch (error) {
+    console.error("Error deleting diaries");
+    alert("Error deleting diaries!");
+  } finally {
+    setLoading(false);
+  }
+}

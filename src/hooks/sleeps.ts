@@ -100,7 +100,11 @@ export async function readSleepsList(
 ) {
   try {
     setLoading(true);
-    let { data, error, status } = await supabase.from("sleeps").select("*");
+    let { data, error, status } = await supabase
+    .from("sleeps")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(3);
 
     if (error && status !== 406) {
       throw error;

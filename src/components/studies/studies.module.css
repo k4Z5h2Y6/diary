@@ -1,9 +1,9 @@
-.sleepsO {
+.studiesO {
   display: flex;
   justify-content: center;
 }
 
-.sleepsI {
+.studiesI {
   width: fit-content;
   display: flex;
   flex-direction: row;

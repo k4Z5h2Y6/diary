@@ -23,6 +23,11 @@ p {
   margin: 0;
 }
 
+a, p, div {
+  font-size: 14px;
+  line-height: 16px;
+}
+
 /* layout.tsx */
 
 .supabaseListenerO {

@@ -3,31 +3,32 @@ import {
   User,
   createClientComponentClient,
 } from "@supabase/auth-helpers-nextjs";
-import SleepOnsetButton from "./sleepOnsetButton";
 import { useEffect, useState } from "react";
-import WakeUpButton from "./wakeUpButton";
 import { readLatestSleep } from "@/hooks/sleeps";
-import { SleepsType } from "@/consts/sleeps.types";
-import styles from "./sleeps.module.css";
+import styles from "./studies.module.css";
+import StartStudyingButton from "./startStudyingButton";
+import FinishStudyingButton from "./finishStudyingButton";
+import { readLatestStudy } from "@/hooks/studies";
+import { StudiesType } from "@/consts/studies.types";
 
-export const LatestSleepsListener = ({ user }: { user: User | null }) => {
-  const supabase = createClientComponentClient<SleepsType>();
-  const [isSleeping, setIsSleeping] = useState<boolean>(false);
+export const LatestStudiesListener = ({ user }: { user: User | null }) => {
+  const supabase = createClientComponentClient<StudiesType>();
+  const [isStudying, setIsStudying] = useState<boolean>(false);
 
   useEffect(() => {
     // Realtimeクライアントを使用してsleepsテーブルを監視
     const subscription = supabase
-      .channel("sleeps")
+      .channel("studies")
       .on(
         "postgres_changes",
         {
           event: "*",
           schema: "public",
-          table: "sleeps",
+          table: "studies",
         },
         (payload) => {
           // 変更後のデータに対しての処理を記載
-          readLatestSleep(setIsSleeping);
+          readLatestStudy(setIsStudying);
         }
       )
       .subscribe();
@@ -39,18 +40,18 @@ export const LatestSleepsListener = ({ user }: { user: User | null }) => {
   }, []); // 最初のマウント時にのみ実行
 
   useEffect(() => {
-    readLatestSleep(setIsSleeping);
+    readLatestStudy(setIsStudying);
   }, []);
 
   return (
     <>
-      <div className={styles.sleepsO}>
-        <div className={styles.sleepsI}>
+      <div className={styles.studiesO}>
+        <div className={styles.studiesI}>
           <div>
-            <SleepOnsetButton user={user} isSleeping={isSleeping} />
+            <StartStudyingButton user={user} isStudying={isStudying} />
           </div>
           <div>
-            <WakeUpButton user={user} isSleeping={isSleeping} />
+            <FinishStudyingButton user={user} isStudying={isStudying} />
           </div>
         </div>
       </div>

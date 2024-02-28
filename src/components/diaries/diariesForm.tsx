@@ -5,7 +5,7 @@ import { User } from "@supabase/auth-helpers-nextjs";
 import { useRef, useState } from "react";
 import styles from "./diaries.module.css";
 
-export default function Diaries({
+export default function DiariesForm({
   user,
 } : {
   user: User | null

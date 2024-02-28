@@ -94,9 +94,9 @@ export async function deleteSleeps(
   }
 }
 
-export async function readSleepsList(
+export async function readSleepsRow(
   setLoading: Dispatch<SetStateAction<boolean>>,
-  setSleepsList: Dispatch<SetStateAction<any[]>>,
+  setSleepsRow: Dispatch<SetStateAction<any[]>>,
 ) {
   try {
     setLoading(true);
@@ -112,7 +112,7 @@ export async function readSleepsList(
 
     if (data) {
       console.log(data);
-      setSleepsList(data);
+      setSleepsRow(data);
     }
   } catch (error) {
     alert("Error loading user sleeps list!");

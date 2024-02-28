@@ -68,3 +68,55 @@ export async function updateFinishStudying(
     setLoading(false);
   }
 }
+
+export async function deleteStudies(
+  id: string,
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  setStudiesRow: Dispatch<SetStateAction<any[]>>,
+) {
+  try {
+    setLoading(true);
+    const { error } = await supabase.from("studies").delete().eq("id", id);
+
+    if (error) {
+      throw error;
+    }
+
+    // 削除が成功したら、sleepsList からも該当する id のデータを削除します
+    setStudiesRow((prevStudiesList) =>
+      prevStudiesList.filter((sl) => sl.id !== id)
+    );
+  } catch (error) {
+    console.error("Error deleting study:");
+    alert("Error deleting study!");
+  } finally {
+    setLoading(false);
+  }
+}
+
+export async function readStudiesRow(
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  setStudiesRow: Dispatch<SetStateAction<any[]>>,
+) {
+  try {
+    setLoading(true);
+    let { data, error, status } = await supabase
+    .from("studies")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(1);
+
+    if (error && status !== 406) {
+      throw error;
+    }
+
+    if (data) {
+      console.log(data);
+      setStudiesRow(data);
+    }
+  } catch (error) {
+    alert("Error loading user study list!");
+  } finally {
+    setLoading(false);
+  }
+}

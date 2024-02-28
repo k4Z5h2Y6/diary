@@ -1,16 +1,16 @@
 "use client";
-import { deleteSleeps, readSleepsList } from "@/hooks/sleeps";
+import { deleteSleeps, readSleepsRow } from "@/hooks/sleeps";
 import {
   User,
 } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 
-export const SleepsList = ({ user }: { user: User | null }) => {
+export const LatestSleepsRow = ({ user }: { user: User | null }) => {
   const [loading, setLoading] = useState(true);
-  const [sleepsList, setSleepsList] = useState<any[]>([]);
+  const [sleepsRow, setSleepsRow] = useState<any[]>([]);
 
   useEffect(() => {
-    readSleepsList(setLoading, setSleepsList);
+    readSleepsRow(setLoading, setSleepsRow);
   }, []);
 
   const formatDate = (ts: string) => {
@@ -56,25 +56,25 @@ export const SleepsList = ({ user }: { user: User | null }) => {
 
   return (
     <>
-      {sleepsList ? (
+      {sleepsRow ? (
         <>
           <table border={1}>
             <tbody>
             <tr>
-              <th>日付</th>
+              <th>作成日</th>
               <th>入眠</th>
               <th>起床</th>
               <th>睡眠時間</th>
               <th>削除</th>
             </tr>
-            {sleepsList.map((sl, index) => (
+            {sleepsRow.map((sr, index) => (
               <tr key={index}>
-                <td>{formatDate(sl.sleep_onset_at)}</td>
-                <td>{formatTime(sl.sleep_onset_at)}</td>
-                <td>{formatTime(sl.wake_up_at)}</td>
-                <td>{calculateSleepTime(sl.sleep_onset_at, sl.wake_up_at)}</td>
+                <td>{formatDate(sr.created_at)}</td>
+                <td>{formatTime(sr.sleep_onset_at)}</td>
+                <td>{formatTime(sr.wake_up_at)}</td>
+                <td>{calculateSleepTime(sr.sleep_onset_at, sr.wake_up_at)}</td>
                 <td>
-                  <button onClick={() => deleteSleeps(sl.id, setLoading, setSleepsList)}>削除</button>
+                  <button onClick={() => deleteSleeps(sr.id, setLoading, setSleepsRow)}>削除</button>
                 </td>
               </tr>
             ))}

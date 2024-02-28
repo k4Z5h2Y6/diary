@@ -1,6 +1,7 @@
 import { CigaretteCounter } from "@/components/cigarettes/cigaretteCounter";
 import { DiariesList } from "@/components/diaries/diariesList";
-import { SleepsList } from "@/components/sleeps/sleepsList";
+import { LatestSleepsRow } from "@/components/sleeps/LatestSleepsRow";
+import { LatestSudiesRow } from "@/components/studies/latestStudiesRow";
 import { Database } from "@/consts/database.types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
@@ -14,14 +15,18 @@ export default async function Calendar() {
   
   return (
     <>
-      <p>最近の睡眠</p>
-      <SleepsList user={user}/>
+      <p>最新の睡眠</p>
+      <LatestSleepsRow user={user}/>
+      <a href="">もっと見る</a>
+      <hr />
+      <p>最新の勉強</p>
+      <LatestSudiesRow user={user}/>
       <a href="">もっと見る</a>
       <hr />
       <CigaretteCounter user={user}/>
       <hr />
+      最新の投稿
       <DiariesList user={user}/>
-      <hr />
     </>
   );
 }

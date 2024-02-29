@@ -7,13 +7,15 @@ const supabase = createClientComponentClient<DiariesType>();
 export async function createDiary(
   user: User | null,
   setLoading: Dispatch<SetStateAction<boolean>>,
-  diary: string,
+  diaryText: string,
+  diaryImgUrl: string | null
 ) {
   try {
     setLoading(true);
     const { error } = await supabase.from("diaries").insert({
       user_id: user?.id as string,
-      diary: diary,
+      diary_text: diaryText,
+      diary_img_url: diaryImgUrl,
     });
     if (error) throw error;
     alert("Diary posted!");

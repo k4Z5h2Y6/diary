@@ -1,34 +1,38 @@
 export interface DiariesType {
   public: {
     Tables: {
-      sleeps: {
+      diaries: {
         Row: {
           id: number
           user_id: string
           created_at: string | null
           update_at: string | null
-          diary: string
+          diary_text: string
+          diary_img_url: string | null
         }
         Insert: {
           id?: number
           user_id: string
           created_at?: string | null
           update_at?: string | null
-          diary: string
+          diary_text?: string
+          diary_img_url?: string | null
         }
         Update: {
           id?: number
           user_id?: string | null
           created_at?: string | null
           update_at: string | null
-          diary: string | null
+          diary_text?: string | null
+          diary_img_url?: string | null
         }
         Delete: {
           id: number
           user_id: string | null
           created_at?: string | null
           update_at?: string | null
-          diary?: string | null
+          diary_text?: string | null
+          diary_img_url?: string | null
         }
       }
     }

@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import styles from "./diaries.module.css";
 import ImgUplader from "./imgUploader";
 
+
 export default function DiariesForm({ user }: { user: User | null }) {
   const [loading, setLoading] = useState<boolean>(false);
   const diaryTextRef = useRef<HTMLTextAreaElement>(null);

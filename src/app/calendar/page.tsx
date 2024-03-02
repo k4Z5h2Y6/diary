@@ -1,5 +1,5 @@
 import { CigaretteCounter } from "@/components/cigarettes/cigaretteCounter";
-import { DiariesList } from "@/components/diaries/diariesList";
+// import { DiariesList } from "@/components/diaries/diariesList";
 import { LatestSleepsRow } from "@/components/sleeps/LatestSleepsRow";
 import { LatestSudiesRow } from "@/components/studies/latestStudiesRow";
 import { Database } from "@/consts/database.types";
@@ -26,7 +26,7 @@ export default async function Calendar() {
       <CigaretteCounter user={user}/>
       <hr />
       最新の投稿
-      <DiariesList user={user}/>
+      {/* <DiariesList user={user}/> */}
     </>
   );
 }

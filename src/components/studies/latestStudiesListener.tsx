@@ -4,7 +4,6 @@ import {
   createClientComponentClient,
 } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
-import { readLatestSleep } from "@/hooks/sleeps";
 import styles from "./studies.module.css";
 import StartStudyingButton from "./startStudyingButton";
 import FinishStudyingButton from "./finishStudyingButton";

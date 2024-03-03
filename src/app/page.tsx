@@ -23,6 +23,7 @@ export default async function Home() {
         <hr />
         <LatestCigarettesListener user={user} />
         <hr />
+        {/* ここに原因あり！！！ */}
         {/* <DiariesForm user={user} /> */}
       </div>
     </>

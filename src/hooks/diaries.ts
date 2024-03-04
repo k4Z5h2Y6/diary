@@ -4,6 +4,32 @@ import { Dispatch, SetStateAction } from "react";
 
 const supabase = createClientComponentClient<DiariesType>();
 
+//これを
+export async function uploadDiaryImg(
+  user: User | null,
+  setImgUploading: Dispatch<SetStateAction<boolean>>,
+  diaryImgUrl: string | null,
+  diaryImgFile: File | null,
+) {
+  try {
+    if (diaryImgUrl === null || diaryImgFile === null ) {
+      throw new Error('You must select an image to upload.')
+    }
+    const { error: uploadError } = await supabase.storage.from('diary_img').upload(diaryImgUrl, diaryImgFile)
+
+    if (uploadError) {
+      throw uploadError
+    }
+
+  } catch (error) {
+    alert('Error uploading diary_img!')
+  } finally {
+    setImgUploading(false);
+    console.log("画像アップロード完了")
+    alert("画像アップロード完了")
+  }
+}
+
 export async function createDiary(
   user: User | null,
   setLoading: Dispatch<SetStateAction<boolean>>,
@@ -23,6 +49,8 @@ export async function createDiary(
     alert("Diary post error");
   } finally {
     setLoading(false);
+    console.log("投稿完了")
+    alert("投稿完了")
   }
 }
 

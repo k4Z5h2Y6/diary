@@ -4,12 +4,12 @@ import { Dispatch, SetStateAction } from "react";
 
 const supabase = createClientComponentClient<DiariesType>();
 
-//これを
 export async function uploadDiaryImg(
   user: User | null,
   setImgUploading: Dispatch<SetStateAction<boolean>>,
   diaryImgUrl: string | null,
   diaryImgFile: File | null,
+  callback: () => void
 ) {
   try {
     if (diaryImgUrl === null || diaryImgFile === null ) {
@@ -25,8 +25,8 @@ export async function uploadDiaryImg(
     alert('Error uploading diary_img!')
   } finally {
     setImgUploading(false);
-    console.log("画像アップロード完了")
     alert("画像アップロード完了")
+    callback();
   }
 }
 
@@ -44,12 +44,10 @@ export async function createDiary(
       diary_img_url: diaryImgUrl,
     });
     if (error) throw error;
-    alert("Diary posted!");
   } catch (error) {
     alert("Diary post error");
   } finally {
     setLoading(false);
-    console.log("投稿完了")
     alert("投稿完了")
   }
 }

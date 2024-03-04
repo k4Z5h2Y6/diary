@@ -111,7 +111,6 @@ export async function readStudiesRow(
     }
 
     if (data) {
-      console.log(data);
       setStudiesRow(data);
     }
   } catch (error) {

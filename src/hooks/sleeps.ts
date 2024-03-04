@@ -111,7 +111,6 @@ export async function readSleepsRow(
     }
 
     if (data) {
-      console.log(data);
       setSleepsRow(data);
     }
   } catch (error) {

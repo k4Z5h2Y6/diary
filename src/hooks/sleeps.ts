@@ -23,7 +23,7 @@ export async function createSleepOnset(
 }
 
 export async function readLatestSleep(
-  setIsSleeping: Dispatch<SetStateAction<boolean>>
+  setIsSleeping: Dispatch<SetStateAction<boolean | null>>
 ) {
   // "sleeps" テーブルから作成日が最新の行を取得するクエリを定義します
   const { data, error } = await supabase

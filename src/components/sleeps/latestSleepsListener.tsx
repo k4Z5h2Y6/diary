@@ -9,10 +9,11 @@ import WakeUpButton from "./wakeUpButton";
 import { readLatestSleep } from "@/hooks/sleeps";
 import { SleepsType } from "@/consts/sleeps.types";
 import styles from "./sleeps.module.css";
+import { Skeleton } from "@mui/material";
 
 export const LatestSleepsListener = ({ user }: { user: User | null }) => {
   const supabase = createClientComponentClient<SleepsType>();
-  const [isSleeping, setIsSleeping] = useState<boolean>(false);
+  const [isSleeping, setIsSleeping] = useState<boolean | null>(null);
 
   useEffect(() => {
     // Realtimeクライアントを使用してsleepsテーブルを監視
@@ -45,14 +46,18 @@ export const LatestSleepsListener = ({ user }: { user: User | null }) => {
   return (
     <>
       <div className={styles.sleepsO}>
-        <div className={styles.sleepsI}>
-          <div>
-            <SleepOnsetButton user={user} isSleeping={isSleeping} />
+        {isSleeping === null ? (
+          <Skeleton />
+        ) : (
+          <div className={styles.sleepsI}>
+            <div>
+              <SleepOnsetButton user={user} isSleeping={isSleeping} />
+            </div>
+            <div>
+              <WakeUpButton user={user} isSleeping={isSleeping} />
+            </div>
           </div>
-          <div>
-            <WakeUpButton user={user} isSleeping={isSleeping} />
-          </div>
-        </div>
+        )}
       </div>
     </>
   );

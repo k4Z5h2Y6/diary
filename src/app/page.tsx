@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import styles from "./home.module.css";
 import { LatestStudiesListener } from "@/components/studies/latestStudiesListener";
 import DiariesForm from "@/components/diaries/diariesForm";
+import Button from '@mui/material/Button';
 
 export default async function Home() {
   const supabase = createServerComponentClient<Database>({ cookies });
@@ -25,6 +26,7 @@ export default async function Home() {
         <hr />
         {/* ここに原因あり！！！ */}
         <DiariesForm user={user} />
+        <Button variant="contained">Hello world</Button>
       </div>
     </>
   );

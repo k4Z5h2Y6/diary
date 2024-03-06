@@ -8,12 +8,12 @@ import { useEffect, useState } from "react";
 import CountUpButton from "./countUpButton";
 import { readLatestCigarettes } from "@/hooks/cigarettes";
 import CountDownButton from "./countDownButton";
-import styles from "./cigarettes.module.css";
+import { Box, Grid, Skeleton, Typography } from "@mui/material";
 
 export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
   const supabase = createClientComponentClient<CigarettesType>();
   const [currentId, setCurrentId] = useState<number | null>(null);
-  const [cigarettesCounter, setCigarettesCounter] = useState<number>(0);
+  const [cigarettesCounter, setCigarettesCounter] = useState<number | null>(null);
 
   useEffect(() => {
     // Realtimeクライアントを使用してsleepsテーブルを監視
@@ -45,18 +45,26 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
 
   return (
     <>
-      <div className={styles.cigarettesO}>
-        <div className={styles.cigarettesI}>
+      {cigarettesCounter === null ? (
+        <Skeleton variant="rounded" />
+      ) : (
+        <Grid container spacing={2}>
+          <Grid item xs={4}>
           <CountDownButton
             user={user}
             cigarettesCounter={cigarettesCounter}
             setCigarettesCounter={setCigarettesCounter}
             currentId={currentId}
           />
-          <div>　{cigarettesCounter}　</div>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography sx={{textAlign: "center"}}>{cigarettesCounter}</Typography>
+          </Grid>
+          <Grid item xs={4}>
           <CountUpButton user={user} cigarettesCounter={cigarettesCounter} />
-        </div>
-      </div>
+          </Grid>
+        </Grid>
+      )}
     </>
   );
 };

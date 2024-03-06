@@ -1,6 +1,7 @@
 "use client";
 import { UpdateCigarettesType } from "@/consts/cigarettes.types";
 import { createCigarettes, updateCigarettes } from "@/hooks/cigarettes";
+import { Button } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { Dispatch, SetStateAction, useState } from "react";
 
@@ -28,13 +29,14 @@ export default function CountUpButton({
 
   return (
     <>
-      <div>
-        <button
-          onClick={() => countUpBranch(user!, setLoading, cigarettesCounter)}
-        >
-          ＋
-        </button>
-      </div>
+      <Button
+        variant="outlined"
+        // disabled={isSleeping}
+        onClick={() => countUpBranch(user!, setLoading, cigarettesCounter)}
+        sx={{width: "100%"}}
+      >
+        ＋
+      </Button>
     </>
   );
 }

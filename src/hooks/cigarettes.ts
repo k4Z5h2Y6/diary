@@ -30,7 +30,7 @@ export async function createCigarettes(
 
 export async function readLatestCigarettes(
   setCurrentId: Dispatch<SetStateAction<number | null>>,
-  setCigarettesCounter: Dispatch<SetStateAction<number>>
+  setCigarettesCounter: Dispatch<SetStateAction<number | null>>
 ) {
   // "cigarettes" テーブルから作成日が最新の行を取得するクエリを定義します
   const { data, error } = await supabase
@@ -87,7 +87,7 @@ export async function updateCigarettes(
 export async function deleteCigarettes(
   id: string,
   setLoading: Dispatch<SetStateAction<boolean>>,
-  setCigarettesCounter: Dispatch<SetStateAction<number>>
+  setCigarettesCounter: Dispatch<SetStateAction<number | null>>
 ) {
   try {
     setLoading(true);

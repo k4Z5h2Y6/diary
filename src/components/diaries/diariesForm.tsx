@@ -4,6 +4,7 @@ import { createDiary, uploadDiaryImg } from "@/hooks/diaries";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useRef, useState } from "react";
 import styles from "./diaries.module.css";
+import { Button, TextField } from "@mui/material";
 
 export default function DiariesForm({ user }: { user: User | null }) {
   const [loading, setLoading] = useState<boolean>(false);
@@ -12,14 +13,14 @@ export default function DiariesForm({ user }: { user: User | null }) {
   const [diaryImgUrl, setDiaryImgUrl] = useState<string | null>(null);
   const [diaryImgFile, setDiaryImgFile] = useState<File | null>(null);
 
-  const imgSet: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+  const imgChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     if (event.target.files) {
       const file = event.target.files[0];
       const fileExt = file.name.split(".").pop();
       const filePath = `${user!.id}-${Math.random()}.${fileExt}`;
 
-      setDiaryImgFile(file)
-      setDiaryImgUrl(filePath)
+      setDiaryImgFile(file);
+      setDiaryImgUrl(filePath);
     } else {
       setDiaryImgFile(null);
       setDiaryImgUrl(null);
@@ -34,9 +35,15 @@ export default function DiariesForm({ user }: { user: User | null }) {
 
     if (diaryText) {
       if (diaryImgUrl) {
-        await uploadDiaryImg(user, setImgUploading, diaryImgUrl, diaryImgFile, () => {
-          createDiary(user, setLoading, diaryText, diaryImgUrl);
-        });
+        await uploadDiaryImg(
+          user,
+          setImgUploading,
+          diaryImgUrl,
+          diaryImgFile,
+          () => {
+            createDiary(user, setLoading, diaryText, diaryImgUrl);
+          }
+        );
       } else {
         createDiary(user, setLoading, diaryText, diaryImgUrl);
       }
@@ -54,7 +61,48 @@ export default function DiariesForm({ user }: { user: User | null }) {
 
   return (
     <>
-      <form className={styles.form} onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
+        <TextField
+          label="テキスト"
+          variant="outlined"
+          inputRef={diaryTextRef}
+          fullWidth
+          sx={{ marginBottom: "16px" }}
+        />
+        <label htmlFor="single">
+          <Button
+            variant="contained"
+            component="span"
+            fullWidth
+            sx={{ marginBottom: "16px" }}
+          >
+            画像を選択
+          </Button>
+        </label>
+        <input
+          style={{
+            visibility: "hidden",
+            position: "absolute",
+          }}
+          type="file"
+          id="single"
+          accept="image/*"
+          onChange={imgChange}
+          disabled={imgUploading}
+        />
+        <Button
+          variant="outlined"
+          type="submit"
+          fullWidth
+          sx={{ marginBottom: "16px" }}
+        >
+          送信
+        </Button>
+      </form>
+
+      {/* まだ削除してはいけない */}
+
+      {/* <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.textareaO}>
           <textarea
             name="diaryText"
@@ -79,7 +127,7 @@ export default function DiariesForm({ user }: { user: User | null }) {
           />
           <input type="submit" value="投稿" />
         </div>
-      </form>
+      </form> */}
     </>
   );
 }

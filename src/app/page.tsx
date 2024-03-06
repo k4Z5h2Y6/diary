@@ -19,12 +19,10 @@ export default async function Home() {
   return (
     <>
       <Container
-        id="aaa"
         maxWidth="md"
         sx={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
         }}
       >
         <Divider>睡眠時間</Divider>

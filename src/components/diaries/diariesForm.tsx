@@ -3,7 +3,6 @@
 import { createDiary, uploadDiaryImg } from "@/hooks/diaries";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useRef, useState } from "react";
-import styles from "./diaries.module.css";
 import { Button, TextField } from "@mui/material";
 
 export default function DiariesForm({ user }: { user: User | null }) {
@@ -99,35 +98,6 @@ export default function DiariesForm({ user }: { user: User | null }) {
           送信
         </Button>
       </form>
-
-      {/* まだ削除してはいけない */}
-
-      {/* <form className={styles.form} onSubmit={handleSubmit}>
-        <div className={styles.textareaO}>
-          <textarea
-            name="diaryText"
-            id=""
-            ref={diaryTextRef}
-            cols={50}
-            rows={15}
-          />
-          <label className="" htmlFor="single">
-            {imgUploading ? "Uploading ..." : "Upload"}
-          </label>
-          <input
-            style={{
-              visibility: "hidden",
-              position: "absolute",
-            }}
-            type="file"
-            id="single"
-            accept="image/*"
-            onChange={imgSet}
-            disabled={imgUploading}
-          />
-          <input type="submit" value="投稿" />
-        </div>
-      </form> */}
     </>
   );
 }

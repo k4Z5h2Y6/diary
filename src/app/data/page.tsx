@@ -3,30 +3,40 @@ import { CigaretteCounter } from "@/components/cigarettes/cigaretteCounter";
 import { LatestSleepsRow } from "@/components/sleeps/LatestSleepsRow";
 import { LatestSudiesRow } from "@/components/studies/latestStudiesRow";
 import { Database } from "@/consts/database.types";
+import { Container, Divider, Link } from "@mui/material";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
 export default async function Calendar() {
-  const supabase = createServerComponentClient<Database>({ cookies })
+  const supabase = createServerComponentClient<Database>({ cookies });
 
   const {
     data: { user },
-  } = await supabase.auth.getUser()
-  
+  } = await supabase.auth.getUser();
+
   return (
     <>
-      <p>最新の睡眠</p>
-      <LatestSleepsRow user={user}/>
-      <a href="">もっと見る</a>
-      <hr />
-      <p>最新の勉強</p>
-      <LatestSudiesRow user={user}/>
-      <a href="">もっと見る</a>
-      <hr />
-      <CigaretteCounter user={user}/>
-      <hr />
-      最新の投稿
-      {/* <DiariesList user={user}/> */}
+      <Container
+        maxWidth="md"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Divider>最新の睡眠</Divider>
+        <LatestSleepsRow user={user} />
+        <Link href="">もっと見る</Link>
+        <hr />
+        <Divider>最新の作業</Divider>
+        <LatestSudiesRow user={user} />
+        <Link href="">もっと見る</Link>
+        <Divider>今日の喫煙</Divider>
+        <CigaretteCounter user={user} />
+        <Link href="">もっと見る</Link>
+        <Divider>今日の投稿</Divider>
+        {/* <DiariesList user={user}/> */}
+        <Link href="">もっと見る</Link>
+      </Container>
     </>
   );
 }

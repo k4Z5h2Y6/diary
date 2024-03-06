@@ -20,7 +20,7 @@ export const Navigation = ({ session }: { session: Session | null }) => {
             <Link href="/"><p className={styles.navP}>Home</p></Link>
           </div>
           <div className={styles.navItemO}>
-            <Link href="/calendar"><p className={styles.navP}>Calendar</p></Link>
+            <Link href="/data"><p className={styles.navP}>Data</p></Link>
           </div>
         </div>
       ) : (

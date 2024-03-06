@@ -1,8 +1,8 @@
 "use client";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
-import styles from "./studies.module.css";
 import { createStudy } from "@/hooks/studies";
+import { Button } from "@mui/material";
 
 export default function StartStudyingButton({
   user,
@@ -15,14 +15,14 @@ export default function StartStudyingButton({
 
   return (
     <>
-      <div className={styles.buttonO}>
-        <button
-          disabled={isStudying}
-          onClick={() => createStudy(user, setLoading)}
-        >
-          　勉強開始　
-        </button>
-      </div>
+      <Button
+        variant="outlined"
+        disabled={isStudying}
+        onClick={() => createStudy(user, setLoading)}
+        sx={{width: "100%"}}
+      >
+        作業開始
+      </Button>
     </>
   );
 }

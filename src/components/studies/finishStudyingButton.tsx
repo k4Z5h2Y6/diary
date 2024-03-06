@@ -2,9 +2,9 @@
 
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
-import styles from "./studies.module.css";
 import { updateFinishStudying } from "@/hooks/studies";
 import { UpdateFinishStudyingType } from "@/consts/studies.types";
+import { Button } from "@mui/material";
 
 export default function FinishStudyingButton({
   user,
@@ -28,14 +28,14 @@ export default function FinishStudyingButton({
 
   return (
     <>
-      <div className={styles.buttonO}>
-        <button 
-          disabled={!isStudying || loading} 
-          onClick={handleClick}
-        >
-          　勉強終了　
-        </button>
-      </div>
+      <Button
+        variant="outlined"
+        disabled={!isStudying || loading}
+        onClick={handleClick}
+        sx={{width: "100%"}}
+      >
+        作業終了
+      </Button>
     </>
   );
 }

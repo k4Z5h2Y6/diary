@@ -1,6 +1,7 @@
 import SupabaseListener from "@/components/navigation/supabaseListener";
 import "./globals.css";
-import { Navigation } from "@/components/navigation/navigation";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 export default function RootLayout({
   children,

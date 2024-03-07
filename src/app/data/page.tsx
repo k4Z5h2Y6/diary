@@ -26,7 +26,6 @@ export default async function Calendar() {
         <Divider>最新の睡眠</Divider>
         <LatestSleepsRow user={user} />
         <Link href="">もっと見る</Link>
-        <hr />
         <Divider>最新の作業</Divider>
         <LatestSudiesRow user={user} />
         <Link href="">もっと見る</Link>

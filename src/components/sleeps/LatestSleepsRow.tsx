@@ -1,9 +1,24 @@
 "use client";
 import { deleteSleeps, readSleepsRow } from "@/hooks/sleeps";
 import {
-  User,
-} from "@supabase/auth-helpers-nextjs";
-import { useEffect, useState } from "react";
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from "@mui/material";
+import { User } from "@supabase/auth-helpers-nextjs";
+import { SetStateAction, useEffect, useState } from "react";
+
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
+import { DatePickerDiary } from "../common/datepickerDiary";
 
 export const LatestSleepsRow = ({ user }: { user: User | null }) => {
   const [loading, setLoading] = useState(true);
@@ -21,16 +36,15 @@ export const LatestSleepsRow = ({ user }: { user: User | null }) => {
     const month = (jpDate.getMonth() + 1).toString().padStart(2, "0");
     const day = jpDate.getDate().toString().padStart(2, "0");
     return `${month}/${day}`;
+    // const date = new Date(ts);
+    // return date;
   };
 
   const formatTime = (ts: string) => {
     if (ts) {
       const date = new Date(ts);
-      const jpOffset = 9; // Japan's timezone offset from UTC in hours
-      const jpHours = (date.getUTCHours() + jpOffset)
-        .toString()
-        .padStart(2, "0");
-      const minutes = date.getUTCMinutes().toString().padStart(2, "0");
+      const jpHours = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
       return `${jpHours}:${minutes}`;
     } else {
       return null;
@@ -58,28 +72,53 @@ export const LatestSleepsRow = ({ user }: { user: User | null }) => {
     <>
       {sleepsRow ? (
         <>
-          <table border={1}>
-            <tbody>
-            <tr>
-              <th>作成日</th>
-              <th>入眠</th>
-              <th>起床</th>
-              <th>睡眠時間</th>
-              <th>削除</th>
-            </tr>
-            {sleepsRow.map((sr, index) => (
-              <tr key={index}>
-                <td>{formatDate(sr.created_at)}</td>
-                <td>{formatTime(sr.sleep_onset_at)}</td>
-                <td>{formatTime(sr.wake_up_at)}</td>
-                <td>{calculateSleepTime(sr.sleep_onset_at, sr.wake_up_at)}</td>
-                <td>
-                  <button onClick={() => deleteSleeps(sr.id, setLoading, setSleepsRow)}>削除</button>
-                </td>
-              </tr>
-            ))}
-            </tbody>
-          </table>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">作成日</TableCell>
+                  <TableCell align="center">入眠</TableCell>
+                  <TableCell align="center">起床</TableCell>
+                  <TableCell align="center">睡眠時間</TableCell>
+                  <TableCell align="center">削除</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {sleepsRow.map((sr) => (
+                  <TableRow
+                    key={sr.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell align="center">
+                      <DatePickerDiary
+                        user={user}
+                        defaultValue={dayjs(sr.created_at!)}
+                        // defaultValue={formatDate(sr.created_at!)}
+                      />
+                    </TableCell>
+                    <TableCell align="center">
+                      {formatTime(sr.sleep_onset_at)}
+                    </TableCell>
+                    <TableCell align="center">
+                      {formatTime(sr.wake_up_at)}
+                    </TableCell>
+                    <TableCell align="center">
+                      {calculateSleepTime(sr.sleep_onset_at, sr.wake_up_at)}
+                    </TableCell>
+                    <TableCell align="center">
+                      <Button
+                        onClick={() =>
+                          deleteSleeps(sr.id, setLoading, setSleepsRow)
+                        }
+                      >
+                        削除
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </>
       ) : null}
     </>

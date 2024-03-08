@@ -1,6 +1,6 @@
 import { CigaretteCounter } from "@/components/cigarettes/cigaretteCounter";
 // import { DiariesList } from "@/components/diaries/diariesList";
-import { LatestSleepsRow } from "@/components/sleeps/LatestSleepsRow";
+import { LatestSleepsRow } from "@/components/sleeps/latestSleepsRow";
 import { LatestSudiesRow } from "@/components/studies/latestStudiesRow";
 import { Database } from "@/consts/database.types";
 import { Container, Divider, Link } from "@mui/material";

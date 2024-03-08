@@ -9,6 +9,7 @@ export interface DiariesType {
           update_at: string | null
           diary_text: string
           diary_img_url: string | null
+          diary_category: number | null
         }
         Insert: {
           id?: number
@@ -17,6 +18,7 @@ export interface DiariesType {
           update_at?: string | null
           diary_text?: string
           diary_img_url?: string | null
+          diary_category?: number | null
         }
         Update: {
           id?: number
@@ -25,6 +27,7 @@ export interface DiariesType {
           update_at: string | null
           diary_text?: string | null
           diary_img_url?: string | null
+          diary_category?: number | null
         }
         Delete: {
           id: number
@@ -33,6 +36,7 @@ export interface DiariesType {
           update_at?: string | null
           diary_text?: string | null
           diary_img_url?: string | null
+          diary_category?: number | null
         }
       }
     }

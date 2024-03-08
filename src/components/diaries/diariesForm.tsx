@@ -2,8 +2,10 @@
 
 import { createDiary, uploadDiaryImg } from "@/hooks/diaries";
 import { User } from "@supabase/auth-helpers-nextjs";
-import { useRef, useState } from "react";
-import { Button, TextField } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { Autocomplete, Button, TextField } from "@mui/material";
+import { readCategories } from "@/hooks/categories";
+import { LabelCategoriesType } from "@/consts/categories.types";
 
 export default function DiariesForm({ user }: { user: User | null }) {
   const [loading, setLoading] = useState<boolean>(false);
@@ -11,6 +13,9 @@ export default function DiariesForm({ user }: { user: User | null }) {
   const diaryTextRef = useRef<HTMLTextAreaElement>(null);
   const [diaryImgUrl, setDiaryImgUrl] = useState<string | null>(null);
   const [diaryImgFile, setDiaryImgFile] = useState<File | null>(null);
+  const [diaryCategoyLabel, setDiaryCategoyLabel] = useState<string | null>(null);
+  const [diaryCategory, setDiaryCategory] = useState<number | null>(null);
+  const [diaryCategories, setDiaryCategories] = useState<any[]>([]);
 
   const imgChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     if (event.target.files) {
@@ -40,11 +45,11 @@ export default function DiariesForm({ user }: { user: User | null }) {
           diaryImgUrl,
           diaryImgFile,
           () => {
-            createDiary(user, setLoading, diaryText, diaryImgUrl);
+            createDiary(user, setLoading, diaryText, diaryImgUrl, diaryCategory);
           }
         );
       } else {
-        createDiary(user, setLoading, diaryText, diaryImgUrl);
+        createDiary(user, setLoading, diaryText, diaryImgUrl, diaryCategory);
       }
     } else {
       alert("コンテンツがありません");
@@ -57,6 +62,10 @@ export default function DiariesForm({ user }: { user: User | null }) {
     setDiaryImgFile(null);
     setDiaryImgUrl(null);
   };
+
+  useEffect(() => {
+    readCategories(setLoading, setDiaryCategories);
+  }, []);
 
   return (
     <>
@@ -88,6 +97,20 @@ export default function DiariesForm({ user }: { user: User | null }) {
           accept="image/*"
           onChange={imgChange}
           disabled={imgUploading}
+        />
+        <Autocomplete
+          value={diaryCategoyLabel}
+          onChange={(event: any, newValue: LabelCategoriesType | null) => {
+            if (newValue) {
+              setDiaryCategoyLabel(newValue!.label);
+              setDiaryCategory(newValue!.id)
+            } else {
+              setDiaryCategoyLabel(null);
+              setDiaryCategory(null)
+            }
+          }}
+          options={diaryCategories}
+          renderInput={(params) => <TextField {...params} label="カテゴリー" fullWidth/>}
         />
         <Button
           variant="outlined"

@@ -32,7 +32,6 @@ export default async function Home() {
         <Divider>喫煙本数</Divider>
         <LatestCigarettesListener user={user} />
         <Divider>記録</Divider>
-        {/* ここに原因あり！！！ */}
         <DiariesForm user={user} />
       </Container>
     </>

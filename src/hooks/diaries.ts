@@ -34,7 +34,8 @@ export async function createDiary(
   user: User | null,
   setLoading: Dispatch<SetStateAction<boolean>>,
   diaryText: string,
-  diaryImgUrl: string | null
+  diaryImgUrl: string | null,
+  diaryCategory: number | null,
 ) {
   try {
     setLoading(true);
@@ -42,10 +43,11 @@ export async function createDiary(
       user_id: user?.id as string,
       diary_text: diaryText,
       diary_img_url: diaryImgUrl,
+      diary_category: diaryCategory,
     });
     if (error) throw error;
   } catch (error) {
-    alert("Diary post error");
+    alert("投稿エラー");
   } finally {
     setLoading(false);
     alert("投稿完了")

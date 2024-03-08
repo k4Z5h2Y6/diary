@@ -18,7 +18,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
-import { DatePickerDiary } from "../common/datepickerDiary";
 
 export const LatestSleepsRow = ({ user }: { user: User | null }) => {
   const [loading, setLoading] = useState(true);

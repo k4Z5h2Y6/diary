@@ -36,8 +36,6 @@ export const LatestSleepsRow = ({ user }: { user: User | null }) => {
     const month = (jpDate.getMonth() + 1).toString().padStart(2, "0");
     const day = jpDate.getDate().toString().padStart(2, "0");
     return `${month}/${day}`;
-    // const date = new Date(ts);
-    // return date;
   };
 
   const formatTime = (ts: string) => {
@@ -90,14 +88,14 @@ export const LatestSleepsRow = ({ user }: { user: User | null }) => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell align="center">
-                      <DatePickerDiary
-                        user={user}
-                        defaultValue={dayjs(sr.created_at!)}
-                        // defaultValue={formatDate(sr.created_at!)}
-                      />
+                      {formatDate(sr.created_at)}
                     </TableCell>
                     <TableCell align="center">
                       {formatTime(sr.sleep_onset_at)}
+                    {/* <DatePickerDiary
+                        user={user}
+                        defaultValue={dayjs(sr.sleep_onset_at!)}
+                      /> */}
                     </TableCell>
                     <TableCell align="center">
                       {formatTime(sr.wake_up_at)}

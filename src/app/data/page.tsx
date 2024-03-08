@@ -34,7 +34,8 @@ export default async function Calendar() {
         <Link href="">もっと見る</Link>
         <Divider>今日の投稿</Divider>
         {/* <DiariesList user={user}/> */}
-        <Link href="">もっと見る</Link>
+        <Link href="">投稿一覧へ</Link>
+        <Divider>投稿カテゴリーを編集</Divider>
       </Container>
     </>
   );

@@ -11,8 +11,7 @@ html {
 body {
   width: 100vw;
   height: 100vh;
-  margin: 0;
-  overflow: hidden;
+  margin: 0 0 10vh 0;/*  */
 }
 
 a {

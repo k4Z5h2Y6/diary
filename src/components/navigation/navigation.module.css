@@ -9,7 +9,7 @@
 
 .navItemO {
   width: calc(100vw / 3);
-  height: 10vh;
+  height: 10vh;/*  */
   text-align: center;
 }
 

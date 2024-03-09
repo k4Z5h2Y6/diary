@@ -1,5 +1,5 @@
 import { CigaretteCounter } from "@/components/cigarettes/cigaretteCounter";
-import { LatestSleepsRow } from "@/components/sleeps/latestSleepsRow";
+// import { LatestSleepsRow } from "@/components/sleeps/latestSleepsRow";
 // import { DiariesList } from "@/components/diaries/diariesList";
 import { LatestSudiesRow } from "@/components/studies/latestStudiesRow";
 import { Database } from "@/consts/database.types";

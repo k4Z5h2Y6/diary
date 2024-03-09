@@ -6,24 +6,28 @@ export interface CigarettesType {
           id: number;
           user_id: string;
           created_at: string;
+          update_at: string;
           cigarettes_counter: number;
         };
         Insert: {
           id?: number;
           user_id: string;
           created_at?: string;
+          update_at?: string;
           cigarettes_counter?: number;
         };
         Update: {
           id?: number;
           user_id?: string;
           created_at?: string;
+          update_at: string;
           cigarettes_counter: number;
         };
         Delete: {
           id: number;
           user_id?: string;
           created_at?: string;
+          update_at?: string;
           cigarettes_counter?: number;
         };
       };
@@ -41,5 +45,14 @@ export interface CigarettesType {
 }
 
 export interface UpdateCigarettesType {
+  update_at: string;
+  cigarettes_counter: number;
+}
+
+export interface CigaretteDataType {
+  id: number;
+  user_id: string;
+  created_at: string;
+  update_at: string;
   cigarettes_counter: number;
 }

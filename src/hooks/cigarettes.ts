@@ -1,4 +1,5 @@
 import {
+  CigaretteDataType,
   CigarettesType,
   UpdateCigarettesType,
 } from "@/consts/cigarettes.types";
@@ -28,9 +29,8 @@ export async function createCigarettes(
   }
 }
 
-export async function readLatestCigarettes(
-  setCurrentId: Dispatch<SetStateAction<number | null>>,
-  setCigarettesCounter: Dispatch<SetStateAction<number | null>>
+export async function readLatestCigarette(
+  setLatestCigaretteData: Dispatch<SetStateAction<CigaretteDataType | null>>,
 ) {
   // "cigarettes" テーブルから作成日が最新の行を取得するクエリを定義します
   const { data, error } = await supabase
@@ -43,18 +43,7 @@ export async function readLatestCigarettes(
     return;
   }
   if (data[0]) {
-    const today = new Date();
-    const date = new Date(data[0].created_at);
-    if (
-      today.getFullYear() === date.getFullYear() &&
-      today.getMonth() === date.getMonth() &&
-      today.getDate() === date.getDate()
-    ) {
-      setCurrentId(data[0].id);
-      setCigarettesCounter(data[0].cigarettes_counter);
-    } else {
-      setCigarettesCounter(0);
-    }
+    setLatestCigaretteData(data[0])
   }
 }
 

@@ -20,7 +20,11 @@ export default function CountUpButton({
     cigarettesCounter: number,
   ) => {
     if (cigarettesCounter > 0 ) {
-      const newData: UpdateCigarettesType = {cigarettes_counter: cigarettesCounter + 1}
+      const currentDate = new Date().toISOString() // 現在時刻をISO形式の文字列に変換
+      const newData: UpdateCigarettesType = {
+        update_at: currentDate,
+        cigarettes_counter: cigarettesCounter + 1
+      }
       updateCigarettes(user.id, setLoading, newData)
     } else {
       createCigarettes(user, setLoading)
@@ -31,7 +35,6 @@ export default function CountUpButton({
     <>
       <Button
         variant="outlined"
-        // disabled={isSleeping}
         onClick={() => countUpBranch(user!, setLoading, cigarettesCounter)}
         sx={{width: "100%"}}
       >

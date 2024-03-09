@@ -31,7 +31,9 @@ export default function CountDownButton({
     } else if (cigarettesCounter === 1) {
       deleteCigarettes(`${currentId!}`, setLoading, setCigarettesCounter);
     } else {
+      const currentDate = new Date().toISOString() // 現在時刻をISO形式の文字列に変換
       const newData: UpdateCigarettesType = {
+        update_at: currentDate,
         cigarettes_counter: cigarettesCounter - 1,
       };
       updateCigarettes(user.id, setLoading, newData);
@@ -42,7 +44,7 @@ export default function CountDownButton({
     <>
       <Button
         variant="outlined"
-        // disabled={isSleeping}
+        disabled={cigarettesCounter === 0}
         onClick={() => countDownBranch(user!, setLoading, cigarettesCounter)}
         sx={{ width: "100%" }}
       >

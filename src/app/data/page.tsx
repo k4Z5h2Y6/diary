@@ -1,6 +1,6 @@
 import { CigaretteCounter } from "@/components/cigarettes/cigaretteCounter";
-// import { DiariesList } from "@/components/diaries/diariesList";
 import { LatestSleepsRow } from "@/components/sleeps/latestSleepsRow";
+// import { DiariesList } from "@/components/diaries/diariesList";
 import { LatestSudiesRow } from "@/components/studies/latestStudiesRow";
 import { Database } from "@/consts/database.types";
 import { Container, Divider, Link } from "@mui/material";
@@ -30,7 +30,7 @@ export default async function Calendar() {
         <LatestSudiesRow user={user} />
         <Link href="">もっと見る</Link>
         <Divider>今日の喫煙</Divider>
-        <CigaretteCounter user={user} />
+        <CigaretteCounter />
         <Link href="">もっと見る</Link>
         <Divider>今日の投稿</Divider>
         {/* <DiariesList user={user}/> */}

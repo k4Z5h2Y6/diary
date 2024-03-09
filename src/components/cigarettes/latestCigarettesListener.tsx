@@ -26,7 +26,6 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
   const [noCigaretteMinute, setNoCigaretteMinute] = useState<number | null>(
     null
   );
-  // const [key, setKey] = useState<number>(1); //レンダリングさせるため
 
   useEffect(() => {
     // Realtimeクライアントを使用してsleepsテーブルを監視

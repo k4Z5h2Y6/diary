@@ -129,7 +129,10 @@ export default function DiariesForm({ user }: { user: User | null }) {
             }}
           >
             <IconButton
-              aria-label="delete image"
+              onClick={() => {
+                setDiaryImgFile(null);
+                setDiaryImgUrl(null);
+              }}
               style={{
                 position: "absolute",
                 top: 0,
@@ -137,7 +140,6 @@ export default function DiariesForm({ user }: { user: User | null }) {
                 zIndex: 1,
                 color: "#aaa",
               }}
-              // onClick={() => handleOnRemoveImage(i)}
             >
               <CancelRoundedIcon />
             </IconButton>

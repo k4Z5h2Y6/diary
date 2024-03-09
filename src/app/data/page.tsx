@@ -14,7 +14,7 @@ export default async function Calendar() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  
+
   return (
     <>
       <Container

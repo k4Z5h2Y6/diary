@@ -1,12 +1,15 @@
-import { SleepsType, UpdateWakeupType } from "@/consts/sleeps.types";
-import { User, createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { SleepDataType, SleepsType, UpdateSleepType, UpdateWakeupType } from "@/consts/sleeps.types";
+import {
+  User,
+  createClientComponentClient,
+} from "@supabase/auth-helpers-nextjs";
 import { Dispatch, SetStateAction } from "react";
 
 const supabase = createClientComponentClient<SleepsType>();
 
 export async function createSleepOnset(
   user: User | null,
-  setLoading: Dispatch<SetStateAction<boolean>>,
+  setLoading: Dispatch<SetStateAction<boolean>>
 ) {
   try {
     setLoading(true);
@@ -22,6 +25,7 @@ export async function createSleepOnset(
   }
 }
 
+//home,単数用
 export async function readLatestSleep(
   setIsSleeping: Dispatch<SetStateAction<boolean | null>>
 ) {
@@ -43,11 +47,59 @@ export async function readLatestSleep(
   }
 }
 
-export async function updateWakeUp(
+//data,複数用
+export async function readLatestSleeps(
+  setLatestSleepsData: Dispatch<SetStateAction<SleepDataType[]>>
+) {
+  try {
+    let { data, error, status } = await supabase
+      .from("sleeps")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(7);
+
+    if (error && status !== 406) {
+      throw error;
+    }
+
+    if (data) {
+      setLatestSleepsData(data);
+    }
+  } catch (error) {
+    alert("Error loading user sleeps list!");
+  } finally {
+  }
+}
+
+export async function updateSleep(
+  userId: string,
+  id: number,
+  newData: UpdateSleepType,
+) {
+  try {
+    const { data, error } = await supabase
+      .from("sleeps")
+      .update(newData)
+      .eq("user_id", userId)
+      .eq('id', id)
+      .single();
+    if (error) {
+      throw error;
+    }
+    console.log("Updated sleep data:", data);
+  } catch (error) {
+    console.error("Error updating sleep data:");
+    alert("Error updating sleep data");
+  } finally {
+    alert("更新完了");
+  }
+}
+
+export async function updateSleepWakeUp(
   userId: string,
   setLoading: Dispatch<SetStateAction<boolean>>,
-  newData: UpdateWakeupType,
-  ) {
+  newData: UpdateWakeupType
+) {
   try {
     setLoading(true);
     const { data, error } = await supabase
@@ -70,12 +122,10 @@ export async function updateWakeUp(
 }
 
 export async function deleteSleeps(
-  id: string,
-  setLoading: Dispatch<SetStateAction<boolean>>,
-  setSleepsList: Dispatch<SetStateAction<any[]>>,
+  id: number,
+  setLatestSleepsData: Dispatch<SetStateAction<SleepDataType[]>>
 ) {
   try {
-    setLoading(true);
     const { error } = await supabase.from("sleeps").delete().eq("id", id);
 
     if (error) {
@@ -83,28 +133,28 @@ export async function deleteSleeps(
     }
 
     // 削除が成功したら、sleepsList からも該当する id のデータを削除します
-    setSleepsList((prevSleepsList) =>
+    setLatestSleepsData((prevSleepsList) =>
       prevSleepsList.filter((sl) => sl.id !== id)
     );
   } catch (error) {
     console.error("Error deleting sleep:");
     alert("Error deleting sleep!");
   } finally {
-    setLoading(false);
+    console.error("finish delete");
   }
 }
 
 export async function readSleepsRow(
   setLoading: Dispatch<SetStateAction<boolean>>,
-  setSleepsRow: Dispatch<SetStateAction<any[]>>,
+  setSleepsRow: Dispatch<SetStateAction<any[]>>
 ) {
   try {
     setLoading(true);
     let { data, error, status } = await supabase
-    .from("sleeps")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .limit(3);
+      .from("sleeps")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(3);
 
     if (error && status !== 406) {
       throw error;

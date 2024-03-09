@@ -36,7 +36,7 @@ export const LatestSleepsListener = ({ user }: { user: User | null }) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, []); // 最初のマウント時にのみ実行
+  }, [supabase]);
 
   useEffect(() => {
     readLatestSleep(setIsSleeping);

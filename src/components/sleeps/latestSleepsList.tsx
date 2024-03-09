@@ -1,5 +1,6 @@
 "use client";
-import { deleteSleeps, readSleepsRow } from "@/hooks/sleeps";
+import { SleepDataType } from "@/consts/sleeps.types";
+import { deleteSleeps, readLatestSleeps } from "@/hooks/sleeps";
 import {
   Button,
   Paper,
@@ -12,32 +13,31 @@ import {
   TextField,
 } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { DatePickerDiary } from "../common/datePickerDiary";
 
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs from "dayjs";
-
-export const LatestSleepsRow = ({ user }: { user: User | null }) => {
-  const [loading, setLoading] = useState(true);
-  const [sleepsRow, setSleepsRow] = useState<any[]>([]);
+export const LatestSleepsList = ({ user }: { user: User | null }) => {
+  const [latestSleepsData, setLatestSleepsData] = useState<SleepDataType[]>([]);
 
   useEffect(() => {
-    readSleepsRow(setLoading, setSleepsRow);
+    readLatestSleeps(setLatestSleepsData);
   }, []);
 
-  const formatDate = (ts: string) => {
-    const date = new Date(ts);
-    const jpDate = new Date(
-      date.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })
-    );
-    const month = (jpDate.getMonth() + 1).toString().padStart(2, "0");
-    const day = jpDate.getDate().toString().padStart(2, "0");
-    return `${month}/${day}`;
+  const formatDate = (ts: string | null) => {
+    if (ts) {
+      const date = new Date(ts);
+      const jpDate = new Date(
+        date.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })
+      );
+      const month = (jpDate.getMonth() + 1).toString().padStart(2, "0");
+      const day = jpDate.getDate().toString().padStart(2, "0");
+      return `${month}/${day}`;
+    } else {
+      return null;
+    }
   };
 
-  const formatTime = (ts: string) => {
+  const formatTime = (ts: string | null) => {
     if (ts) {
       const date = new Date(ts);
       const jpHours = date.getHours().toString().padStart(2, "0");
@@ -48,7 +48,7 @@ export const LatestSleepsRow = ({ user }: { user: User | null }) => {
     }
   };
 
-  const calculateSleepTime = (sts: string, wts: string) => {
+  const calculateSleepTime = (sts: string | null, wts: string | null) => {
     if (sts && wts) {
       const date1 = new Date(sts);
       const date2 = new Date(wts);
@@ -67,7 +67,7 @@ export const LatestSleepsRow = ({ user }: { user: User | null }) => {
 
   return (
     <>
-      {sleepsRow ? (
+      {latestSleepsData ? (
         <>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -81,31 +81,37 @@ export const LatestSleepsRow = ({ user }: { user: User | null }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {sleepsRow.map((sr) => (
+                {latestSleepsData.map((lsd) => (
                   <TableRow
-                    key={sr.id}
+                    key={lsd.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell align="center">
-                      {formatDate(sr.created_at)}
+                      {formatDate(lsd.created_at)}
                     </TableCell>
                     <TableCell align="center">
-                      {formatTime(sr.sleep_onset_at)}
-                    {/* <DatePickerDiary
+                      <DatePickerDiary
                         user={user}
-                        defaultValue={dayjs(sr.sleep_onset_at!)}
-                      /> */}
+                        defaultValue={lsd.sleep_onset_at}
+                        id={lsd.id}
+                        updateColumn={"sleep_onset_at"}
+                      />
                     </TableCell>
                     <TableCell align="center">
-                      {formatTime(sr.wake_up_at)}
+                      <DatePickerDiary
+                        user={user}
+                        defaultValue={lsd.wake_up_at}
+                        id={lsd.id}
+                        updateColumn={"wake_up_at"}
+                      />
                     </TableCell>
                     <TableCell align="center">
-                      {calculateSleepTime(sr.sleep_onset_at, sr.wake_up_at)}
+                      {calculateSleepTime(lsd.sleep_onset_at, lsd.wake_up_at)}
                     </TableCell>
                     <TableCell align="center">
                       <Button
                         onClick={() =>
-                          deleteSleeps(sr.id, setLoading, setSleepsRow)
+                          deleteSleeps(lsd.id, setLatestSleepsData)
                         }
                       >
                         削除

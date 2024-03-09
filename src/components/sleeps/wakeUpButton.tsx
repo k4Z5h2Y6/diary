@@ -1,7 +1,7 @@
 "use client";
 
 import { UpdateWakeupType } from "@/consts/sleeps.types";
-import { updateWakeUp } from "@/hooks/sleeps";
+import { updateSleepWakeUp } from "@/hooks/sleeps";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
 import { Button } from "@mui/material";
@@ -22,7 +22,7 @@ export default function WakeUpButton({
       wake_up_at: currentDate,
     };
     if (user) {
-      updateWakeUp(user.id, setLoading, newData);
+      updateSleepWakeUp(user.id, setLoading, newData);
     }
   }
 

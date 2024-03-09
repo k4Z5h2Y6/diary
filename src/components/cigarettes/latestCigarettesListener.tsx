@@ -40,7 +40,6 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
         },
         (payload) => {
           // 変更後のデータに対しての処理を記載
-          console.log("Realtime?--");
           readLatestCigarette(setLatestCigaretteData);
         }
       )
@@ -50,7 +49,7 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [supabase]); // 最初のマウント時にのみ実行
+  }, [supabase]);
 
   useEffect(() => {
     readLatestCigarette(setLatestCigaretteData);

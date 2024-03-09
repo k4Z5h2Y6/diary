@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { readCategories } from "@/hooks/categories";
 import { LabelCategoriesType } from "@/consts/categories.types";
-import Image from "next/image";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 
 export default function DiariesForm({ user }: { user: User | null }) {

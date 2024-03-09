@@ -57,7 +57,7 @@ export async function readLatestSleeps(
       .select("*")
       .order("created_at", { ascending: false })
       .limit(7);
-
+    
     if (error && status !== 406) {
       throw error;
     }
@@ -68,30 +68,7 @@ export async function readLatestSleeps(
   } catch (error) {
     alert("Error loading user sleeps list!");
   } finally {
-  }
-}
-
-export async function updateSleep(
-  userId: string,
-  id: number,
-  newData: UpdateSleepType,
-) {
-  try {
-    const { data, error } = await supabase
-      .from("sleeps")
-      .update(newData)
-      .eq("user_id", userId)
-      .eq('id', id)
-      .single();
-    if (error) {
-      throw error;
-    }
-    console.log("Updated sleep data:", data);
-  } catch (error) {
-    console.error("Error updating sleep data:");
-    alert("Error updating sleep data");
-  } finally {
-    alert("更新完了");
+    console.log("読み込み完了")
   }
 }
 
@@ -118,6 +95,30 @@ export async function updateSleepWakeUp(
     alert("Error updating sleep data");
   } finally {
     setLoading(false);
+  }
+}
+
+export async function updateSleep(
+  userId: string,
+  id: number,
+  newData: UpdateSleepType,
+) {
+  try {
+    const { data, error } = await supabase
+      .from("sleeps")
+      .update(newData)
+      .eq("user_id", userId)
+      .eq('id', id)
+      .single();
+    if (error) {
+      throw error;
+    }
+    console.log("Updated sleep data:", data);
+  } catch (error) {
+    console.error("Error updating sleep data:");
+    alert("Error updating sleep data");
+  } finally {
+    alert("更新完了");
   }
 }
 

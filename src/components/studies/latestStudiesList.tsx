@@ -1,25 +1,18 @@
 "use client";
-import { SleepDataType } from "@/consts/sleeps.types";
-import { deleteSleeps, readLatestSleeps } from "@/hooks/sleeps";
+import { deleteStudies, readLatestStudies } from "@/hooks/studies";
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import {
-  Button,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
-import { User } from "@supabase/auth-helpers-nextjs";
+  User,
+} from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import { DatePickerDiary } from "../common/datePickerDiary";
+import { deleteSleeps } from "@/hooks/sleeps";
 
-export const LatestSleepsList = ({ user }: { user: User | null }) => {
-  const [latestSleepsData, setLatestSleepsData] = useState<SleepDataType[]>([]);
+export const LatestSudiesList = ({ user }: { user: User | null }) => {
+  const [latestStudiesData, setLatestStudiesData] = useState<any[]>([]);
 
   useEffect(() => {
-    readLatestSleeps(setLatestSleepsData);
+    readLatestStudies(setLatestStudiesData);
   }, []);
 
   const formatDate = (ts: string | null) => {
@@ -47,10 +40,10 @@ export const LatestSleepsList = ({ user }: { user: User | null }) => {
   //   }
   // };
 
-  const calculateSleepTime = (sts: string | null, wts: string | null) => {
-    if (sts && wts) {
-      const date1 = new Date(sts);
-      const date2 = new Date(wts);
+  const calculateStudyTime = (ss: string | null, fs: string | null) => {
+    if (ss && fs) {
+      const date1 = new Date(ss);
+      const date2 = new Date(fs);
       const differenceMs = date2.getTime() - date1.getTime();
       const hours = Math.floor(differenceMs / (1000 * 60 * 60));
       const minutes = Math.floor(
@@ -66,21 +59,21 @@ export const LatestSleepsList = ({ user }: { user: User | null }) => {
 
   return (
     <>
-      {latestSleepsData ? (
+      {latestStudiesData ? (
         <>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
                   <TableCell align="center">作成日</TableCell>
-                  <TableCell align="center">入眠</TableCell>
-                  <TableCell align="center">起床</TableCell>
-                  <TableCell align="center">睡眠時間</TableCell>
+                  <TableCell align="center">開始</TableCell>
+                  <TableCell align="center">終了</TableCell>
+                  <TableCell align="center">作業時間</TableCell>
                   <TableCell align="center">削除</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {latestSleepsData.map((lsd) => (
+                {latestStudiesData.map((lsd) => (
                   <TableRow
                     key={lsd.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -91,26 +84,26 @@ export const LatestSleepsList = ({ user }: { user: User | null }) => {
                     <TableCell align="center">
                       <DatePickerDiary
                         user={user}
-                        defaultValue={lsd.sleep_onset_at}
+                        defaultValue={lsd.start_studying}
                         id={lsd.id}
-                        updateColumn={"sleep_onset_at"}
+                        updateColumn={"start_studying"}
                       />
                     </TableCell>
                     <TableCell align="center">
                       <DatePickerDiary
                         user={user}
-                        defaultValue={lsd.wake_up_at}
+                        defaultValue={lsd.finish_studying}
                         id={lsd.id}
-                        updateColumn={"wake_up_at"}
+                        updateColumn={"finish_studying"}
                       />
                     </TableCell>
                     <TableCell align="center">
-                      {calculateSleepTime(lsd.sleep_onset_at, lsd.wake_up_at)}
+                      {calculateStudyTime(lsd.start_studying, lsd.finish_studying)}
                     </TableCell>
                     <TableCell align="center">
                       <Button
                         onClick={() =>
-                          deleteSleeps(lsd.id, setLatestSleepsData)
+                          deleteStudies(lsd.id, setLatestStudiesData)
                         }
                       >
                         削除

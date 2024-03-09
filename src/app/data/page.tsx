@@ -1,7 +1,7 @@
 import { CigaretteCounter } from "@/components/cigarettes/cigaretteCounter";
 import { LatestSleepsList } from "@/components/sleeps/latestSleepsList";
+import { LatestSudiesList } from "@/components/studies/latestStudiesList";
 // import { DiariesList } from "@/components/diaries/diariesList";
-import { LatestSudiesRow } from "@/components/studies/latestStudiesRow";
 import { Database } from "@/consts/database.types";
 import { Container, Divider, Link } from "@mui/material";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -25,10 +25,10 @@ export default async function Calendar() {
         }}
       >
         <Divider>最新の睡眠</Divider>
-        <LatestSleepsList user={user}></LatestSleepsList>
+        <LatestSleepsList user={user} />
         <Link href="">もっと見る</Link>
         <Divider>最新の作業</Divider>
-        <LatestSudiesRow user={user} />
+        <LatestSudiesList user={user} />
         <Link href="">もっと見る</Link>
         <Divider>今日の喫煙</Divider>
         <CigaretteCounter />

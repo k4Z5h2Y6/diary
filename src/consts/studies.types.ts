@@ -52,3 +52,18 @@ export interface UpdateFinishStudyingType {
   update_at: string;
   finish_studying: string;
 }
+
+export interface UpdateStudyType {
+  update_at: string;
+  start_studying?: string | null;
+  finish_studying?: string | null;
+}
+
+export interface StudiesDataType {
+  id: number
+  user_id: string
+  created_at: string | null
+  update_at: string | null
+  start_studying: string | null
+  finish_studying: string | null
+}

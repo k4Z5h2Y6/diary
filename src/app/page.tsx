@@ -3,11 +3,9 @@ import { LatestSleepsListener } from "@/components/sleeps/latestSleepsListener";
 import { Database } from "@/consts/database.types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import styles from "./home.module.css";
 import { LatestStudiesListener } from "@/components/studies/latestStudiesListener";
 import DiariesForm from "@/components/diaries/diariesForm";
-import Button from "@mui/material/Button";
-import { Box, Container, Divider } from "@mui/material";
+import { Container, Divider } from "@mui/material";
 
 export default async function Home() {
   const supabase = createServerComponentClient<Database>({ cookies });
@@ -33,6 +31,7 @@ export default async function Home() {
         <LatestCigarettesListener user={user} />
         <Divider>記録</Divider>
         <DiariesForm user={user} />
+        <Divider>食事</Divider>
       </Container>
     </>
   );

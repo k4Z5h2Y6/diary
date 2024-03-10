@@ -89,6 +89,7 @@ export default function DiariesForm({ user }: { user: User | null }) {
           label="テキスト"
           variant="outlined"
           inputRef={diaryTextRef}
+          multiline
           size="small"
           fullWidth
           sx={{ marginBottom: "16px" }}

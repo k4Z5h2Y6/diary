@@ -1,6 +1,5 @@
 "use client";
 import { User } from "@supabase/auth-helpers-nextjs";
-import { useState } from "react";
 import { createStudy } from "@/hooks/studies";
 import { Button } from "@mui/material";
 

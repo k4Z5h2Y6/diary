@@ -11,14 +11,12 @@ export default function StartStudyingButton({
   user: User | null
   isStudying: boolean
 }) {
-  const [loading, setLoading] = useState<boolean>(false);
-
   return (
     <>
       <Button
         variant="outlined"
         disabled={isStudying}
-        onClick={() => createStudy(user, setLoading)}
+        onClick={() => createStudy(user)}
         sx={{width: "100%"}}
       >
         作業開始

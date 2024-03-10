@@ -1,4 +1,9 @@
-import { SleepDataType, SleepsType, UpdateSleepType, UpdateWakeupType } from "@/consts/sleeps.types";
+import {
+  SleepDataType,
+  SleepsType,
+  UpdateSleepType,
+  UpdateWakeupType,
+} from "@/consts/sleeps.types";
 import {
   User,
   createClientComponentClient,
@@ -7,21 +12,16 @@ import { Dispatch, SetStateAction } from "react";
 
 const supabase = createClientComponentClient<SleepsType>();
 
-export async function createSleepOnset(
-  user: User | null,
-  setLoading: Dispatch<SetStateAction<boolean>>
-) {
+export async function createSleepOnset(user: User | null) {
   try {
-    setLoading(true);
     const { error } = await supabase.from("sleeps").insert({
       user_id: user?.id as string,
     });
     if (error) throw error;
-    alert("Sleep Onset Created!");
   } catch (error) {
     alert("Error");
   } finally {
-    setLoading(false);
+    console.log("完了");
   }
 }
 
@@ -57,7 +57,7 @@ export async function readLatestSleeps(
       .select("*")
       .order("created_at", { ascending: false })
       .limit(7);
-    
+
     if (error && status !== 406) {
       throw error;
     }
@@ -68,17 +68,15 @@ export async function readLatestSleeps(
   } catch (error) {
     alert("Error loading user sleeps list!");
   } finally {
-    console.log("読み込み完了")
+    console.log("完了");
   }
 }
 
 export async function updateSleepWakeUp(
   userId: string,
-  setLoading: Dispatch<SetStateAction<boolean>>,
   newData: UpdateWakeupType
 ) {
   try {
-    setLoading(true);
     const { data, error } = await supabase
       .from("sleeps")
       .update(newData)
@@ -89,33 +87,29 @@ export async function updateSleepWakeUp(
     if (error) {
       throw error;
     }
-    console.log("Updated sleep data:", data);
   } catch (error) {
-    console.error("Error updating sleep data:");
     alert("Error updating sleep data");
   } finally {
-    setLoading(false);
+    console.log("完了");
   }
 }
 
 export async function updateSleep(
   userId: string,
   id: number,
-  newData: UpdateSleepType,
+  newData: UpdateSleepType
 ) {
   try {
     const { data, error } = await supabase
       .from("sleeps")
       .update(newData)
       .eq("user_id", userId)
-      .eq('id', id)
+      .eq("id", id)
       .single();
     if (error) {
       throw error;
     }
-    console.log("Updated sleep data:", data);
   } catch (error) {
-    console.error("Error updating sleep data:");
     alert("Error updating sleep data");
   } finally {
     alert("更新完了");
@@ -138,35 +132,8 @@ export async function deleteSleeps(
       prevSleepsList.filter((sl) => sl.id !== id)
     );
   } catch (error) {
-    console.error("Error deleting sleep:");
     alert("Error deleting sleep!");
   } finally {
-    console.error("finish delete");
-  }
-}
-
-export async function readSleepsRow(
-  setLoading: Dispatch<SetStateAction<boolean>>,
-  setSleepsRow: Dispatch<SetStateAction<any[]>>
-) {
-  try {
-    setLoading(true);
-    let { data, error, status } = await supabase
-      .from("sleeps")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(3);
-
-    if (error && status !== 406) {
-      throw error;
-    }
-
-    if (data) {
-      setSleepsRow(data);
-    }
-  } catch (error) {
-    alert("Error loading user sleeps list!");
-  } finally {
-    setLoading(false);
+    console.log("完了");
   }
 }

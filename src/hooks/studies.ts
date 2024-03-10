@@ -6,10 +6,8 @@ const supabase = createClientComponentClient<StudiesType>();
 
 export async function createStudy(
   user: User | null,
-  setLoading: Dispatch<SetStateAction<boolean>>,
 ) {
   try {
-    setLoading(true);
     const { error } = await supabase.from("studies").insert({
       user_id: user?.id as string,
     });
@@ -18,7 +16,7 @@ export async function createStudy(
   } catch (error) {
     alert("Error");
   } finally {
-    setLoading(false);
+    console.log("完了")
   }
 }
 
@@ -63,17 +61,15 @@ export async function readLatestStudies(
   } catch (error) {
     alert("Error loading user study list!");
   } finally {
-    console.log("読み込み完了")
+    console.log("完了")
   }
 }
 
 export async function updateFinishStudying(
   userId: string,
-  setLoading: Dispatch<SetStateAction<boolean>>,
   newData: UpdateFinishStudyingType,
   ) {
   try {
-    setLoading(true);
     const { data, error } = await supabase
       .from("studies")
       .update(newData)
@@ -84,12 +80,10 @@ export async function updateFinishStudying(
     if (error) {
       throw error;
     }
-    console.log("Updated study data:", data);
   } catch (error) {
-    console.error("Error updating study data:");
     alert("Error updating study data");
   } finally {
-    setLoading(false);
+    console.log("完了")
   }
 }
 
@@ -108,9 +102,7 @@ export async function updateStudy(
     if (error) {
       throw error;
     }
-    console.log("Updated study data:", data);
   } catch (error) {
-    console.error("Error updating study data:");
     alert("Error updating study data");
   } finally {
     alert("更新完了");
@@ -133,9 +125,8 @@ export async function deleteStudies(
       prevStudiesList.filter((sl) => sl.id !== id)
     );
   } catch (error) {
-    console.error("Error deleting study:");
     alert("Error deleting study!");
   } finally {
-    console.error("finish delete");
+    console.log("完了")
   }
 }

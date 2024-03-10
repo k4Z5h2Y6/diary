@@ -13,7 +13,6 @@ export default function WakeUpButton({
   user: User | null;
   isSleeping: boolean;
 }) {
-  const [loading, setLoading] = useState<boolean>(false);
 
   function handleWakeUpClick() {
     const currentDate = new Date().toISOString(); // 現在時刻をISO形式の文字列に変換
@@ -22,7 +21,7 @@ export default function WakeUpButton({
       wake_up_at: currentDate,
     };
     if (user) {
-      updateSleepWakeUp(user.id, setLoading, newData);
+      updateSleepWakeUp(user.id, newData);
     }
   }
 
@@ -30,7 +29,7 @@ export default function WakeUpButton({
     <>
       <Button
         variant="outlined"
-        disabled={!isSleeping || loading}
+        disabled={!isSleeping}
         onClick={handleWakeUpClick}
         sx={{width: "100%"}}
       >

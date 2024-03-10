@@ -13,8 +13,6 @@ export default function FinishStudyingButton({
   user: User | null;
   isStudying: boolean;
 }) {
-  const [loading, setLoading] = useState<boolean>(false);
-
   function handleClick() {
     const currentDate = new Date().toISOString(); // 現在時刻をISO形式の文字列に変換
     const newData: UpdateFinishStudyingType = {
@@ -22,7 +20,7 @@ export default function FinishStudyingButton({
       finish_studying: currentDate,
     };
     if (user) {
-      updateFinishStudying(user.id, setLoading, newData);
+      updateFinishStudying(user.id, newData);
     }
   }
 
@@ -30,7 +28,7 @@ export default function FinishStudyingButton({
     <>
       <Button
         variant="outlined"
-        disabled={!isStudying || loading}
+        disabled={!isStudying}
         onClick={handleClick}
         sx={{width: "100%"}}
       >

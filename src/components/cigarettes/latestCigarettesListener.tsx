@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import CountUpButton from "./countUpButton";
 import { readLatestCigarette } from "@/hooks/cigarettes";
 import CountDownButton from "./countDownButton";
-import { Box, Grid, Skeleton, Typography } from "@mui/material";
+import { Grid, Skeleton, Typography } from "@mui/material";
 
 export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
   const supabase = createClientComponentClient<CigarettesType>();
@@ -57,28 +57,64 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
 
   useEffect(() => {
     if (latestCigaretteData) {
-      const today = new Date();
-      const date = new Date(latestCigaretteData.update_at);
-      if (
-        today.getFullYear() === date.getFullYear() &&
-        today.getMonth() === date.getMonth() &&
-        today.getDate() === date.getDate()
-      ) {
-        setCurrentId(latestCigaretteData.id);
-        setCigarettesCounter(latestCigaretteData.cigarettes_counter);
-        const years = today.getFullYear() - date.getFullYear();
-        setNoCigaretteYear(years)
-        setNoCigaretteMonth(today.getMonth() - date.getMonth() + 12 * years);
-        const diffInMilliseconds = Math.abs(today.getTime() - date.getTime());
-        setNoCigaretteDay(Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24)))
-        setNoCigaretteHour(Math.floor(
-          (diffInMilliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        ))
-        setNoCigaretteMinute(Math.floor(
-          (diffInMilliseconds % (1000 * 60 * 60)) / (1000 * 60)
-        ))
+      if (latestCigaretteData.cigarettes_counter === 1) {
+        const today = new Date();
+        const date = new Date(latestCigaretteData.created_at);
+
+        if (
+          today.getFullYear() === date.getFullYear() &&
+          today.getMonth() === date.getMonth() &&
+          today.getDate() === date.getDate()
+        ) {
+          setCurrentId(latestCigaretteData.id);
+          setCigarettesCounter(latestCigaretteData.cigarettes_counter);
+          const years = today.getFullYear() - date.getFullYear();
+          setNoCigaretteYear(years);
+          setNoCigaretteMonth(today.getMonth() - date.getMonth() + 12 * years);
+          const diffInMilliseconds = Math.abs(today.getTime() - date.getTime());
+          setNoCigaretteDay(
+            Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24))
+          );
+          setNoCigaretteHour(
+            Math.floor(
+              (diffInMilliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+            )
+          );
+          setNoCigaretteMinute(
+            Math.floor((diffInMilliseconds % (1000 * 60 * 60)) / (1000 * 60))
+          );
+        } else {
+          setCigarettesCounter(0);
+        }
       } else {
-        setCigarettesCounter(0);
+        const today = new Date();
+        const date = new Date(latestCigaretteData.update_at);
+
+        if (
+          today.getFullYear() === date.getFullYear() &&
+          today.getMonth() === date.getMonth() &&
+          today.getDate() === date.getDate()
+        ) {
+          setCurrentId(latestCigaretteData.id);
+          setCigarettesCounter(latestCigaretteData.cigarettes_counter);
+          const years = today.getFullYear() - date.getFullYear();
+          setNoCigaretteYear(years);
+          setNoCigaretteMonth(today.getMonth() - date.getMonth() + 12 * years);
+          const diffInMilliseconds = Math.abs(today.getTime() - date.getTime());
+          setNoCigaretteDay(
+            Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24))
+          );
+          setNoCigaretteHour(
+            Math.floor(
+              (diffInMilliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+            )
+          );
+          setNoCigaretteMinute(
+            Math.floor((diffInMilliseconds % (1000 * 60 * 60)) / (1000 * 60))
+          );
+        } else {
+          setCigarettesCounter(0);
+        }
       }
     }
   }, [latestCigaretteData]);
@@ -107,7 +143,10 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
           </Grid>
         </Grid>
       )}
-      <Typography sx={{ textAlign: "center" }}>{noCigaretteYear}年{noCigaretteMonth}月{noCigaretteDay}日{noCigaretteHour}時間{noCigaretteMinute}分前に喫煙</Typography>
+      <Typography sx={{ textAlign: "center" }}>
+        {noCigaretteYear}年{noCigaretteMonth}月{noCigaretteDay}日
+        {noCigaretteHour}時間{noCigaretteMinute}分前に喫煙
+      </Typography>
     </>
   );
 };

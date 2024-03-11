@@ -89,7 +89,7 @@ export const DatePickerDiary = ({
           value={value}
           ampm={false}
           views={["month", "day", "hours", "minutes"]}
-          format="MM/DD hh:mm"
+          format="MM/DD HH:mm"
           onChange={(nv) => handleChenge(nv)}
           // renderInput={(params: any) => <TextField {...params} />}
         />

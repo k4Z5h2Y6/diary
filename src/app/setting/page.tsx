@@ -1,10 +1,18 @@
-import LogoutButton from "@/components/auth/logoutButton";
-
+import { Button } from "@mui/material";
 
 export default function Setting() {
   return (
     <>
-      <LogoutButton />
+      <form action="/auth/logout" method="post">
+        <Button
+          variant="contained"
+          type="submit"
+          fullWidth
+          sx={{ marginBottom: "16px" }}
+        >
+          ログアウト
+        </Button>
+      </form>
     </>
   );
 }

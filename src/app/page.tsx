@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { LatestStudiesListener } from "@/components/studies/latestStudiesListener";
 import DiariesForm from "@/components/diaries/diariesForm";
 import { Container, Divider } from "@mui/material";
+import FoodsForm from "@/components/foods/foodsForm";
 
 export default async function Home() {
   const supabase = createServerComponentClient<Database>({ cookies });
@@ -34,6 +35,7 @@ export default async function Home() {
         <Divider>記録</Divider>
         <DiariesForm user={user} />
         <Divider>食事</Divider>
+        <FoodsForm user={user} />
       </Container>
     </>
   );

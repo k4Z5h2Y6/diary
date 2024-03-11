@@ -1,30 +1,17 @@
 "use client";
 
-import { createDiary, uploadDiaryImg } from "@/hooks/diaries";
 import { User } from "@supabase/auth-helpers-nextjs";
-import { useEffect, useRef, useState } from "react";
-import {
-  Autocomplete,
-  Box,
-  Button,
-  IconButton,
-  TextField,
-} from "@mui/material";
-import { readCategories } from "@/hooks/categories";
-import { LabelCategoriesType } from "@/consts/categories.types";
+import { useRef, useState } from "react";
+import { Box, Button, IconButton, TextField } from "@mui/material";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
+import { createFood, uploadFoodImg } from "@/hooks/foods";
 
-export default function DiariesForm({ user }: { user: User | null }) {
+export default function FoodsForm({ user }: { user: User | null }) {
   const [loading, setLoading] = useState<boolean>(false);
   const [imgUploading, setImgUploading] = useState(false);
-  const diaryTextRef = useRef<HTMLTextAreaElement>(null);
-  const [diaryImgUrl, setDiaryImgUrl] = useState<string | null>(null);
-  const [diaryImgFile, setDiaryImgFile] = useState<File | null>(null);
-  const [diaryCategoyLabel, setDiaryCategoyLabel] = useState<string | null>(
-    null
-  );
-  const [diaryCategory, setDiaryCategory] = useState<number | null>(null);
-  const [diaryCategories, setDiaryCategories] = useState<any[]>([]);
+  const foodTextRef = useRef<HTMLTextAreaElement>(null);
+  const [foodImgUrl, setFoodImgUrl] = useState<string | null>(null);
+  const [foodImgFile, setFoodImgFile] = useState<File | null>(null);
 
   const imgChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     if (event.target.files) {
@@ -32,66 +19,55 @@ export default function DiariesForm({ user }: { user: User | null }) {
       const fileExt = file.name.split(".").pop();
       const filePath = `${user!.id}-${Math.random()}.${fileExt}`;
 
-      setDiaryImgFile(file);
-      setDiaryImgUrl(filePath);
+      setFoodImgFile(file);
+      setFoodImgUrl(filePath);
     } else {
-      setDiaryImgFile(null);
-      setDiaryImgUrl(null);
+      setFoodImgFile(null);
+      setFoodImgUrl(null);
     }
   };
 
   const handleSubmit = async () => {
-    const diaryText = diaryTextRef.current?.value || "";
+    const foodText = foodTextRef.current?.value || "";
 
-    if (diaryText) {
-      if (diaryImgUrl) {
-        await uploadDiaryImg(
+    if (foodText) {
+      if (foodImgUrl) {
+        await uploadFoodImg(
           user,
           setImgUploading,
-          diaryImgUrl,
-          diaryImgFile,
+          foodImgUrl,
+          foodImgFile,
           () => {
-            createDiary(
-              user,
-              setLoading,
-              diaryText,
-              diaryImgUrl,
-              diaryCategory
-            );
+            createFood(user, setLoading, foodText, foodImgUrl);
           }
         );
       } else {
-        createDiary(user, setLoading, diaryText, diaryImgUrl, diaryCategory);
+        createFood(user, setLoading, foodText, foodImgUrl);
       }
     } else {
       alert("コンテンツがありません");
     }
 
     // フォームを送信した後、textarea をクリアする
-    if (diaryTextRef.current) {
-      diaryTextRef.current.value = "";
+    if (foodTextRef.current) {
+      foodTextRef.current.value = "";
     }
-    setDiaryImgFile(null);
-    setDiaryImgUrl(null);
-    setDiaryCategoyLabel(null)
+    setFoodImgFile(null);
+    setFoodImgUrl(null);
   };
-
-  useEffect(() => {
-    readCategories(setLoading, setDiaryCategories);
-  }, []);
 
   return (
     <>
       <TextField
-        label="テキスト"
+        label="料理名、食材など"
         variant="outlined"
-        inputRef={diaryTextRef}
+        inputRef={foodTextRef}
         multiline
         size="small"
         fullWidth
         sx={{ marginBottom: "16px" }}
       />
-      <label htmlFor="single">
+      <label htmlFor="foods">
         <Button
           variant="outlined"
           component="span"
@@ -107,13 +83,13 @@ export default function DiariesForm({ user }: { user: User | null }) {
           position: "absolute",
         }}
         type="file"
-        id="single"
+        id="foods"
         // accept="image/*"
         onChange={imgChange}
         disabled={imgUploading}
       />
 
-      {diaryImgFile ? (
+      {foodImgFile ? (
         <Box
           sx={{
             width: "160px",
@@ -127,8 +103,8 @@ export default function DiariesForm({ user }: { user: User | null }) {
         >
           <IconButton
             onClick={() => {
-              setDiaryImgFile(null);
-              setDiaryImgUrl(null);
+              setFoodImgFile(null);
+              setFoodImgUrl(null);
             }}
             style={{
               position: "absolute",
@@ -141,7 +117,7 @@ export default function DiariesForm({ user }: { user: User | null }) {
             <CancelRoundedIcon />
           </IconButton>
           <img
-            src={URL.createObjectURL(diaryImgFile)}
+            src={URL.createObjectURL(foodImgFile)}
             alt=""
             style={{
               width: "160px",
@@ -154,25 +130,6 @@ export default function DiariesForm({ user }: { user: User | null }) {
       ) : (
         <></>
       )}
-
-      <Autocomplete
-        value={diaryCategoyLabel}
-        onChange={(event: any, newValue: LabelCategoriesType | null) => {
-          if (newValue) {
-            setDiaryCategoyLabel(newValue!.label);
-            setDiaryCategory(newValue!.id);
-          } else {
-            setDiaryCategoyLabel(null);
-            setDiaryCategory(null);
-          }
-        }}
-        options={diaryCategories}
-        renderInput={(params) => (
-          <TextField {...params} label="カテゴリー" fullWidth />
-        )}
-        size="small"
-        sx={{ marginBottom: "16px" }}
-      />
       <Button
         variant="contained"
         type="submit"

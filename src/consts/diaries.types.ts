@@ -7,7 +7,7 @@ export interface DiariesType {
           user_id: string
           created_at: string | null
           update_at: string | null
-          diary_text: string
+          diary_text: string | null
           diary_img_url: string | null
           diary_category: number | null
         }
@@ -16,7 +16,7 @@ export interface DiariesType {
           user_id: string
           created_at?: string | null
           update_at?: string | null
-          diary_text?: string
+          diary_text?: string | null
           diary_img_url?: string | null
           diary_category?: number | null
         }

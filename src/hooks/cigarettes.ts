@@ -29,6 +29,7 @@ export async function createCigarettes(
   }
 }
 
+//単数
 export async function readLatestCigarette(
   setLatestCigaretteData: Dispatch<SetStateAction<CigaretteDataType | null>>,
 ) {
@@ -47,13 +48,30 @@ export async function readLatestCigarette(
   }
 }
 
+//複数
+export async function readLatestCigarettes(
+  setLatestCigaretteData: Dispatch<SetStateAction<CigaretteDataType[] | null>>,
+) {
+  // "cigarettes" テーブルから作成日が最新の行を取得するクエリを定義します
+  const { data, error } = await supabase
+    .from("cigarettes")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(7);
+  if (error) {
+    console.error("Error fetching data:", error.message);
+    return;
+  }
+  if (data) {
+    setLatestCigaretteData(data)
+  }
+}
+
 export async function updateCigarettes(
   userId: string,
-  setLoading: Dispatch<SetStateAction<boolean>>,
   newData: UpdateCigarettesType
 ) {
   try {
-    setLoading(true);
     const { data, error } = await supabase
       .from("cigarettes")
       .update(newData)
@@ -69,27 +87,45 @@ export async function updateCigarettes(
     console.error("Error updating cigarettes data:");
     alert("Error updating cigarettes data");
   } finally {
-    setLoading(false);
+    console.log("完了");
   }
 }
 
-export async function deleteCigarettes(
-  id: string,
-  setLoading: Dispatch<SetStateAction<boolean>>,
-  setCigarettesCounter: Dispatch<SetStateAction<number | null>>
+export async function deleteCigarette(
+  id: number,
 ) {
   try {
-    setLoading(true);
     const { error } = await supabase.from("cigarettes").delete().eq("id", id);
     if (error) {
       throw error;
     }
-    setCigarettesCounter(0)
-    alert("Cigarettes deleted!");
+    alert("Cigarettes row deleted!");
   } catch (error) {
     console.error("Error deleting cigarettes");
     alert("Error deleting cigarettes!");
   } finally {
-    setLoading(false);
+    console.log('完了')
+  }
+}
+
+export async function deleteCigarettes(
+  id: number,
+  setLatestCigaretteData: Dispatch<SetStateAction<CigaretteDataType[] | null>>,
+) {
+  try {
+    const { error } = await supabase.from("cigarettes").delete().eq("id", id);
+    if (error) {
+      throw error;
+    }
+
+    // 削除が成功したら、sleepsList からも該当する id のデータを削除します
+    setLatestCigaretteData((prevCigarettesList) =>
+      prevCigarettesList!.filter((cl) => cl.id !== id)
+    );
+  } catch (error) {
+    console.error("Error deleting cigarettes");
+    alert("Error deleting cigarettes!");
+  } finally {
+    console.log('完了')
   }
 }

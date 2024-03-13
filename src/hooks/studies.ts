@@ -42,7 +42,7 @@ export async function readLatestStudy(
 }
 
 export async function readLatestStudies(
-  setLatestStudiesData: Dispatch<SetStateAction<StudiesDataType[]>>,
+  setLatestStudiesData: Dispatch<SetStateAction<StudiesDataType[] | null>>,
 ) {
   try {
     let { data, error, status } = await supabase
@@ -111,7 +111,7 @@ export async function updateStudy(
 
 export async function deleteStudies(
   id: number,
-  setLatestStudiesData: Dispatch<SetStateAction<StudiesDataType[]>>,
+  setLatestStudiesData: Dispatch<SetStateAction<StudiesDataType[] | null>>,
 ) {
   try {
     const { error } = await supabase.from("studies").delete().eq("id", id);
@@ -122,7 +122,7 @@ export async function deleteStudies(
 
     // 削除が成功したら、sleepsList からも該当する id のデータを削除します
     setLatestStudiesData((prevStudiesList) =>
-      prevStudiesList.filter((sl) => sl.id !== id)
+      prevStudiesList!.filter((sl) => sl.id !== id)
     );
   } catch (error) {
     alert("Error deleting study!");

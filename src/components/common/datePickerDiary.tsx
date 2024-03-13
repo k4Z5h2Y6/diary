@@ -20,6 +20,7 @@ import timezone from "dayjs/plugin/timezone";
 import { updateSleep } from "@/hooks/sleeps";
 import { UpdateSleepType } from "@/consts/sleeps.types";
 import { UpdateStudyType } from "@/consts/studies.types";
+import { updateStudy } from "@/hooks/studies";
 
 export const DatePickerDiary = ({
   user,
@@ -70,11 +71,13 @@ export const DatePickerDiary = ({
         update_at: currentDate,
         start_studying: dayjs.tz(nv).format(),
       };
+      updateStudy(user!.id, id, newData);
     } else if (updateColumn === "finish_studying") {
       const newData: UpdateStudyType = {
         update_at: currentDate,
         finish_studying: dayjs.tz(nv).format(),
       };
+      updateStudy(user!.id, id, newData);
     }
   };
 

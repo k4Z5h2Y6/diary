@@ -1,6 +1,7 @@
 "use client";
 import { UpdateCigarettesType } from "@/consts/cigarettes.types";
 import {
+  deleteCigarette,
   deleteCigarettes,
   updateCigarettes,
 } from "@/hooks/cigarettes";
@@ -19,24 +20,23 @@ export default function CountDownButton({
   setCigarettesCounter: Dispatch<SetStateAction<number | null>>;
   currentId: number | null;
 }) {
-  const [loading, setLoading] = useState<boolean>(false);
 
   const countDownBranch = (
     user: User,
-    setLoading: Dispatch<SetStateAction<boolean>>,
     cigarettesCounter: number
   ) => {
     if (cigarettesCounter === 0) {
       return;
     } else if (cigarettesCounter === 1) {
-      deleteCigarettes(`${currentId!}`, setLoading, setCigarettesCounter);
+      deleteCigarette(currentId!);
+      setCigarettesCounter(0)
     } else {
       const currentDate = new Date().toISOString() // 現在時刻をISO形式の文字列に変換
       const newData: UpdateCigarettesType = {
         update_at: currentDate,
         cigarettes_counter: cigarettesCounter - 1,
       };
-      updateCigarettes(user.id, setLoading, newData);
+      updateCigarettes(user.id, newData);
     }
   };
 
@@ -45,7 +45,7 @@ export default function CountDownButton({
       <Button
         variant="outlined"
         disabled={cigarettesCounter === 0}
-        onClick={() => countDownBranch(user!, setLoading, cigarettesCounter)}
+        onClick={() => countDownBranch(user!, cigarettesCounter)}
         sx={{ width: "100%" }}
       >
         ー

@@ -49,7 +49,7 @@ export async function readLatestSleep(
 
 //data,複数用
 export async function readLatestSleeps(
-  setLatestSleepsData: Dispatch<SetStateAction<SleepDataType[]>>
+  setLatestSleepsData: Dispatch<SetStateAction<SleepDataType[] | null>>
 ) {
   try {
     let { data, error, status } = await supabase
@@ -118,7 +118,7 @@ export async function updateSleep(
 
 export async function deleteSleeps(
   id: number,
-  setLatestSleepsData: Dispatch<SetStateAction<SleepDataType[]>>
+  setLatestSleepsData: Dispatch<SetStateAction<SleepDataType[] | null>>
 ) {
   try {
     const { error } = await supabase.from("sleeps").delete().eq("id", id);
@@ -129,7 +129,7 @@ export async function deleteSleeps(
 
     // 削除が成功したら、sleepsList からも該当する id のデータを削除します
     setLatestSleepsData((prevSleepsList) =>
-      prevSleepsList.filter((sl) => sl.id !== id)
+      prevSleepsList!.filter((sl) => sl.id !== id)
     );
   } catch (error) {
     alert("Error deleting sleep!");

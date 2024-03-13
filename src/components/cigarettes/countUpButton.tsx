@@ -25,7 +25,7 @@ export default function CountUpButton({
         update_at: currentDate,
         cigarettes_counter: cigarettesCounter + 1
       }
-      updateCigarettes(user.id, setLoading, newData)
+      updateCigarettes(user.id, newData)
     } else {
       createCigarettes(user, setLoading)
     }

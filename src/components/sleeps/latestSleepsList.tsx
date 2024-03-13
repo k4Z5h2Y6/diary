@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { DatePickerDiary } from "../common/datePickerDiary";
 
 export const LatestSleepsList = ({ user }: { user: User | null }) => {
-  const [latestSleepsData, setLatestSleepsData] = useState<SleepDataType[]>([]);
+  const [latestSleepsData, setLatestSleepsData] = useState<SleepDataType[] | null>(null);
 
   useEffect(() => {
     readLatestSleeps(setLatestSleepsData);

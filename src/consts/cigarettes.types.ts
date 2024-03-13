@@ -44,7 +44,7 @@ export interface CigarettesType {
   };
 }
 
-export interface UpdateCigarettesType {
+export interface UpdateCigaretteType {
   update_at: string;
   cigarettes_counter: number;
 }

@@ -25,16 +25,16 @@ export default async function Calendar() {
           flexDirection: "column",
         }}
       >
-        <Divider>最新の睡眠</Divider>
+        <Divider>睡眠履歴</Divider>
         <LatestSleepsList user={user} />
         <Link href="">もっと見る</Link>
-        <Divider>最新の作業</Divider>
+        <Divider>作業履歴</Divider>
         <LatestSudiesList user={user} />
         <Link href="">もっと見る</Link>
-        <Divider>今日の喫煙</Divider>
+        <Divider>喫煙履歴</Divider>
         <LatestCigarettesList user={user} />
         <Link href="">もっと見る</Link>
-        <Divider>今日の投稿</Divider>
+        <Divider>投稿履歴</Divider>
         {/* <DiariesList user={user}/> */}
         <Link href="">投稿一覧へ</Link>
         <Divider>投稿カテゴリーを編集</Divider>

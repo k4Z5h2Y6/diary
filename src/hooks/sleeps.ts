@@ -112,7 +112,7 @@ export async function updateSleep(
   } catch (error) {
     alert("Error updating sleep data");
   } finally {
-    alert("更新完了");
+    alert("終了");
   }
 }
 

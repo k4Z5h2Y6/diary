@@ -55,66 +55,51 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
     readLatestCigarette(setLatestCigaretteData);
   }, []);
 
+  const calculateNoSmokingTime = (date: Date) => {
+    const today = new Date();
+    const years = today.getFullYear() - date.getFullYear();
+    setNoCigaretteYear(years);
+    setNoCigaretteMonth(today.getMonth() - date.getMonth() + 12 * years);
+    const diffInMilliseconds = Math.abs(today.getTime() - date.getTime());
+    setNoCigaretteDay(Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24)));
+    setNoCigaretteHour(
+      Math.floor(
+        (diffInMilliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      )
+    );
+    setNoCigaretteMinute(
+      Math.floor((diffInMilliseconds % (1000 * 60 * 60)) / (1000 * 60))
+    );
+  };
+
+  const DoseResetCounter = (date: Date) => {
+    setCurrentId(latestCigaretteData!.id);
+    const today = new Date();
+    if (
+      today.getFullYear() === date.getFullYear() &&
+      today.getMonth() === date.getMonth() &&
+      today.getDate() === date.getDate()
+    ) {
+      //最新喫煙データが今日である場合
+      setCigarettesCounter(latestCigaretteData!.cigarettes_counter);
+    } else {
+      //最新喫煙データが今日ではない場合
+      setCigarettesCounter(0);
+    }
+  };
+
   useEffect(() => {
     if (latestCigaretteData) {
-      if (latestCigaretteData.cigarettes_counter === 1) {
-        const today = new Date();
-        const date = new Date(latestCigaretteData.created_at);
-
-        if (
-          today.getFullYear() === date.getFullYear() &&
-          today.getMonth() === date.getMonth() &&
-          today.getDate() === date.getDate()
-        ) {
-          setCurrentId(latestCigaretteData.id);
-          setCigarettesCounter(latestCigaretteData.cigarettes_counter);
-          const years = today.getFullYear() - date.getFullYear();
-          setNoCigaretteYear(years);
-          setNoCigaretteMonth(today.getMonth() - date.getMonth() + 12 * years);
-          const diffInMilliseconds = Math.abs(today.getTime() - date.getTime());
-          setNoCigaretteDay(
-            Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24))
-          );
-          setNoCigaretteHour(
-            Math.floor(
-              (diffInMilliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-            )
-          );
-          setNoCigaretteMinute(
-            Math.floor((diffInMilliseconds % (1000 * 60 * 60)) / (1000 * 60))
-          );
-        } else {
-          setCigarettesCounter(0);
-        }
-      } else {
-        const today = new Date();
+      if (latestCigaretteData.update_at) {
+        //最新喫煙データに更新日付があった場合
         const date = new Date(latestCigaretteData.update_at);
-
-        if (
-          today.getFullYear() === date.getFullYear() &&
-          today.getMonth() === date.getMonth() &&
-          today.getDate() === date.getDate()
-        ) {
-          setCurrentId(latestCigaretteData.id);
-          setCigarettesCounter(latestCigaretteData.cigarettes_counter);
-          const years = today.getFullYear() - date.getFullYear();
-          setNoCigaretteYear(years);
-          setNoCigaretteMonth(today.getMonth() - date.getMonth() + 12 * years);
-          const diffInMilliseconds = Math.abs(today.getTime() - date.getTime());
-          setNoCigaretteDay(
-            Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24))
-          );
-          setNoCigaretteHour(
-            Math.floor(
-              (diffInMilliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-            )
-          );
-          setNoCigaretteMinute(
-            Math.floor((diffInMilliseconds % (1000 * 60 * 60)) / (1000 * 60))
-          );
-        } else {
-          setCigarettesCounter(0);
-        }
+        DoseResetCounter(date);
+        calculateNoSmokingTime(date);
+      } else {
+        //最新喫煙データに更新日付がなかった場合
+        const date = new Date(latestCigaretteData.created_at);
+        DoseResetCounter(date);
+        calculateNoSmokingTime(date);
       }
     }
   }, [latestCigaretteData]);
@@ -128,9 +113,9 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
           <Grid item xs={4}>
             <CountDownButton
               user={user}
+              currentId={currentId}
               cigarettesCounter={cigarettesCounter}
               setCigarettesCounter={setCigarettesCounter}
-              currentId={currentId}
             />
           </Grid>
           <Grid item xs={4}>
@@ -139,7 +124,12 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            <CountUpButton user={user} cigarettesCounter={cigarettesCounter} />
+            <CountUpButton
+              user={user}
+              currentId={currentId}
+              cigarettesCounter={cigarettesCounter}
+              setCigarettesCounter={setCigarettesCounter}
+            />
           </Grid>
         </Grid>
       )}

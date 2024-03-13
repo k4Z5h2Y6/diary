@@ -1,7 +1,7 @@
 import {
   CigaretteDataType,
   CigarettesType,
-  UpdateCigarettesType,
+  UpdateCigaretteType,
 } from "@/consts/cigarettes.types";
 import {
   User,
@@ -11,21 +11,21 @@ import { Dispatch, SetStateAction } from "react";
 
 const supabase = createClientComponentClient<CigarettesType>();
 
-export async function createCigarettes(
+export async function createCigarette(
   user: User | null,
-  setLoading: Dispatch<SetStateAction<boolean>>
+  setCigarettesCounter: Dispatch<SetStateAction<number | null>>,
 ) {
   try {
-    setLoading(true);
     const { error } = await supabase.from("cigarettes").insert({
       user_id: user?.id as string,
     });
     if (error) throw error;
     alert("Cigarettes Onset Created!");
+    setCigarettesCounter(1)
   } catch (error) {
     alert("Error");
   } finally {
-    setLoading(false);
+    console.log("終了");
   }
 }
 
@@ -67,32 +67,35 @@ export async function readLatestCigarettes(
   }
 }
 
-export async function updateCigarettes(
+export async function updateCigarette(
   userId: string,
-  newData: UpdateCigarettesType
+  id: number,
+  newData: UpdateCigaretteType,
+  setCigarettesCounter: Dispatch<SetStateAction<number | null>>,
 ) {
   try {
     const { data, error } = await supabase
       .from("cigarettes")
       .update(newData)
       .eq("user_id", userId)
-      .order("created_at", { ascending: false }) // 作成日が最新の行を指定
-      .limit(1)
+      .eq("id", id)
       .single();
     if (error) {
       throw error;
     }
-    console.log("Updated cigarettes data:", data);
+    alert("更新完了");
+    setCigarettesCounter(newData.cigarettes_counter)
   } catch (error) {
-    console.error("Error updating cigarettes data:");
-    alert("Error updating cigarettes data");
+    alert("Error updating sleep data");
   } finally {
-    console.log("完了");
+    console.log("終了");
   }
 }
 
+//ホーム用
 export async function deleteCigarette(
   id: number,
+  setCigarettesCounter: Dispatch<SetStateAction<number | null>>,
 ) {
   try {
     const { error } = await supabase.from("cigarettes").delete().eq("id", id);
@@ -100,6 +103,7 @@ export async function deleteCigarette(
       throw error;
     }
     alert("Cigarettes row deleted!");
+    setCigarettesCounter(0)
   } catch (error) {
     console.error("Error deleting cigarettes");
     alert("Error deleting cigarettes!");
@@ -108,6 +112,7 @@ export async function deleteCigarette(
   }
 }
 
+//履歴用
 export async function deleteCigarettes(
   id: number,
   setLatestCigaretteData: Dispatch<SetStateAction<CigaretteDataType[] | null>>,

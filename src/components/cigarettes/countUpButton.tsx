@@ -1,33 +1,32 @@
 "use client";
-import { UpdateCigarettesType } from "@/consts/cigarettes.types";
-import { createCigarettes, updateCigarettes } from "@/hooks/cigarettes";
+import { UpdateCigaretteType } from "@/consts/cigarettes.types";
+import { createCigarette, updateCigarette } from "@/hooks/cigarettes";
 import { Button } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 export default function CountUpButton({
   user,
+  currentId,
   cigarettesCounter,
+  setCigarettesCounter,
 }: {
   user: User | null;
+  currentId: number | null;
   cigarettesCounter: number;
+  setCigarettesCounter: Dispatch<SetStateAction<number | null>>;
 }) {
-  const [loading, setLoading] = useState<boolean>(false);
 
-  const countUpBranch = (
-    user: User, 
-    setLoading: Dispatch<SetStateAction<boolean>>, 
-    cigarettesCounter: number,
-  ) => {
+  const countUpBranch = () => {
     if (cigarettesCounter > 0 ) {
       const currentDate = new Date().toISOString() // 現在時刻をISO形式の文字列に変換
-      const newData: UpdateCigarettesType = {
+      const newData: UpdateCigaretteType = {
         update_at: currentDate,
         cigarettes_counter: cigarettesCounter + 1
       }
-      updateCigarettes(user.id, newData)
+      updateCigarette(user!.id, currentId!, newData, setCigarettesCounter)
     } else {
-      createCigarettes(user, setLoading)
+      createCigarette(user, setCigarettesCounter)
     }
   }
 
@@ -35,7 +34,7 @@ export default function CountUpButton({
     <>
       <Button
         variant="outlined"
-        onClick={() => countUpBranch(user!, setLoading, cigarettesCounter)}
+        onClick={() => countUpBranch()}
         sx={{width: "100%"}}
       >
         ＋

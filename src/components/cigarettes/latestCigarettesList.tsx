@@ -1,6 +1,7 @@
 "use client";
 import {
   Button,
+  Grid,
   Paper,
   Table,
   TableBody,
@@ -8,16 +9,19 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
-import { DatePickerDiary } from "../common/datePickerDiary";
 import { CigaretteDataType } from "@/consts/cigarettes.types";
 import { deleteCigarettes, readLatestCigarettes } from "@/hooks/cigarettes";
+import CountDownButton from "./countDownButton";
+import CountUpButton from "./countUpButton";
 
 export const LatestCigarettesList = ({ user }: { user: User | null }) => {
-  const [latestCigaretteData, setLatestCigaretteData] =
-    useState<CigaretteDataType[] | null>([]);
+  const [latestCigaretteData, setLatestCigaretteData] = useState<
+    CigaretteDataType[] | null
+  >([]);
 
   useEffect(() => {
     readLatestCigarettes(setLatestCigaretteData);
@@ -59,9 +63,32 @@ export const LatestCigarettesList = ({ user }: { user: User | null }) => {
                     <TableCell align="center">
                       {formatDate(lcd.created_at)}
                     </TableCell>
+
                     <TableCell align="center">
-                      {lcd.cigarettes_counter}
+                      {/* {lcd.cigarettes_counter} */}
+                      <Grid container>
+                        <Grid item xs={4}>
+                          <CountDownButton
+                            user={user}
+                            cigarettesCounter={lcd.cigarettes_counter}
+                            currentId={lcd.id}
+                          />
+                        </Grid>
+                        <Grid item xs={4}>
+                          <Typography sx={{ textAlign: "center" }}>
+                            {lcd.cigarettes_counter}
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                          <CountUpButton
+                            user={user}
+                            cigarettesCounter={lcd.cigarettes_counter}
+                            currentId={lcd.id}
+                          />
+                        </Grid>
+                      </Grid>
                     </TableCell>
+
                     <TableCell align="center">
                       <Button
                         onClick={() =>

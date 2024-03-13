@@ -72,8 +72,8 @@ export const LatestCigarettesList = ({ user }: { user: User | null }) => {
                         <Grid item xs={4} >
                           <CountDownButton
                             user={user}
-                            cigarettesCounter={lcd.cigarettes_counter}
                             currentId={lcd.id}
+                            cigarettesCounter={lcd.cigarettes_counter}
                           />
                         </Grid>
                         <Grid item xs={4}>
@@ -84,8 +84,8 @@ export const LatestCigarettesList = ({ user }: { user: User | null }) => {
                         <Grid item xs={4} >
                           <CountUpButton
                             user={user}
-                            cigarettesCounter={lcd.cigarettes_counter}
                             currentId={lcd.id}
+                            cigarettesCounter={lcd.cigarettes_counter}
                           />
                         </Grid>
                       </Grid>

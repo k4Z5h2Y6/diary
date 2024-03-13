@@ -6,33 +6,33 @@ import {
 } from "@/hooks/cigarettes";
 import { Button } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
-import { Dispatch, SetStateAction } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CountDownButton({
   user,
   currentId,
   cigarettesCounter,
-  setCigarettesCounter,
 }: {
   user: User | null;
   currentId: number | null;
   cigarettesCounter: number;
-  setCigarettesCounter: Dispatch<SetStateAction<number | null>>;
 }) {
-
+  const router = useRouter();
   const countDownBranch = () => {
+    
     if (cigarettesCounter === 0) {
       return;
     } else if (cigarettesCounter === 1) {
-      deleteCigarette(currentId!, setCigarettesCounter);
+      deleteCigarette(currentId!);
     } else {
       const currentDate = new Date().toISOString() // 現在時刻をISO形式の文字列に変換
       const newData: UpdateCigaretteType = {
         update_at: currentDate,
         cigarettes_counter: cigarettesCounter - 1,
       };
-      updateCigarette(user!.id, currentId!, newData, setCigarettesCounter);
+      updateCigarette(user!.id, currentId!, newData);
     }
+    router.refresh()
   };
 
   return (

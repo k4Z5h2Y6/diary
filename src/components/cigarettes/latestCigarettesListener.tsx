@@ -115,7 +115,6 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
               user={user}
               currentId={currentId}
               cigarettesCounter={cigarettesCounter}
-              setCigarettesCounter={setCigarettesCounter}
             />
           </Grid>
           <Grid item xs={4}>
@@ -128,7 +127,6 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
               user={user}
               currentId={currentId}
               cigarettesCounter={cigarettesCounter}
-              setCigarettesCounter={setCigarettesCounter}
             />
           </Grid>
         </Grid>

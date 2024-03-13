@@ -13,7 +13,6 @@ const supabase = createClientComponentClient<CigarettesType>();
 
 export async function createCigarette(
   user: User | null,
-  setCigarettesCounter: Dispatch<SetStateAction<number | null>>,
 ) {
   try {
     const { error } = await supabase.from("cigarettes").insert({
@@ -21,7 +20,6 @@ export async function createCigarette(
     });
     if (error) throw error;
     alert("Cigarettes Onset Created!");
-    setCigarettesCounter(1)
   } catch (error) {
     alert("Error");
   } finally {
@@ -71,7 +69,6 @@ export async function updateCigarette(
   userId: string,
   id: number,
   newData: UpdateCigaretteType,
-  setCigarettesCounter: Dispatch<SetStateAction<number | null>>,
 ) {
   try {
     const { data, error } = await supabase
@@ -84,9 +81,9 @@ export async function updateCigarette(
       throw error;
     }
     alert("更新完了");
-    setCigarettesCounter(newData.cigarettes_counter)
   } catch (error) {
-    alert("Error updating sleep data");
+    alert("error");
+    console.log(error)
   } finally {
     console.log("終了");
   }
@@ -95,7 +92,6 @@ export async function updateCigarette(
 //ホーム用
 export async function deleteCigarette(
   id: number,
-  setCigarettesCounter: Dispatch<SetStateAction<number | null>>,
 ) {
   try {
     const { error } = await supabase.from("cigarettes").delete().eq("id", id);
@@ -103,7 +99,6 @@ export async function deleteCigarette(
       throw error;
     }
     alert("Cigarettes row deleted!");
-    setCigarettesCounter(0)
   } catch (error) {
     console.error("Error deleting cigarettes");
     alert("Error deleting cigarettes!");

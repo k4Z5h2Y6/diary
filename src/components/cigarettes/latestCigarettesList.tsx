@@ -17,11 +17,14 @@ import { CigaretteDataType } from "@/consts/cigarettes.types";
 import { deleteCigarettes, readLatestCigarettes } from "@/hooks/cigarettes";
 import CountDownButton from "./countDownButton";
 import CountUpButton from "./countUpButton";
+import { useRouter } from "next/navigation";
 
 export const LatestCigarettesList = ({ user }: { user: User | null }) => {
   const [latestCigaretteData, setLatestCigaretteData] = useState<
     CigaretteDataType[] | null
   >([]);
+
+  const router = useRouter();
 
   useEffect(() => {
     readLatestCigarettes(setLatestCigaretteData);
@@ -65,9 +68,8 @@ export const LatestCigarettesList = ({ user }: { user: User | null }) => {
                     </TableCell>
 
                     <TableCell align="center">
-                      {/* {lcd.cigarettes_counter} */}
                       <Grid container>
-                        <Grid item xs={4}>
+                        <Grid item xs={4} >
                           <CountDownButton
                             user={user}
                             cigarettesCounter={lcd.cigarettes_counter}
@@ -79,7 +81,7 @@ export const LatestCigarettesList = ({ user }: { user: User | null }) => {
                             {lcd.cigarettes_counter}
                           </Typography>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={4} >
                           <CountUpButton
                             user={user}
                             cigarettesCounter={lcd.cigarettes_counter}
@@ -91,9 +93,10 @@ export const LatestCigarettesList = ({ user }: { user: User | null }) => {
 
                     <TableCell align="center">
                       <Button
-                        onClick={() =>
-                          deleteCigarettes(lcd.id, setLatestCigaretteData)
-                        }
+                        onClick={() => {
+                          deleteCigarettes(lcd.id, setLatestCigaretteData);
+                          router.refresh();
+                        }}
                       >
                         削除
                       </Button>

@@ -21,6 +21,10 @@ export default function Avatar({
   const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
+    console.log(avatarUrl)
+  })
+
+  useEffect(() => {
     async function downloadImage(path: string) {
       try {
         const { data, error } = await supabase.storage.from('avatars').download(path)
@@ -30,6 +34,7 @@ export default function Avatar({
 
         const url = URL.createObjectURL(data)
         setAvatarUrl(url)
+        console.log(data)
       } catch (error) {
         console.log('Error downloading image: ', error)
       }
@@ -63,6 +68,8 @@ export default function Avatar({
       setUploading(false)
     }
   }
+
+  
 
   return (
     <div>

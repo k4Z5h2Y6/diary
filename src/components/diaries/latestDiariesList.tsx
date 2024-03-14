@@ -1,9 +1,10 @@
 "use client";
 
-import { DiaryDataType } from "@/consts/diaries.types";
+import { DiariesType, DiaryDataType } from "@/consts/diaries.types";
 import { deleteDiaries, readLatestDiaries } from "@/hooks/diaries";
-
+import Image from "next/image";
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -12,15 +13,13 @@ import {
 } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
+import PreviewImg from "./previewImg";
 
 export const LatestDiariesList = ({ user }: { user: User | null }) => {
   const [latestDiariesData, setLatestDiariesData] = useState<
     DiaryDataType[] | null
   >(null);
-
-  useEffect(() => {
-    readLatestDiaries(setLatestDiariesData);
-  }, []);
+  const [diaryImgUrl, setDiaryImgUrl] = useState<string | null>(null);
 
   useEffect(() => {
     readLatestDiaries(setLatestDiariesData);
@@ -52,9 +51,12 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
 
   const formatCategory = (n: number) => {
     switch (n) {
-      case 1: return "禁煙日記"
-      case 2: return "pombio"
-      default : return "カテゴリーなし"
+      case 1:
+        return "禁煙日記";
+      case 2:
+        return "pombio";
+      default:
+        return "カテゴリーなし";
     }
   };
 
@@ -68,22 +70,34 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
               sx={{
                 minWidth: 275,
                 marginBottom: "16px",
+                display: "flex",
+                flexDirection: "column",
               }}
             >
-              <CardContent>
+              <Box width={100} height={100}>
+                {/* {ldd.diary_img_url ? (
+                  <PreviewImg url={ldd.diary_img_url} />
+                ) : (
+                  <></>
+                )} */}
+                <PreviewImg
+                user={user!}
+                  url={ldd.diary_img_url}
+                  // url={diaryImgUrl}
+                />
+              </Box>
+              <Box>
                 <Typography>
                   {formatDate(ldd.created_at!)} {formatTime(ldd.created_at!)}
                 </Typography>
                 <Typography>{ldd.diary_text}</Typography>
                 <Typography>{formatCategory(ldd.diary_category!)}</Typography>
-              </CardContent>
-              <CardActions>
                 <Button
                   onClick={() => deleteDiaries(ldd.id, setLatestDiariesData)}
                 >
                   削除
                 </Button>
-              </CardActions>
+              </Box>
             </Card>
           ))}
         </>
@@ -91,3 +105,34 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
     </>
   );
 };
+
+// "use client";
+
+// import {  DiaryDataType } from "@/consts/diaries.types";
+// import { readLatestDiaries } from "@/hooks/diaries";
+// import { User } from "@supabase/auth-helpers-nextjs";
+// import { useEffect, useState } from "react";
+// import PreviewImg from "./previewImg";
+// import { DiariesCard } from "./diariesCard";
+
+// export const LatestDiariesList = ({ user }: { user: User | null }) => {
+//   const [latestDiariesData, setLatestDiariesData] = useState<
+//     DiaryDataType[] | null
+//   >(null);
+
+//   useEffect(() => {
+//     readLatestDiaries(setLatestDiariesData);
+//   }, []);
+
+//   return (
+//     <>
+//       {latestDiariesData ? (
+//         <>
+//           {latestDiariesData.map((ldd) => (
+//             <DiariesCard key={ldd.id} ldd={ldd} setLatestDiariesData={setLatestDiariesData}/>
+//           ))}
+//         </>
+//       ) : null}
+//     </>
+//   );
+// };

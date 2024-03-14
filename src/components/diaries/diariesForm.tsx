@@ -64,7 +64,7 @@ export default function DiariesForm({ user }: { user: User | null }) {
         createDiary(user, setLoading, diaryText, diaryImgUrl, diaryCategory);
       }
     } else {
-      alert("コンテンツがありません");
+      alert("テキストがありません");
     }
 
     // フォームを送信した後、textarea をクリアする
@@ -108,7 +108,7 @@ export default function DiariesForm({ user }: { user: User | null }) {
         }}
         type="file"
         id="single"
-        // accept="image/*"
+        accept="image/*"
         onChange={imgChange}
         disabled={imgUploading}
       />

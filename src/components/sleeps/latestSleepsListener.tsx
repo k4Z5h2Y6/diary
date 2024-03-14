@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import WakeUpButton from "./wakeUpButton";
 import { readLatestSleep } from "@/hooks/sleeps";
 import { SleepsType } from "@/consts/sleeps.types";
-import { Grid, Skeleton } from "@mui/material";
+import { Box, Grid, Skeleton } from "@mui/material";
 
 export const LatestSleepsListener = ({ user }: { user: User | null }) => {
   const supabase = createClientComponentClient<SleepsType>();
@@ -45,7 +45,7 @@ export const LatestSleepsListener = ({ user }: { user: User | null }) => {
   return (
     <>
       {isSleeping === null ? (
-        <Skeleton variant="rounded" />
+        <Skeleton variant="rounded" height={36.5} />
       ) : (
         <Grid container spacing={2}>
           <Grid item xs={6}>

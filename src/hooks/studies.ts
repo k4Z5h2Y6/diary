@@ -6,17 +6,17 @@ const supabase = createClientComponentClient<StudiesType>();
 
 export async function createStudy(
   user: User | null,
+  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>,
 ) {
   try {
     const { error } = await supabase.from("studies").insert({
       user_id: user?.id as string,
     });
     if (error) throw error;
-    alert("start study!");
+    setIsOpenSnackbar(true)
   } catch (error) {
-    alert("Error");
+    alert("作業開始エラー");
   } finally {
-    console.log("完了")
   }
 }
 
@@ -68,6 +68,7 @@ export async function readLatestStudies(
 export async function updateFinishStudying(
   userId: string,
   newData: UpdateFinishStudyingType,
+  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>,
   ) {
   try {
     const { data, error } = await supabase
@@ -80,10 +81,10 @@ export async function updateFinishStudying(
     if (error) {
       throw error;
     }
+    setIsOpenSnackbar(true)
   } catch (error) {
-    alert("Error updating study data");
+    alert("作業終了エラー");
   } finally {
-    console.log("完了")
   }
 }
 

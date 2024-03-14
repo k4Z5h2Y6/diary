@@ -45,7 +45,7 @@ export const LatestStudiesListener = ({ user }: { user: User | null }) => {
   return (
     <>
       {isStudying === null ? (
-        <Skeleton variant="rounded" />
+        <Skeleton variant="rounded" height={36.5} />
       ) : (
         <Grid container spacing={2}>
           <Grid item xs={6}>

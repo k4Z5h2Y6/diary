@@ -107,7 +107,7 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
   return (
     <>
       {cigarettesCounter === null ? (
-        <Skeleton variant="rounded" />
+        <Skeleton variant="rounded" height={36.5} />
       ) : (
         <Grid container spacing={2}>
           <Grid item xs={4}>

@@ -19,11 +19,9 @@ export async function createCigarette(
       user_id: user?.id as string,
     });
     if (error) throw error;
-    alert("Cigarettes Onset Created!");
   } catch (error) {
-    alert("Error");
+    alert("喫煙カウントアップエラー");
   } finally {
-    console.log("終了");
   }
 }
 
@@ -80,12 +78,10 @@ export async function updateCigarette(
     if (error) {
       throw error;
     }
-    alert("更新完了");
   } catch (error) {
-    alert("error");
+    alert("喫煙更新エラー");
     console.log(error)
   } finally {
-    console.log("終了");
   }
 }
 
@@ -98,12 +94,9 @@ export async function deleteCigarette(
     if (error) {
       throw error;
     }
-    alert("Cigarettes row deleted!");
   } catch (error) {
-    console.error("Error deleting cigarettes");
-    alert("Error deleting cigarettes!");
+    alert("喫煙削除エラー");
   } finally {
-    console.log('完了')
   }
 }
 
@@ -123,9 +116,7 @@ export async function deleteCigarettes(
       prevCigarettesList!.filter((cl) => cl.id !== id)
     );
   } catch (error) {
-    console.error("Error deleting cigarettes");
-    alert("Error deleting cigarettes!");
+    alert("喫煙削除エラー");
   } finally {
-    console.log('完了')
   }
 }

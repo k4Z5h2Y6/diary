@@ -12,20 +12,28 @@ import { Dispatch, SetStateAction } from "react";
 
 const supabase = createClientComponentClient<SleepsType>();
 
-export async function createSleepOnset(user: User | null) {
+
+
+
+
+
+export async function createSleepOnset(
+  user: User | null,
+  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>,
+  ) {
   try {
     const { error } = await supabase.from("sleeps").insert({
       user_id: user?.id as string,
     });
     if (error) throw error;
+    setIsOpenSnackbar(true)
   } catch (error) {
-    alert("Error");
+    alert("入眠エラー");
   } finally {
-    console.log("完了");
   }
 }
 
-//home,単数用
+//単数用
 export async function readLatestSleep(
   setIsSleeping: Dispatch<SetStateAction<boolean | null>>
 ) {
@@ -47,7 +55,7 @@ export async function readLatestSleep(
   }
 }
 
-//data,複数用
+//複数用
 export async function readLatestSleeps(
   setLatestSleepsData: Dispatch<SetStateAction<SleepDataType[] | null>>
 ) {
@@ -74,7 +82,8 @@ export async function readLatestSleeps(
 
 export async function updateSleepWakeUp(
   userId: string,
-  newData: UpdateWakeupType
+  newData: UpdateWakeupType,
+  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>,
 ) {
   try {
     const { data, error } = await supabase
@@ -87,10 +96,10 @@ export async function updateSleepWakeUp(
     if (error) {
       throw error;
     }
+    setIsOpenSnackbar(true)
   } catch (error) {
-    alert("Error updating sleep data");
+    alert("起床Error");
   } finally {
-    console.log("完了");
   }
 }
 

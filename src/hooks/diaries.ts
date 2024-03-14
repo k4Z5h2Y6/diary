@@ -1,4 +1,4 @@
-import { DiariesType } from "@/consts/diaries.types";
+import { DiariesType, DiaryDataType } from "@/consts/diaries.types";
 import { User, createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Dispatch, SetStateAction } from "react";
 
@@ -54,54 +54,47 @@ export async function createDiary(
   }
 }
 
-export async function readDiariesList(
-  setLoading: Dispatch<SetStateAction<boolean>>,
-  setDiariesList: Dispatch<SetStateAction<any[]>>,
+export async function readLatestDiaries(
+  setLatestDiariesList: Dispatch<SetStateAction<DiaryDataType[] | null>>,
 ) {
   try {
-    setLoading(true);
     let { data, error, status } = await supabase
     .from("diaries")
     .select("*")
     .order("created_at", { ascending: false })
-    .limit(3);
+    .limit(7);
 
     if (error && status !== 406) {
       throw error;
     }
 
     if (data) {
-      console.log(data);
-      setDiariesList(data);
+      setLatestDiariesList(data);
     }
   } catch (error) {
-    alert("Error loading user diaries list!");
+    alert("記録読み込みエラー");
   } finally {
-    setLoading(false);
   }
 }
 
-// export async function deleteDiaries(
-//   id: string,
-//   setLoading: Dispatch<SetStateAction<boolean>>,
-//   setDiariesList: Dispatch<SetStateAction<any[]>>,
-// ) {
-//   try {
-//     setLoading(true);
-//     const { error } = await supabase.from("diaries").delete().eq("id", id);
+export async function deleteDiaries(
+  id: number,
+  setLatestDiariesData: Dispatch<SetStateAction<DiaryDataType[] | null>>
+) {
+  try {
+    const { error } = await supabase.from("diaries").delete().eq("id", id);
 
-//     if (error) {
-//       throw error;
-//     }
+    if (error) {
+      throw error;
+    }
 
-//     // 削除が成功したら、sleepsList からも該当する id のデータを削除します
-//     setDiariesList((prevSleepsList) =>
-//       prevSleepsList.filter((sl) => sl.id !== id)
-//     );
-//   } catch (error) {
-//     console.error("Error deleting diaries");
-//     alert("Error deleting diaries!");
-//   } finally {
-//     setLoading(false);
-//   }
-// }
+    // 削除が成功したら、sleepsList からも該当する id のデータを削除します
+    setLatestDiariesData((prevDiariesList) =>
+      prevDiariesList!.filter((dl) => dl.id !== id)
+    );
+  } catch (error) {
+    alert("記録削除エラー");
+  } finally {
+    console.log("完了");
+  }
+}

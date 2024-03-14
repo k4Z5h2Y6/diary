@@ -76,7 +76,6 @@ export async function readLatestSleeps(
   } catch (error) {
     alert("Error loading user sleeps list!");
   } finally {
-    console.log("完了");
   }
 }
 
@@ -141,7 +140,7 @@ export async function deleteSleeps(
       prevSleepsList!.filter((sl) => sl.id !== id)
     );
   } catch (error) {
-    alert("Error deleting sleep!");
+    alert("睡眠削除エラー");
   } finally {
     console.log("完了");
   }

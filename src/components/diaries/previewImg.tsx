@@ -6,21 +6,14 @@ import {
 } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-type Diaries = DiariesType["public"]["Tables"]["diaries"]["Row"];
 
 export default function PreviewImg({
   url,
-  user,
 }: {
-  url: Diaries["diary_img_url"];
-  user: User | null;
+  url: string | null;
 }) {
   const supabase = createClientComponentClient<DiariesType>();
-  const [diaryImgUrl, setDiaryImgUrl] = useState<Diaries["diary_img_url"]>(url);
-
-  useEffect(() => {
-    console.log(diaryImgUrl);
-  },[]);
+  const [diaryImgUrl, setDiaryImgUrl] = useState<string | null>(url);
 
   useEffect(() => {
     async function downloadImage(path: string) {
@@ -31,11 +24,10 @@ export default function PreviewImg({
         if (error) {
           throw error;
         }
-
         const url = URL.createObjectURL(data);
         setDiaryImgUrl(url);
       } catch (error) {
-        console.log("Error downloading image: ", error);
+        console.log("Error downloading image");
       } finally {
       }
     }
@@ -46,16 +38,15 @@ export default function PreviewImg({
     <>
       {diaryImgUrl ? (
         <Image
+          src={diaryImgUrl}
+          alt=""
           width={100}
           height={100}
-          src={diaryImgUrl}
-          // src={diaryImgUrl.toString()}
-          // src={`${diaryImgUrl}`}
-          alt=""
           style={{ height: 100, width: 100 }}
+          unoptimized={true}
         />
       ) : (
-        <></>
+        null
       )}
     </>
   );

@@ -1,14 +1,11 @@
 "use client";
 
-import { DiariesType, DiaryDataType } from "@/consts/diaries.types";
+import { DiaryDataType } from "@/consts/diaries.types";
 import { deleteDiaries, readLatestDiaries } from "@/hooks/diaries";
-import Image from "next/image";
 import {
   Box,
   Button,
   Card,
-  CardActions,
-  CardContent,
   Typography,
 } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
@@ -19,7 +16,6 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
   const [latestDiariesData, setLatestDiariesData] = useState<
     DiaryDataType[] | null
   >(null);
-  const [diaryImgUrl, setDiaryImgUrl] = useState<string | null>(null);
 
   useEffect(() => {
     readLatestDiaries(setLatestDiariesData);
@@ -71,20 +67,10 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
                 minWidth: 275,
                 marginBottom: "16px",
                 display: "flex",
-                flexDirection: "column",
               }}
             >
               <Box width={100} height={100}>
-                {/* {ldd.diary_img_url ? (
-                  <PreviewImg url={ldd.diary_img_url} />
-                ) : (
-                  <></>
-                )} */}
-                <PreviewImg
-                user={user!}
-                  url={ldd.diary_img_url}
-                  // url={diaryImgUrl}
-                />
+                <PreviewImg url={ldd.diary_img_url} />
               </Box>
               <Box>
                 <Typography>
@@ -105,34 +91,3 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
     </>
   );
 };
-
-// "use client";
-
-// import {  DiaryDataType } from "@/consts/diaries.types";
-// import { readLatestDiaries } from "@/hooks/diaries";
-// import { User } from "@supabase/auth-helpers-nextjs";
-// import { useEffect, useState } from "react";
-// import PreviewImg from "./previewImg";
-// import { DiariesCard } from "./diariesCard";
-
-// export const LatestDiariesList = ({ user }: { user: User | null }) => {
-//   const [latestDiariesData, setLatestDiariesData] = useState<
-//     DiaryDataType[] | null
-//   >(null);
-
-//   useEffect(() => {
-//     readLatestDiaries(setLatestDiariesData);
-//   }, []);
-
-//   return (
-//     <>
-//       {latestDiariesData ? (
-//         <>
-//           {latestDiariesData.map((ldd) => (
-//             <DiariesCard key={ldd.id} ldd={ldd} setLatestDiariesData={setLatestDiariesData}/>
-//           ))}
-//         </>
-//       ) : null}
-//     </>
-//   );
-// };

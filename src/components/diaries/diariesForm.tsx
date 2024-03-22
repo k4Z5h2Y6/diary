@@ -13,6 +13,7 @@ import {
 import { readCategories } from "@/hooks/categories";
 import { LabelCategoriesType } from "@/consts/categories.types";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
+// import heic2any from 'heic2any';
 
 export default function DiariesForm({ user }: { user: User | null }) {
   const [loading, setLoading] = useState<boolean>(false);
@@ -73,7 +74,7 @@ export default function DiariesForm({ user }: { user: User | null }) {
     }
     setDiaryImgFile(null);
     setDiaryImgUrl(null);
-    setDiaryCategoyLabel(null)
+    setDiaryCategoyLabel(null);
   };
 
   useEffect(() => {
@@ -108,7 +109,7 @@ export default function DiariesForm({ user }: { user: User | null }) {
         }}
         type="file"
         id="single"
-        accept="image/*"
+        // accept="image/*"
         onChange={imgChange}
         disabled={imgUploading}
       />
@@ -140,16 +141,18 @@ export default function DiariesForm({ user }: { user: User | null }) {
           >
             <CancelRoundedIcon />
           </IconButton>
-          <img
-            src={URL.createObjectURL(diaryImgFile)}
-            alt=""
-            style={{
-              width: "160px",
-              height: "160px",
-              objectFit: "contain",
-              aspectRatio: "1 / 1",
-            }}
-          />
+          <picture>
+            <img
+              src={URL.createObjectURL(diaryImgFile)}
+              alt=""
+              style={{
+                width: "160px",
+                height: "160px",
+                objectFit: "contain",
+                aspectRatio: "1 / 1",
+              }}
+            />
+          </picture>
         </Box>
       ) : (
         <></>
@@ -185,3 +188,4 @@ export default function DiariesForm({ user }: { user: User | null }) {
     </>
   );
 }
+

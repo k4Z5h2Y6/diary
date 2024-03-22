@@ -48,7 +48,6 @@ export default function DiariesForm({ user }: { user: User | null }) {
       if (diaryImgUrl) {
         await uploadDiaryImg(
           user,
-          setImgUploading,
           diaryImgUrl,
           diaryImgFile,
           () => {

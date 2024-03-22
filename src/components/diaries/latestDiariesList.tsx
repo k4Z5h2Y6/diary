@@ -1,13 +1,12 @@
 "use client";
 
 import { DiaryDataType } from "@/consts/diaries.types";
-import { deleteDiaries, readLatestDiaries } from "@/hooks/diaries";
 import {
-  Box,
-  Button,
-  Card,
-  Typography,
-} from "@mui/material";
+  deleteDiaries,
+  deleteDiaryImg,
+  readLatestDiaries,
+} from "@/hooks/diaries";
+import { Box, Button, Card, Typography } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import PreviewImg from "./previewImg";
@@ -56,6 +55,14 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
     }
   };
 
+  const handleDelete = async (id: number, diaryImgUrl: string | null) => {
+    if (diaryImgUrl) {
+      await deleteDiaryImg(user, diaryImgUrl, () => {deleteDiaries(id, setLatestDiariesData)})
+    } else {
+      deleteDiaries(id, setLatestDiariesData)
+    }
+  };
+
   return (
     <>
       {latestDiariesData ? (
@@ -79,7 +86,8 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
                 <Typography>{ldd.diary_text}</Typography>
                 <Typography>{formatCategory(ldd.diary_category!)}</Typography>
                 <Button
-                  onClick={() => deleteDiaries(ldd.id, setLatestDiariesData)}
+                  // onClick={() => deleteDiaries(ldd.id, setLatestDiariesData)}
+                  onClick={() => handleDelete(ldd.id, ldd.diary_img_url)}
                 >
                   削除
                 </Button>

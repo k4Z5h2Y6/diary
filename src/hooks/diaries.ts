@@ -6,7 +6,6 @@ const supabase = createClientComponentClient<DiariesType>();
 
 export async function uploadDiaryImg(
   user: User | null,
-  setImgUploading: Dispatch<SetStateAction<boolean>>,
   diaryImgUrl: string | null,
   diaryImgFile: File | null,
   callback: () => void
@@ -20,13 +19,30 @@ export async function uploadDiaryImg(
     if (uploadError) {
       throw uploadError
     }
-
+    alert("画像アップロード完了")
+    callback();
   } catch (error) {
     alert('Error uploading diary_img!')
   } finally {
-    setImgUploading(false);
-    alert("画像アップロード完了")
+  }
+}
+
+export async function deleteDiaryImg(
+  user: User | null,
+  diaryImgUrl: string,
+  callback: () => void
+) {
+  try {
+    const { error: uploadError } = await supabase.storage.from('diary_img').remove([diaryImgUrl])
+
+    if (uploadError) {
+      throw uploadError
+    }
+    alert('写真削除完了')
     callback();
+  } catch (error) {
+    alert('Error delete diary_img!')
+  } finally {
   }
 }
 
@@ -92,6 +108,7 @@ export async function deleteDiaries(
     setLatestDiariesData((prevDiariesList) =>
       prevDiariesList!.filter((dl) => dl.id !== id)
     );
+    alert("記録削除完了");
   } catch (error) {
     alert("記録削除エラー");
   } finally {

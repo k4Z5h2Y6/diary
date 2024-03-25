@@ -18,6 +18,7 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
 
   useEffect(() => {
     readLatestDiaries(setLatestDiariesData);
+    console.log(latestDiariesData)
   }, []);
 
   const formatDate = (ts: string) => {
@@ -77,7 +78,7 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
               }}
             >
               <Box width={100} height={100}>
-                <PreviewImg url={ldd.diary_img_url} />
+                <PreviewImg url={ldd.diary_img_url} bucket="diary_img"/>
               </Box>
               <Box>
                 <Typography>

@@ -1,9 +1,9 @@
 import { CigaretteCounter } from "@/components/cigarettes/cigaretteCounter";
 import { LatestCigarettesList } from "@/components/cigarettes/latestCigarettesList";
 import { LatestDiariesList } from "@/components/diaries/latestDiariesList";
+import { LatestFoodsList } from "@/components/foods/latestFoodsList";
 import { LatestSleepsList } from "@/components/sleeps/latestSleepsList";
 import { LatestSudiesList } from "@/components/studies/latestStudiesList";
-// import { DiariesList } from "@/components/diaries/diariesList";
 import { Database } from "@/consts/database.types";
 import { Container, Divider, Link } from "@mui/material";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -38,7 +38,9 @@ export default async function Calendar() {
         <Divider>投稿履歴</Divider>
         <LatestDiariesList user={user}/>
         <Link href="">投稿一覧へ</Link>
-        <Divider>投稿カテゴリーを編集</Divider>
+        <Divider>食事履歴</Divider>
+        <LatestFoodsList user={user}/>
+        <Link href="">食事一覧へ</Link>
       </Container>
     </>
   );

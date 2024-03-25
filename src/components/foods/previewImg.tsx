@@ -42,9 +42,8 @@ export default function PreviewImg({
         <Image
           src={imgUrl}
           alt=""
-          width={100}
-          height={100}
-          style={{ height: 100, width: 100 }}
+          objectFit="contain"
+          layout="fill"
           unoptimized={true}
         />
       ) : (

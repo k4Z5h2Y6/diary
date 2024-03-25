@@ -112,6 +112,5 @@ export async function deleteDiaries(
   } catch (error) {
     alert("記録削除エラー");
   } finally {
-    console.log("完了");
   }
 }

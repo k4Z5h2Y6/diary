@@ -53,7 +53,7 @@ export async function readLatestCigarettes(
     .from("cigarettes")
     .select("*")
     .order("created_at", { ascending: false })
-    .limit(7);
+    .limit(5);
   if (error) {
     console.error("Error fetching data:", error.message);
     return;

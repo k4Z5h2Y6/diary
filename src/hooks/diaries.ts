@@ -78,7 +78,7 @@ export async function readLatestDiaries(
     .from("diaries")
     .select("*")
     .order("created_at", { ascending: false })
-    .limit(7);
+    .limit(5);
 
     if (error && status !== 406) {
       throw error;

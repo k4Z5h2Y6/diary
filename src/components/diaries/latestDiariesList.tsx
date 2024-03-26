@@ -18,7 +18,6 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
 
   useEffect(() => {
     readLatestDiaries(setLatestDiariesData);
-    console.log(latestDiariesData)
   }, []);
 
   const formatDate = (ts: string) => {

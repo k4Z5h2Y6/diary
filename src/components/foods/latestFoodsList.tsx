@@ -3,14 +3,10 @@
 import { FoodDataType } from "@/consts/foods.types";
 import { deleteFoodImg, deleteFoods, readLatestFoods } from "@/hooks/foods";
 import {
-  Box,
-  Button,
-  Card,
   IconButton,
   ImageList,
   ImageListItem,
   ImageListItemBar,
-  Typography,
 } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
@@ -35,6 +31,16 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
     }
   };
 
+  const formatDate = (ts: string) => {
+    const date = new Date(ts);
+    const jpDate = new Date(
+      date.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })
+    );
+    const month = (jpDate.getMonth() + 1).toString().padStart(2, "0");
+    const day = jpDate.getDate().toString().padStart(2, "0");
+    return `${month}/${day}`;
+  };
+
   return (
     <>
       {latestFoodsData ? (
@@ -44,7 +50,7 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
               <PreviewImg url={lfd.food_img_url!} bucket="food_img" />
               <ImageListItemBar
                 title={lfd.food_text}
-                subtitle={lfd.created_at}
+                subtitle={formatDate(lfd.created_at!)}
                 actionIcon={
                   <IconButton
                     sx={{ color: "rgba(255, 255, 255, 0.54)" }}

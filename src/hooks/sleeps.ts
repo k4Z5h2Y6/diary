@@ -12,11 +12,6 @@ import { Dispatch, SetStateAction } from "react";
 
 const supabase = createClientComponentClient<SleepsType>();
 
-
-
-
-
-
 export async function createSleepOnset(
   user: User | null,
   setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>,
@@ -64,7 +59,7 @@ export async function readLatestSleeps(
       .from("sleeps")
       .select("*")
       .order("created_at", { ascending: false })
-      .limit(7);
+      .limit(5);
 
     if (error && status !== 406) {
       throw error;

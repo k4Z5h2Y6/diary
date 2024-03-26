@@ -1,19 +1,27 @@
 "use client";
 import Link from "next/link";
 import type { Session } from "@supabase/auth-helpers-nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { BottomNavigation, BottomNavigationAction, Box } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import HomeIcon from "@mui/icons-material/Home";
 import HistoryIcon from "@mui/icons-material/History";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const Navigation = ({ session }: { session: Session | null }) => {
   const router = useRouter();
   if (session === null) {
     router.push("/login");
   }
+
   const [value, setValue] = useState("home");
+  const pathname = usePathname();
+  useEffect(() => {
+    if (pathname.charAt(0) === "/") {
+      setValue(pathname.substring(1));
+    }
+  }, []);
+
   return (
     <>
       {session ? (

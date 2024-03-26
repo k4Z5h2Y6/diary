@@ -1,6 +1,6 @@
 import { AllSleepsList } from "@/components/sleeps/allSleepsList";
 import { Database } from "@/consts/database.types";
-import { readAllSleeps, readSleepsCount } from "@/hooks/sleeps";
+import { readSleepsCount } from "@/hooks/sleeps";
 import { Container, Divider } from "@mui/material";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";

@@ -14,11 +14,17 @@ export const Navigation = ({ session }: { session: Session | null }) => {
     router.push("/login");
   }
 
-  const [value, setValue] = useState("home");
+  const [value, setValue] = useState<string | null>(null);
   const pathname = usePathname();
   useEffect(() => {
-    if (pathname.charAt(0) === "/") {
-      setValue(pathname.substring(1));
+    const formatingDirectlyName = pathname.substring(1);
+    const index = formatingDirectlyName.indexOf("/");
+    if (index !== -1) {
+      setValue(formatingDirectlyName.substring(0, index));
+    } else if (formatingDirectlyName == "") {
+      setValue("home")
+    } else {
+      setValue(formatingDirectlyName)
     }
   }, []);
 

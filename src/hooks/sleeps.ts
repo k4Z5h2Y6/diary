@@ -14,14 +14,14 @@ const supabase = createClientComponentClient<SleepsType>();
 
 export async function createSleepOnset(
   user: User | null,
-  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>,
-  ) {
+  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>
+) {
   try {
     const { error } = await supabase.from("sleeps").insert({
       user_id: user?.id as string,
     });
     if (error) throw error;
-    setIsOpenSnackbar(true)
+    setIsOpenSnackbar(true);
   } catch (error) {
     alert("入眠エラー");
   } finally {
@@ -77,7 +77,7 @@ export async function readLatestSleeps(
 export async function updateSleepWakeUp(
   userId: string,
   newData: UpdateWakeupType,
-  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>,
+  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>
 ) {
   try {
     const { data, error } = await supabase
@@ -90,7 +90,7 @@ export async function updateSleepWakeUp(
     if (error) {
       throw error;
     }
-    setIsOpenSnackbar(true)
+    setIsOpenSnackbar(true);
   } catch (error) {
     alert("起床Error");
   } finally {
@@ -138,5 +138,52 @@ export async function deleteSleeps(
     alert("睡眠削除エラー");
   } finally {
     console.log("完了");
+  }
+}
+
+export async function readRangedSleeps(
+  rangeStart: number,
+  rangeEnd: number,
+  setSleepsData: Dispatch<SetStateAction<SleepDataType[] | null>>
+) {
+  try {
+    let { data, error, status } = await supabase
+      .from("sleeps")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .range(rangeStart, rangeEnd) //
+
+    if (error && status !== 406) {
+      throw error;
+    }
+
+    if (data) {
+      setSleepsData(data);
+    }
+  } catch (error) {
+    alert("Error loading user sleeps list!");
+  } finally {
+  }
+}
+
+export async function readSleepsCount(
+  setAllSleepsCount: Dispatch<SetStateAction<number | null>>
+) {
+  try {
+    const { count, error, status } = await supabase
+      .from("sleeps")
+      .select("*", { count: "exact", head: true });
+
+    if (error && status !== 406) {
+      throw error;
+    }
+
+    if (count) {
+      console.log(count);
+      setAllSleepsCount(count);
+    }
+  } catch (error) {
+    alert("Error loading user sleeps list!");
+  } finally {
   }
 }

@@ -21,25 +21,27 @@ import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import { DatePickerDiary } from "../common/datePickerDiary";
 import { PaginationDiary } from "../common/pagenationDiary";
+import { StudyDataType } from "@/consts/studies.types";
+import { deleteStudies, readRangedStudies, readStudiesCount } from "@/hooks/studies";
 
 const parPage = 5;
 
-export const AllSleepsList = ({ user }: { user: User | null }) => {
-  const [sleepsData, setSleepsData] = useState<SleepDataType[] | null>(null);
+export const AllStudiesList = ({ user }: { user: User | null }) => {
+  const [studiesData, setStudiesData] = useState<StudyDataType[] | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rangeStart, setRangeStart] = useState<number>(0);
-  const [allSleepsCount, setAllSleepsCount] = useState<number | null>(null);
-  const pageCount = (allSleepsCount: number | null, parPage: number) => {
-    if (allSleepsCount! % parPage === 0) {
-      return allSleepsCount! / parPage;
+  const [allStudiesCount, setAllStudiesCount] = useState<number | null>(null);
+  const pageCount = (allStudiesCount: number | null, parPage: number) => {
+    if (allStudiesCount! % parPage === 0) {
+      return allStudiesCount! / parPage;
     } else {
-      return Math.floor(allSleepsCount! / parPage) + 1;
+      return Math.floor(allStudiesCount! / parPage) + 1;
     }
   };
 
   useEffect(() => {
-    readSleepsCount(setAllSleepsCount);
-    readRangedSleeps(0, parPage - 1, setSleepsData);
+    readStudiesCount(setAllStudiesCount);
+    readRangedStudies(0, parPage - 1, setStudiesData);
   }, []);
 
   useEffect(() => {
@@ -52,9 +54,9 @@ export const AllSleepsList = ({ user }: { user: User | null }) => {
 
   useEffect(() => {
     if (currentPage === 1) {
-      readRangedSleeps(0, parPage - 1, setSleepsData);
+      readRangedStudies(0, parPage - 1, setStudiesData);
     } else {
-      readRangedSleeps(rangeStart, rangeStart + parPage - 1, setSleepsData);
+      readRangedStudies(rangeStart, rangeStart + parPage - 1, setStudiesData);
     }
   }, [rangeStart]);
 
@@ -72,7 +74,7 @@ export const AllSleepsList = ({ user }: { user: User | null }) => {
     }
   };
 
-  const calculateSleepTime = (sts: string | null, wts: string | null) => {
+  const calculateStudyTime = (sts: string | null, wts: string | null) => {
     if (sts && wts) {
       const date1 = new Date(sts);
       const date2 = new Date(wts);
@@ -91,9 +93,9 @@ export const AllSleepsList = ({ user }: { user: User | null }) => {
 
   return (
     <>
-      {sleepsData ? (
+      {studiesData ? (
         <>
-          <Typography>全{allSleepsCount}件のデータ</Typography>
+          <Typography>全{allStudiesCount}件のデータ</Typography>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
@@ -106,7 +108,7 @@ export const AllSleepsList = ({ user }: { user: User | null }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {sleepsData.map((sd) => (
+                {studiesData.map((sd) => (
                   <TableRow
                     key={sd.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -117,25 +119,25 @@ export const AllSleepsList = ({ user }: { user: User | null }) => {
                     <TableCell align="center">
                       <DatePickerDiary
                         user={user}
-                        defaultValue={sd.sleep_onset_at}
+                        defaultValue={sd.start_studying}
                         id={sd.id}
-                        updateColumn={"sleep_onset_at"}
+                        updateColumn={"start_studying"}
                       />
                     </TableCell>
                     <TableCell align="center">
                       <DatePickerDiary
                         user={user}
-                        defaultValue={sd.wake_up_at}
+                        defaultValue={sd.finish_studying}
                         id={sd.id}
-                        updateColumn={"wake_up_at"}
+                        updateColumn={"finish_studying"}
                       />
                     </TableCell>
                     <TableCell align="center">
-                      {calculateSleepTime(sd.sleep_onset_at, sd.wake_up_at)}
+                      {calculateStudyTime(sd.start_studying, sd.finish_studying)}
                     </TableCell>
                     <TableCell align="center">
                       <Button
-                        onClick={() => deleteSleeps(sd.id, setSleepsData)}
+                        onClick={() => deleteStudies(sd.id, setStudiesData)}
                       >
                         削除
                       </Button>
@@ -146,7 +148,7 @@ export const AllSleepsList = ({ user }: { user: User | null }) => {
             </Table>
           </TableContainer>
           <PaginationDiary
-            pageCount={pageCount(allSleepsCount, parPage)}
+            pageCount={pageCount(allStudiesCount, parPage)}
             setCurrentPage={setCurrentPage}
           />
         </>

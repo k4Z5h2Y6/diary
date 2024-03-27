@@ -6,11 +6,10 @@ import {
 } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import { DatePickerDiary } from "../common/datePickerDiary";
-import { deleteSleeps } from "@/hooks/sleeps";
-import { StudiesDataType } from "@/consts/studies.types";
+import { StudyDataType } from "@/consts/studies.types";
 
 export const LatestSudiesList = ({ user }: { user: User | null }) => {
-  const [latestStudiesData, setLatestStudiesData] = useState<StudiesDataType[] | null>(null);
+  const [latestStudiesData, setLatestStudiesData] = useState<StudyDataType[] | null>(null);
 
   useEffect(() => {
     readLatestStudies(setLatestStudiesData);

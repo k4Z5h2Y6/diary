@@ -36,9 +36,6 @@ export const DatePickerDiary = ({
   const [value, setValue] = useState<Dayjs | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // const handleClickOpen = () => {
-  //   setIsDialogOpen(true);
-  // };
   const handleClose = () => {
     setIsDialogOpen(false);
   };

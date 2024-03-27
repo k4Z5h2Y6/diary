@@ -20,7 +20,6 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
 
   useEffect(() => {
     readLatestFoods(setLatestFoodsData);
-    console.log(latestFoodsData);
   }, []);
 
   const handleDelete = async (id: number, foodImgUrl: string | null) => {

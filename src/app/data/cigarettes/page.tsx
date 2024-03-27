@@ -1,10 +1,10 @@
-import { AllSleepsList } from "@/components/sleeps/allSleepsList";
+import { AllCigarettesList } from "@/components/cigarettes/allCigarettesList";
 import { Database } from "@/consts/database.types";
 import { Container, Divider } from "@mui/material";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
-export default async function Sleeps() {
+export default async function Cigarettes() {
   const supabase = createServerComponentClient<Database>({ cookies });
   const {
     data: { user },
@@ -20,7 +20,7 @@ export default async function Sleeps() {
         }}
       >
         <Divider>全睡眠履歴</Divider>
-        <AllSleepsList user={user} />
+        <AllCigarettesList user={user} />
       </Container>
     </>
   );

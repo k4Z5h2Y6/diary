@@ -13,15 +13,12 @@ export const PaginationDiary = ({
 }) => {
   return (
     <>
-      <Stack spacing={2}>
+      <Stack spacing={2} sx={{alignItems: "center"}}>
         <Pagination
           count={pageCount}
           showFirstButton
           showLastButton
-          onChange={(e, page) => {
-            console.log(page);
-            setCurrentPage(page);
-          }}
+          onChange={(e, page) => setCurrentPage(page)}
         />
       </Stack>
     </>

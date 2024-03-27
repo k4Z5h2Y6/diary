@@ -137,7 +137,27 @@ export async function deleteSleeps(
   } catch (error) {
     alert("睡眠削除エラー");
   } finally {
-    console.log("完了");
+  }
+}
+
+export async function readSleepsCount(
+  setAllSleepsCount: Dispatch<SetStateAction<number | null>>
+) {
+  try {
+    const { count, error, status } = await supabase
+      .from("sleeps")
+      .select("*", { count: "exact", head: true });
+
+    if (error && status !== 406) {
+      throw error;
+    }
+
+    if (count) {
+      setAllSleepsCount(count);
+    }
+  } catch (error) {
+    alert("Error loading user sleeps list!");
+  } finally {
   }
 }
 
@@ -159,28 +179,6 @@ export async function readRangedSleeps(
 
     if (data) {
       setSleepsData(data);
-    }
-  } catch (error) {
-    alert("Error loading user sleeps list!");
-  } finally {
-  }
-}
-
-export async function readSleepsCount(
-  setAllSleepsCount: Dispatch<SetStateAction<number | null>>
-) {
-  try {
-    const { count, error, status } = await supabase
-      .from("sleeps")
-      .select("*", { count: "exact", head: true });
-
-    if (error && status !== 406) {
-      throw error;
-    }
-
-    if (count) {
-      console.log(count);
-      setAllSleepsCount(count);
     }
   } catch (error) {
     alert("Error loading user sleeps list!");

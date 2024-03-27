@@ -53,6 +53,6 @@ export interface CigaretteDataType {
   id: number;
   user_id: string;
   created_at: string;
-  update_at: string;
+  update_at: string | null;
   cigarettes_counter: number;
 }

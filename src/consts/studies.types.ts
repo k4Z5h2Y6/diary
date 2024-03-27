@@ -59,7 +59,7 @@ export interface UpdateStudyType {
   finish_studying?: string | null;
 }
 
-export interface StudiesDataType {
+export interface StudyDataType {
   id: number
   user_id: string
   created_at: string | null

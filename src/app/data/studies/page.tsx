@@ -1,4 +1,4 @@
-import { AllSleepsList } from "@/components/sleeps/allSleepsList";
+import { AllStudiesList } from "@/components/studies/allStudiesList";
 import { Database } from "@/consts/database.types";
 import { Container, Divider } from "@mui/material";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -19,8 +19,8 @@ export default async function Sleeps() {
           flexDirection: "column",
         }}
       >
-        <Divider>全睡眠履歴</Divider>
-        <AllSleepsList user={user} />
+        <Divider>全作業履歴</Divider>
+        <AllStudiesList user={user} />
       </Container>
     </>
   );

@@ -104,13 +104,59 @@ export async function deleteDiaries(
       throw error;
     }
 
-    // 削除が成功したら、sleepsList からも該当する id のデータを削除します
+    // 削除が成功したら、DiariesList からも該当する id のデータを削除します
     setLatestDiariesData((prevDiariesList) =>
       prevDiariesList!.filter((dl) => dl.id !== id)
     );
     alert("記録削除完了");
   } catch (error) {
     alert("記録削除エラー");
+  } finally {
+  }
+}
+
+export async function readDiariesCount(
+  setAllDiariesCount: Dispatch<SetStateAction<number | null>>
+) {
+  try {
+    const { count, error, status } = await supabase
+      .from("diaries")
+      .select("*", { count: "exact", head: true });
+
+    if (error && status !== 406) {
+      throw error;
+    }
+
+    if (count) {
+      setAllDiariesCount(count);
+    }
+  } catch (error) {
+    alert("Error loading user Diaries list!");
+  } finally {
+  }
+}
+
+export async function readRangedDiaries(
+  rangeStart: number,
+  rangeEnd: number,
+  setDiariesData: Dispatch<SetStateAction<DiaryDataType[] | null>>
+) {
+  try {
+    let { data, error, status } = await supabase
+      .from("diaries")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .range(rangeStart, rangeEnd) //
+
+    if (error && status !== 406) {
+      throw error;
+    }
+
+    if (data) {
+      setDiariesData(data);
+    }
+  } catch (error) {
+    alert("Error loading user Diaries list!");
   } finally {
   }
 }

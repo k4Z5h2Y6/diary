@@ -36,10 +36,10 @@ export default async function Calendar() {
         <Link href="/data/cigarettes">もっと見る</Link>
         <Divider>投稿履歴</Divider>
         <LatestDiariesList user={user}/>
-        <Link href="">投稿一覧へ</Link>
+        <Link href="/data/diaries">投稿一覧へ</Link>
         <Divider>食事履歴</Divider>
         <LatestFoodsList user={user}/>
-        <Link href="">食事一覧へ</Link>
+        <Link href="/data/foods">食事一覧へ</Link>
       </Container>
     </>
   );

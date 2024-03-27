@@ -54,7 +54,7 @@ export default function FinishStudyingButton({
         <Alert
           severity="success"
         >
-          起床しました
+          作業終了しました
         </Alert>
       </Snackbar>
     </>

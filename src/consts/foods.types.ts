@@ -8,7 +8,7 @@ export interface FoodsType {
           created_at: string | null;
           food_text: string | null;
           food_img_url: string | null;
-          food_category: number | null;
+          ingredient: string | null;
         };
         Insert: {
           id?: number;
@@ -16,7 +16,7 @@ export interface FoodsType {
           created_at?: string | null;
           food_text?: string | null;
           food_img_url?: string | null;
-          food_category?: number | null;
+          ingredient?: string | null;
         };
         Delete: {
           id: number;
@@ -24,7 +24,7 @@ export interface FoodsType {
           created_at?: string | null;
           food_text?: string | null;
           food_img_url?: string | null;
-          food_category?: number | null;
+          ingredient?: string | null;
         };
       };
     };
@@ -46,5 +46,5 @@ export interface FoodDataType {
   created_at?: string | null;
   food_text?: string | null;
   food_img_url?: string | null;
-  food_category?: number | null;
+  ingredient?: string | null;
 }

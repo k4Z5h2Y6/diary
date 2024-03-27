@@ -13,7 +13,6 @@ import {
 import { readCategories } from "@/hooks/categories";
 import { LabelCategoriesType } from "@/consts/categories.types";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
-// import heic2any from 'heic2any';
 
 export default function DiariesForm({ user }: { user: User | null }) {
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,20 +45,9 @@ export default function DiariesForm({ user }: { user: User | null }) {
 
     if (diaryText) {
       if (diaryImgUrl) {
-        await uploadDiaryImg(
-          user,
-          diaryImgUrl,
-          diaryImgFile,
-          () => {
-            createDiary(
-              user,
-              setLoading,
-              diaryText,
-              diaryImgUrl,
-              diaryCategory
-            );
-          }
-        );
+        await uploadDiaryImg(user, diaryImgUrl, diaryImgFile, () => {
+          createDiary(user, setLoading, diaryText, diaryImgUrl, diaryCategory);
+        });
       } else {
         createDiary(user, setLoading, diaryText, diaryImgUrl, diaryCategory);
       }
@@ -89,6 +77,24 @@ export default function DiariesForm({ user }: { user: User | null }) {
         multiline
         size="small"
         fullWidth
+        sx={{ marginBottom: "16px" }}
+      />
+      <Autocomplete
+        value={diaryCategoyLabel}
+        onChange={(event: any, newValue: LabelCategoriesType | null) => {
+          if (newValue) {
+            setDiaryCategoyLabel(newValue!.label);
+            setDiaryCategory(newValue!.id);
+          } else {
+            setDiaryCategoyLabel(null);
+            setDiaryCategory(null);
+          }
+        }}
+        options={diaryCategories}
+        renderInput={(params) => (
+          <TextField {...params} label="カテゴリー" fullWidth />
+        )}
+        size="small"
         sx={{ marginBottom: "16px" }}
       />
       <label htmlFor="single">
@@ -157,24 +163,6 @@ export default function DiariesForm({ user }: { user: User | null }) {
         <></>
       )}
 
-      <Autocomplete
-        value={diaryCategoyLabel}
-        onChange={(event: any, newValue: LabelCategoriesType | null) => {
-          if (newValue) {
-            setDiaryCategoyLabel(newValue!.label);
-            setDiaryCategory(newValue!.id);
-          } else {
-            setDiaryCategoyLabel(null);
-            setDiaryCategory(null);
-          }
-        }}
-        options={diaryCategories}
-        renderInput={(params) => (
-          <TextField {...params} label="カテゴリー" fullWidth />
-        )}
-        size="small"
-        sx={{ marginBottom: "16px" }}
-      />
       <Button
         variant="contained"
         type="submit"
@@ -187,4 +175,3 @@ export default function DiariesForm({ user }: { user: User | null }) {
     </>
   );
 }
-

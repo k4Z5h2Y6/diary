@@ -40,6 +40,20 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
     return `${month}/${day}`;
   };
 
+  const formatTime = (ts: string) => {
+    if (ts) {
+      const date = new Date(ts);
+      const jpOffset = 9; // Japan's timezone offset from UTC in hours
+      const jpHours = (date.getUTCHours() + jpOffset)
+        .toString()
+        .padStart(2, "0");
+      const minutes = date.getUTCMinutes().toString().padStart(2, "0");
+      return `${jpHours}:${minutes}`;
+    } else {
+      return null;
+    }
+  };
+
   return (
     <>
       {latestFoodsData ? (
@@ -49,7 +63,7 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
               <PreviewImg url={lfd.food_img_url!} bucket="food_img" />
               <ImageListItemBar
                 title={lfd.food_text}
-                subtitle={formatDate(lfd.created_at!)}
+                subtitle={`${formatDate(lfd.created_at!)} ${formatTime(lfd.created_at!)}`}
                 actionIcon={
                   <IconButton
                     sx={{ color: "rgba(255, 255, 255, 0.54)" }}

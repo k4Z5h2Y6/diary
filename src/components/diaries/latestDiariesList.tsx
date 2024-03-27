@@ -57,9 +57,11 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
 
   const handleDelete = async (id: number, diaryImgUrl: string | null) => {
     if (diaryImgUrl) {
-      await deleteDiaryImg(user, diaryImgUrl, () => {deleteDiaries(id, setLatestDiariesData)})
+      await deleteDiaryImg(user, diaryImgUrl, () => {
+        deleteDiaries(id, setLatestDiariesData);
+      });
     } else {
-      deleteDiaries(id, setLatestDiariesData)
+      deleteDiaries(id, setLatestDiariesData);
     }
   };
 
@@ -71,22 +73,48 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
             <Card
               key={ldd.id}
               sx={{
+                height: 100,
                 minWidth: 275,
                 marginBottom: "16px",
                 display: "flex",
               }}
             >
-              <Box width={100} height={100}>
-                <PreviewImg url={ldd.diary_img_url} bucket="diary_img"/>
+              <Box
+                sx={{
+                  width: 100,
+                  height: 100,
+                }}
+              >
+                <PreviewImg url={ldd.diary_img_url} bucket="diary_img" />
               </Box>
-              <Box>
+              <Box
+                sx={{
+                  flex: 1,
+                  overflow: "hidden",
+                }}
+              >
                 <Typography>
-                  {formatDate(ldd.created_at!)} {formatTime(ldd.created_at!)}
+                  {formatDate(ldd.created_at!)} {formatTime(ldd.created_at!)} {formatCategory(ldd.diary_category!)}
                 </Typography>
-                <Typography>{ldd.diary_text}</Typography>
-                <Typography>{formatCategory(ldd.diary_category!)}</Typography>
+                <Typography
+                  sx={{
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {ldd.diary_text}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  width: "auto",
+                  height: 100,
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
                 <Button
-                  // onClick={() => deleteDiaries(ldd.id, setLatestDiariesData)}
                   onClick={() => handleDelete(ldd.id, ldd.diary_img_url)}
                 >
                   削除

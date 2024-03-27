@@ -113,7 +113,6 @@ export async function updateStudy(
   } catch (error) {
     alert("Error updating study data");
   } finally {
-    alert("更新完了");
   }
 }
 

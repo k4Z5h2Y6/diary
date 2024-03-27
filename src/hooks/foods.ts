@@ -53,6 +53,7 @@ export async function createFood(
   user: User | null,
   setLoading: Dispatch<SetStateAction<boolean>>,
   foodText: string,
+  ingredient: string,
   foodImgUrl: string | null,
 ) {
   try {
@@ -60,6 +61,7 @@ export async function createFood(
     const { error } = await supabase.from("foods").insert({
       user_id: user?.id as string,
       food_text: foodText,
+      ingredient: ingredient,
       food_img_url: foodImgUrl,
     });
     if (error) throw error;
@@ -105,13 +107,59 @@ export async function deleteFoods(
       throw error;
     }
 
-    // 削除が成功したら、sleepsList からも該当する id のデータを削除します
+    // 削除が成功したら、foodsList からも該当する id のデータを削除します
     setLatestDiariesData((prevDiariesList) =>
       prevDiariesList!.filter((dl) => dl.id !== id)
     );
     alert("食事削除完了");
   } catch (error) {
     alert("食事削除エラー");
+  } finally {
+  }
+}
+
+export async function readFoodsCount(
+  setAllFoodsCount: Dispatch<SetStateAction<number | null>>
+) {
+  try {
+    const { count, error, status } = await supabase
+      .from("foods")
+      .select("*", { count: "exact", head: true });
+
+    if (error && status !== 406) {
+      throw error;
+    }
+
+    if (count) {
+      setAllFoodsCount(count);
+    }
+  } catch (error) {
+    alert("Error loading user Foods list!");
+  } finally {
+  }
+}
+
+export async function readRangedFoods(
+  rangeStart: number,
+  rangeEnd: number,
+  setFoodsData: Dispatch<SetStateAction<FoodDataType[] | null>>
+) {
+  try {
+    let { data, error, status } = await supabase
+      .from("foods")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .range(rangeStart, rangeEnd) //
+
+    if (error && status !== 406) {
+      throw error;
+    }
+
+    if (data) {
+      setFoodsData(data);
+    }
+  } catch (error) {
+    alert("Error loading user Foods list!");
   } finally {
   }
 }

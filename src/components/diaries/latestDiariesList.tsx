@@ -71,17 +71,13 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
         <>
           {latestDiariesData.map((ldd) => (
             <Card
-            key={ldd.id}
-            sx={{
-              height: 100,
-              minWidth: 275,
-              marginBottom: "16px",
-              display: "flex",
-            }}
-          >
-            <Box
+              key={ldd.id}
               sx={{
-                width: "100%",
+                height: 100,
+                minWidth: 275,
+                marginBottom: "16px",
+                display: "flex",
+                position: "relative",
               }}
             >
               <Link
@@ -89,11 +85,15 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
                 color="inherit"
                 underline="none"
                 sx={{
+                  width: "calc(100% - 64px)", //
                   height: 100,
                   display: "flex",
+                  position: "absolute",
+                  left: 0,
                 }}
               >
                 <Box
+                  id="yyy"
                   sx={{
                     width: 100,
                     height: 100,
@@ -101,15 +101,16 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
                 >
                   <PreviewImg url={ldd.diary_img_url} bucket="diary_img" />
                 </Box>
+
                 <Box
+                  id="zzz"
                   sx={{
                     flex: 1,
                     overflow: "hidden",
                   }}
                 >
                   <Typography>
-                    {formatDate(ldd.created_at!)} {formatTime(ldd.created_at!)}{" "}
-                    {formatCategory(ldd.diary_category!)}
+                    {formatDate(ldd.created_at!)} {formatTime(ldd.created_at!)} {formatCategory(ldd.diary_category!)}
                   </Typography>
                   <Typography
                     sx={{
@@ -122,20 +123,22 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
                   </Typography>
                 </Box>
               </Link>
-            </Box>
-            <Box
-              sx={{
-                width: "auto",
-                height: 100,
-                display: "flex",
-                justifyContent: "flex-end",
-              }}
-            >
-              <Button onClick={() => handleDelete(ldd.id, ldd.diary_img_url)}>
-                削除
-              </Button>
-            </Box>
-          </Card>
+
+              <Box
+                id="xxx"
+                sx={{
+                  width: 64, //
+                  height: 100,
+                  display: "flex",
+                  position: "absolute",
+                  right: 0,
+                }}
+              >
+                <Button onClick={() => handleDelete(ldd.id, ldd.diary_img_url)}>
+                  削除
+                </Button>
+              </Box>
+            </Card>
           ))}
         </>
       ) : null}

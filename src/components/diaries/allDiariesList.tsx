@@ -110,60 +110,65 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
                 minWidth: 275,
                 marginBottom: "16px",
                 display: "flex",
+                position: "relative"
               }}
             >
-              {/* <Box> */}
-                <Link
-                  href={`/data/diaries/${dd.id}`}
-                  color="inherit"
-                  underline="none"
+
+              <Link
+                href={`/data/diaries/${dd.id}`}
+                color="inherit"
+                underline="none"
+                sx={{
+                  width: "calc(100% - 64px)",
+                  height: 100,
+                  display: "flex",
+                  position: "absolute",
+                  left: 0,
+                  
+                }}
+              >
+                
+                <Box
+                  id="yyy"
                   sx={{
+                    width: 100,
                     height: 100,
-                    display: "flex",
                   }}
                 >
-                  <Box
-                    id="zzz"
+                  <PreviewImg url={dd.diary_img_url} bucket="diary_img" />
+                </Box>
+
+                <Box
+                  id="zzz"
+                  sx={{
+                    flex: 1,
+                    overflow: "hidden",
+                  }}
+                >
+                  <Typography>
+                    {formatDate(dd.created_at!)} {formatTime(dd.created_at!)}
+                    {formatCategory(dd.diary_category!)}
+                  </Typography>
+                  <Typography
                     sx={{
-                      width: 100,
-                      height: 100,
-                    }}
-                  >
-                    <PreviewImg url={dd.diary_img_url} bucket="diary_img" />
-                  </Box>
-                  {/* //ここにyyyを囲むBoxを配置してそのboxを可変に */}
-                  <Box
-                    id="yyy"
-                    sx={{
-                      width: "100%",
-                      flex: 1,
                       overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
                     }}
                   >
-                    <Typography>
-                      {formatDate(dd.created_at!)} {formatTime(dd.created_at!)}
-                      {formatCategory(dd.diary_category!)}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {dd.diary_text}
-                    </Typography>
-                  </Box>
-                </Link>
-              {/* </Box> */}
+                    {dd.diary_text}
+                  </Typography>
+                </Box>
+              </Link>
 
               <Box
                 id="xxx"
                 sx={{
-                  width: 64, //
+                  width: 64,
                   height: 100,
                   display: "flex",
-                  justifyContent: "flex-end",
+                  position: "absolute",
+                  right: 0,
                 }}
               >
                 <Button onClick={() => handleDelete(dd.id, dd.diary_img_url)}>

@@ -1,16 +1,16 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Card,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Card, Grid, Link, Typography } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import { PaginationDiary } from "../common/pagenationDiary";
 import { DiaryDataType } from "@/consts/diaries.types";
-import { deleteDiaries, deleteDiaryImg, readDiariesCount, readRangedDiaries } from "@/hooks/diaries";
+import {
+  deleteDiaries,
+  deleteDiaryImg,
+  readDiariesCount,
+  readRangedDiaries,
+} from "@/hooks/diaries";
 import PreviewImg from "./previewImg";
 
 const parPage = 5;
@@ -112,44 +112,61 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
                 display: "flex",
               }}
             >
-              <Box
-                sx={{
-                  width: 100,
-                  height: 100,
-                }}
-              >
-                <PreviewImg url={dd.diary_img_url} bucket="diary_img" />
-              </Box>
-              <Box
-                sx={{
-                  flex: 1,
-                  overflow: "hidden",
-                }}
-              >
-                <Typography>
-                  {formatDate(dd.created_at!)} {formatTime(dd.created_at!)} {formatCategory(dd.diary_category!)}
-                </Typography>
-                <Typography
+              {/* <Box> */}
+                <Link
+                  href={`/data/diaries/${dd.id}`}
+                  color="inherit"
+                  underline="none"
                   sx={{
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
+                    height: 100,
+                    display: "flex",
                   }}
                 >
-                  {dd.diary_text}
-                </Typography>
-              </Box>
+                  <Box
+                    id="zzz"
+                    sx={{
+                      width: 100,
+                      height: 100,
+                    }}
+                  >
+                    <PreviewImg url={dd.diary_img_url} bucket="diary_img" />
+                  </Box>
+                  {/* //ここにyyyを囲むBoxを配置してそのboxを可変に */}
+                  <Box
+                    id="yyy"
+                    sx={{
+                      width: "100%",
+                      flex: 1,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Typography>
+                      {formatDate(dd.created_at!)} {formatTime(dd.created_at!)}
+                      {formatCategory(dd.diary_category!)}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {dd.diary_text}
+                    </Typography>
+                  </Box>
+                </Link>
+              {/* </Box> */}
+
               <Box
+                id="xxx"
                 sx={{
-                  width: "auto",
+                  width: 64, //
                   height: 100,
                   display: "flex",
                   justifyContent: "flex-end",
                 }}
               >
-                <Button
-                  onClick={() => handleDelete(dd.id, dd.diary_img_url)}
-                >
+                <Button onClick={() => handleDelete(dd.id, dd.diary_img_url)}>
                   削除
                 </Button>
               </Box>

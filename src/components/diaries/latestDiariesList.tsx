@@ -6,7 +6,7 @@ import {
   deleteDiaryImg,
   readLatestDiaries,
 } from "@/hooks/diaries";
-import { Box, Button, Card, Typography } from "@mui/material";
+import { Box, Button, Card, Link, Typography } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import PreviewImg from "./previewImg";
@@ -71,56 +71,71 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
         <>
           {latestDiariesData.map((ldd) => (
             <Card
-              key={ldd.id}
+            key={ldd.id}
+            sx={{
+              height: 100,
+              minWidth: 275,
+              marginBottom: "16px",
+              display: "flex",
+            }}
+          >
+            <Box
               sx={{
-                height: 100,
-                minWidth: 275,
-                marginBottom: "16px",
-                display: "flex",
+                width: "100%",
               }}
             >
-              <Box
+              <Link
+                href={`/data/diaries/${ldd.id}`}
+                color="inherit"
+                underline="none"
                 sx={{
-                  width: 100,
-                  height: 100,
-                }}
-              >
-                <PreviewImg url={ldd.diary_img_url} bucket="diary_img" />
-              </Box>
-              <Box
-                sx={{
-                  flex: 1,
-                  overflow: "hidden",
-                }}
-              >
-                <Typography>
-                  {formatDate(ldd.created_at!)} {formatTime(ldd.created_at!)} {formatCategory(ldd.diary_category!)}
-                </Typography>
-                <Typography
-                  sx={{
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {ldd.diary_text}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  width: "auto",
                   height: 100,
                   display: "flex",
-                  justifyContent: "flex-end",
                 }}
               >
-                <Button
-                  onClick={() => handleDelete(ldd.id, ldd.diary_img_url)}
+                <Box
+                  sx={{
+                    width: 100,
+                    height: 100,
+                  }}
                 >
-                  削除
-                </Button>
-              </Box>
-            </Card>
+                  <PreviewImg url={ldd.diary_img_url} bucket="diary_img" />
+                </Box>
+                <Box
+                  sx={{
+                    flex: 1,
+                    overflow: "hidden",
+                  }}
+                >
+                  <Typography>
+                    {formatDate(ldd.created_at!)} {formatTime(ldd.created_at!)}{" "}
+                    {formatCategory(ldd.diary_category!)}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {ldd.diary_text}
+                  </Typography>
+                </Box>
+              </Link>
+            </Box>
+            <Box
+              sx={{
+                width: "auto",
+                height: 100,
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Button onClick={() => handleDelete(ldd.id, ldd.diary_img_url)}>
+                削除
+              </Button>
+            </Box>
+          </Card>
           ))}
         </>
       ) : null}

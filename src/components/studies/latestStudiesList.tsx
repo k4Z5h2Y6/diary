@@ -9,7 +9,7 @@ import { DatePickerDiary } from "../common/datePickerDiary";
 import { StudyDataType } from "@/consts/studies.types";
 
 export const LatestSudiesList = ({ user }: { user: User | null }) => {
-  const [latestStudiesData, setLatestStudiesData] = useState<StudyDataType[] | null>(null);
+  const [latestStudiesData, setLatestStudiesData] = useState<StudyDataType[] | null>([]);
 
   useEffect(() => {
     readLatestStudies(setLatestStudiesData);
@@ -28,17 +28,6 @@ export const LatestSudiesList = ({ user }: { user: User | null }) => {
       return null;
     }
   };
-
-  // const formatTime = (ts: string | null) => {
-  //   if (ts) {
-  //     const date = new Date(ts);
-  //     const jpHours = date.getHours().toString().padStart(2, "0");
-  //     const minutes = date.getMinutes().toString().padStart(2, "0");
-  //     return `${jpHours}:${minutes}`;
-  //   } else {
-  //     return null;
-  //   }
-  // };
 
   const calculateStudyTime = (ss: string | null, fs: string | null) => {
     if (ss && fs) {

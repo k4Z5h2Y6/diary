@@ -1,5 +1,6 @@
 "use client";
 import { DiariesType } from "@/consts/diaries.types";
+import { Box } from "@mui/material";
 import {
   User,
   createClientComponentClient,
@@ -47,7 +48,13 @@ export default function PreviewImg({
           unoptimized={true}
         />
       ) : (
-        null
+        <Image
+          src="/no_image.jpeg"
+          alt=""
+          objectFit="contain"
+          layout="fill"
+          unoptimized={true}
+        />
       )}
     </>
   );

@@ -7,11 +7,12 @@ import {
   ImageList,
   ImageListItem,
   ImageListItemBar,
+  Link,
 } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import PreviewImg from "./previewImg";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export const LatestFoodsList = ({ user }: { user: User | null }) => {
   const [latestFoodsData, setLatestFoodsData] = useState<FoodDataType[] | null>(
@@ -24,9 +25,11 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
 
   const handleDelete = async (id: number, foodImgUrl: string | null) => {
     if (foodImgUrl) {
-      await deleteFoodImg(user, foodImgUrl, () => {deleteFoods(id, setLatestFoodsData)})
+      await deleteFoodImg(user, foodImgUrl, () => {
+        deleteFoods(id, setLatestFoodsData);
+      });
     } else {
-      deleteFoods(id, setLatestFoodsData)
+      deleteFoods(id, setLatestFoodsData);
     }
   };
 
@@ -57,13 +60,21 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
   return (
     <>
       {latestFoodsData ? (
-        <ImageList cols={3} rowHeight={284}>
+        <ImageList cols={3} rowHeight={280}>
           {latestFoodsData.map((lfd) => (
             <ImageListItem key={lfd.id}>
-              <PreviewImg url={lfd.food_img_url!} bucket="food_img" />
+              <Link
+                href={`/data/foods/${lfd.id}`}
+                color="inherit"
+                underline="none"
+              >
+                <PreviewImg url={lfd.food_img_url!} bucket="food_img" />
+              </Link>
               <ImageListItemBar
                 title={lfd.food_text}
-                subtitle={`${formatDate(lfd.created_at!)} ${formatTime(lfd.created_at!)}`}
+                subtitle={`${formatDate(lfd.created_at!)} ${formatTime(
+                  lfd.created_at!
+                )}`}
                 actionIcon={
                   <IconButton
                     sx={{ color: "rgba(255, 255, 255, 0.54)" }}

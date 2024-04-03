@@ -101,7 +101,6 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
                 >
                   <PreviewImg url={ldd.diary_img_url} bucket="diary_img" />
                 </Box>
-
                 <Box
                   id="zzz"
                   sx={{
@@ -123,7 +122,6 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
                   </Typography>
                 </Box>
               </Link>
-
               <Box
                 id="xxx"
                 sx={{

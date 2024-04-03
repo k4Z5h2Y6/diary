@@ -5,6 +5,7 @@ import {
   ImageList,
   ImageListItem,
   ImageListItemBar,
+  Link,
 } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
@@ -12,7 +13,12 @@ import { PaginationDiary } from "../common/pagenationDiary";
 import PreviewImg from "./previewImg";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { FoodDataType } from "@/consts/foods.types";
-import { deleteFoodImg, deleteFoods, readFoodsCount, readRangedFoods } from "@/hooks/foods";
+import {
+  deleteFoodImg,
+  deleteFoods,
+  readFoodsCount,
+  readRangedFoods,
+} from "@/hooks/foods";
 
 const parPage = 15;
 
@@ -52,9 +58,11 @@ export const AllFoodsList = ({ user }: { user: User | null }) => {
 
   const handleDelete = async (id: number, foodImgUrl: string | null) => {
     if (foodImgUrl) {
-      await deleteFoodImg(user, foodImgUrl, () => {deleteFoods(id, setFoodsData)})
+      await deleteFoodImg(user, foodImgUrl, () => {
+        deleteFoods(id, setFoodsData);
+      });
     } else {
-      deleteFoods(id, setFoodsData)
+      deleteFoods(id, setFoodsData);
     }
   };
 
@@ -93,10 +101,18 @@ export const AllFoodsList = ({ user }: { user: User | null }) => {
           <ImageList cols={3} rowHeight={284}>
             {foodsData.map((lfd) => (
               <ImageListItem key={lfd.id}>
-                <PreviewImg url={lfd.food_img_url!} bucket="food_img" />
+                <Link
+                  href={`/data/foods/${lfd.id}`}
+                  color="inherit"
+                  underline="none"
+                >
+                  <PreviewImg url={lfd.food_img_url!} bucket="food_img" />
+                </Link>
                 <ImageListItemBar
                   title={lfd.food_text}
-                  subtitle={`${formatDate(lfd.created_at!)} ${formatTime(lfd.created_at!)}`}
+                  subtitle={`${formatDate(lfd.created_at!)} ${formatTime(
+                    lfd.created_at!
+                  )}`}
                   actionIcon={
                     <IconButton
                       sx={{ color: "rgba(255, 255, 255, 0.54)" }}

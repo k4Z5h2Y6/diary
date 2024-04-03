@@ -71,7 +71,7 @@ export default function DiariesForm({ user }: { user: User | null }) {
   return (
     <>
       <TextField
-        label="テキスト"
+        label="テキスト*"
         variant="outlined"
         inputRef={diaryTextRef}
         multiline

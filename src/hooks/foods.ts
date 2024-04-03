@@ -1,5 +1,8 @@
 import { FoodDataType, FoodsType } from "@/consts/foods.types";
-import { User, createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import {
+  User,
+  createClientComponentClient,
+} from "@supabase/auth-helpers-nextjs";
 import { Dispatch, SetStateAction } from "react";
 
 const supabase = createClientComponentClient<FoodsType>();
@@ -12,20 +15,21 @@ export async function uploadFoodImg(
   callback: () => void
 ) {
   try {
-    if (foodImgUrl === null || foodImgFile === null ) {
-      throw new Error('You must select an image to upload.')
+    if (foodImgUrl === null || foodImgFile === null) {
+      throw new Error("You must select an image to upload.");
     }
-    const { error: uploadError } = await supabase.storage.from('food_img').upload(foodImgUrl, foodImgFile)
+    const { error: uploadError } = await supabase.storage
+      .from("food_img")
+      .upload(foodImgUrl, foodImgFile);
 
     if (uploadError) {
-      throw uploadError
+      throw uploadError;
     }
-
   } catch (error) {
-    alert('Error uploading diary_img!')
+    alert("Error uploading diary_img!");
   } finally {
     setImgUploading(false);
-    alert("画像アップロード完了")
+    alert("画像アップロード完了");
     callback();
   }
 }
@@ -36,15 +40,17 @@ export async function deleteFoodImg(
   callback: () => void
 ) {
   try {
-    const { error: uploadError } = await supabase.storage.from('food_img').remove([foodImgUrl])
+    const { error: uploadError } = await supabase.storage
+      .from("food_img")
+      .remove([foodImgUrl]);
 
     if (uploadError) {
-      throw uploadError
+      throw uploadError;
     }
-    alert('写真削除完了')
+    alert("写真削除完了");
     callback();
   } catch (error) {
-    alert('Error delete food_img!')
+    alert("Error delete food_img!");
   } finally {
   }
 }
@@ -54,7 +60,7 @@ export async function createFood(
   setLoading: Dispatch<SetStateAction<boolean>>,
   foodText: string,
   ingredient: string,
-  foodImgUrl: string | null,
+  foodImgUrl: string | null
 ) {
   try {
     setLoading(true);
@@ -69,19 +75,19 @@ export async function createFood(
     alert("投稿エラー");
   } finally {
     setLoading(false);
-    alert("投稿完了")
+    alert("投稿完了");
   }
 }
 
 export async function readLatestFoods(
-  setLatestFoodsList: Dispatch<SetStateAction<FoodDataType[] | null>>,
+  setLatestFoodsList: Dispatch<SetStateAction<FoodDataType[] | null>>
 ) {
   try {
     let { data, error, status } = await supabase
-    .from("foods")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .limit(15);
+      .from("foods")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(15);
 
     if (error && status !== 406) {
       throw error;
@@ -92,6 +98,30 @@ export async function readLatestFoods(
     }
   } catch (error) {
     alert("記録読み込みエラー");
+  } finally {
+  }
+}
+
+export async function readFood(
+  id: number,
+  setFoodData: Dispatch<SetStateAction<FoodDataType[] | null>>
+) {
+  try {
+    const { data, error, status } = await supabase
+      .from("foods")
+      .select("*")
+      .eq("id", id)
+      .limit(1);
+
+    if (error && status !== 406) {
+      throw error;
+    }
+
+    if (data) {
+      setFoodData(data);
+    }
+  } catch (error) {
+    alert("食事読み込みエラー");
   } finally {
   }
 }
@@ -149,7 +179,7 @@ export async function readRangedFoods(
       .from("foods")
       .select("*")
       .order("created_at", { ascending: false })
-      .range(rangeStart, rangeEnd) //
+      .range(rangeStart, rangeEnd); //
 
     if (error && status !== 406) {
       throw error;

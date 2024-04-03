@@ -1,18 +1,27 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Container, Divider } from "@mui/material";
 
 export default function Setting() {
   return (
     <>
-      <form action="/auth/logout" method="post">
-        <Button
-          variant="contained"
-          type="submit"
-          fullWidth
-          sx={{ marginBottom: "16px" }}
-        >
-          ログアウト
-        </Button>
-      </form>
+      <Container
+        maxWidth="md"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Divider>設定</Divider>
+        <form action="/auth/logout" method="post">
+          <Button
+            variant="contained"
+            type="submit"
+            fullWidth
+            sx={{ marginBottom: "16px" }}
+          >
+            ログアウト
+          </Button>
+        </form>
+      </Container>
     </>
   );
 }

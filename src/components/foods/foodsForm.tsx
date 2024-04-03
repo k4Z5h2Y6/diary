@@ -22,6 +22,7 @@ export default function FoodsForm({ user }: { user: User | null }) {
 
       setFoodImgFile(file);
       setFoodImgUrl(filePath);
+      console.log(filePath)
     } else {
       setFoodImgFile(null);
       setFoodImgUrl(null);

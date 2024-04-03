@@ -113,7 +113,6 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
                 position: "relative"
               }}
             >
-
               <Link
                 href={`/data/diaries/${dd.id}`}
                 color="inherit"
@@ -124,10 +123,8 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
                   display: "flex",
                   position: "absolute",
                   left: 0,
-                  
                 }}
               >
-                
                 <Box
                   id="yyy"
                   sx={{

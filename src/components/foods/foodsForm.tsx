@@ -42,10 +42,19 @@ export default function FoodsForm({ user }: { user: User | null }) {
     const foodText = foodTextRef.current?.value || "";
     const ingredient = ingredientRef.current?.value || "";
 
-    if (foodText === "" && ingredient === "" && (!foodImgUrls || foodImgUrls.length === 0)) {
+    if (
+      foodText === "" &&
+      ingredient === "" &&
+      (!foodImgUrls || foodImgUrls.length === 0)
+    ) {
       alert("コンテンツがありません");
     } else {
-      if (foodImgUrls && foodImgFiles && foodImgUrls.length > 0 && foodImgUrls.length === foodImgFiles.length) {
+      if (
+        foodImgUrls &&
+        foodImgFiles &&
+        foodImgUrls.length > 0 &&
+        foodImgUrls.length === foodImgFiles.length
+      ) {
         await uploadFoodImgs(
           user,
           setImgUploading,
@@ -113,52 +122,61 @@ export default function FoodsForm({ user }: { user: User | null }) {
         multiple
       />
 
-      {foodImgFiles && foodImgFiles.length > 0 && (
-        foodImgFiles.map((foodImgFile, index) => (
-          <Box
-            key={index}
-            sx={{
-              width: "160px",
-              height: "160px",
-              marginBottom: "16px",
-              display: "flex",
-              justifyContent: "start",
-              alignItems: "center",
-              position: "relative",
-            }}
-          >
-            <IconButton
-              onClick={() => {
-                const updatedUrls = [...foodImgUrls!];
-                const updatedFiles = [...foodImgFiles!];
-                updatedUrls.splice(index, 1);
-                updatedFiles.splice(index, 1);
-                setFoodImgUrls(updatedUrls.length > 0 ? updatedUrls : null);
-                setFoodImgFiles(updatedFiles.length > 0 ? updatedFiles : null);
-              }}
-              style={{
-                position: "absolute",
-                top: 0,
-                right: 0,
-                zIndex: 1,
-                color: "#aaa",
-              }}
-            >
-              <CancelRoundedIcon />
-            </IconButton>
-            <img
-              src={URL.createObjectURL(foodImgFile)}
-              alt=""
-              style={{
+      <Box
+        sx={{
+          display: "flex",
+          // flexDirection: "column",
+        }}
+      >
+        {foodImgFiles &&
+          foodImgFiles.length > 0 &&
+          foodImgFiles.map((foodImgFile, index) => (
+            <Box
+              key={index}
+              sx={{
                 width: "160px",
                 height: "160px",
-                objectFit: "contain",
-                aspectRatio: "1 / 1",
+                marginBottom: "16px",
+                display: "flex",
+                justifyContent: "start",
+                alignItems: "center",
+                position: "relative",
               }}
-            />
-          </Box>
-        ))
-      )}
+            >
+              <IconButton
+                onClick={() => {
+                  const updatedUrls = [...foodImgUrls!];
+                  const updatedFiles = [...foodImgFiles!];
+                  updatedUrls.splice(index, 1);
+                  updatedFiles.splice(index, 1);
+                  setFoodImgUrls(updatedUrls.length > 0 ? updatedUrls : null);
+                  setFoodImgFiles(
+                    updatedFiles.length > 0 ? updatedFiles : null
+                  );
+                }}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  zIndex: 1,
+                  color: "#aaa",
+                }}
+              >
+                <CancelRoundedIcon />
+              </IconButton>
+              <img
+                src={URL.createObjectURL(foodImgFile)}
+                alt=""
+                style={{
+                  width: "160px",
+                  height: "160px",
+                  objectFit: "contain",
+                  aspectRatio: "1 / 1",
+                }}
+              />
+            </Box>
+          ))}
+      </Box>
       <Button
         variant="contained"
         type="submit"

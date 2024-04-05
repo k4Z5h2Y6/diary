@@ -7,7 +7,7 @@ export interface FoodsType {
           user_id: string;
           created_at: string | null;
           food_text: string | null;
-          food_img_url: string | null;
+          food_img_url: string[] | null;
           ingredient: string | null;
         };
         Insert: {
@@ -15,7 +15,7 @@ export interface FoodsType {
           user_id: string;
           created_at?: string | null;
           food_text?: string | null;
-          food_img_url?: string | null;
+          food_img_url?: string[] | null;
           ingredient?: string | null;
         };
         Delete: {
@@ -23,7 +23,7 @@ export interface FoodsType {
           user_id: string;
           created_at?: string | null;
           food_text?: string | null;
-          food_img_url?: string | null;
+          food_img_url?: string[] | null;
           ingredient?: string | null;
         };
       };
@@ -45,6 +45,6 @@ export interface FoodDataType {
   user_id: string;
   created_at?: string | null;
   food_text?: string | null;
-  food_img_url?: string | null;
+  food_img_url?: string[] | null;
   ingredient?: string | null;
 }

@@ -7,32 +7,39 @@ import { Dispatch, SetStateAction } from "react";
 
 const supabase = createClientComponentClient<FoodsType>();
 
-export async function uploadFoodImg(
+export async function uploadFoodImgs(
   user: User | null,
   setImgUploading: Dispatch<SetStateAction<boolean>>,
-  foodImgUrl: string | null,
-  foodImgFile: File | null,
+  foodImgUrls: string[] | null,
+  foodImgFiles: File[] | null,
   callback: () => void
 ) {
   try {
-    if (foodImgUrl === null || foodImgFile === null) {
-      throw new Error("You must select an image to upload.");
+    if (!foodImgUrls || !foodImgFiles || foodImgUrls.length !== foodImgFiles.length) {
+      throw new Error("You must provide matching image URLs and files.");
     }
-    const { error: uploadError } = await supabase.storage
-      .from("food_img")
-      .upload(foodImgUrl, foodImgFile);
 
-    if (uploadError) {
-      throw uploadError;
-    }
-  } catch (error) {
-    alert("Error uploading diary_img!");
-  } finally {
+    const uploadPromises = foodImgUrls.map(async (foodImgUrl, index) => {
+      const foodImgFile = foodImgFiles[index];
+      const { error: uploadError } = await supabase.storage
+        .from("food_img")
+        .upload(foodImgUrl, foodImgFile);
+
+      if (uploadError) {
+        throw uploadError;
+      }
+    });
+
+    await Promise.all(uploadPromises);
     setImgUploading(false);
-    alert("画像アップロード完了");
+    console.log("画像完了");
     callback();
+  } catch (error) {
+    alert("Error uploading food images!");
+  } finally {
   }
 }
+
 
 export async function deleteFoodImg(
   user: User | null,
@@ -60,7 +67,7 @@ export async function createFood(
   setLoading: Dispatch<SetStateAction<boolean>>,
   foodText: string,
   ingredient: string,
-  foodImgUrl: string | null
+  foodImgUrls: string[] | null,
 ) {
   try {
     setLoading(true);
@@ -68,14 +75,14 @@ export async function createFood(
       user_id: user?.id as string,
       food_text: foodText,
       ingredient: ingredient,
-      food_img_url: foodImgUrl,
+      food_img_url: foodImgUrls,
     });
     if (error) throw error;
+    alert("投稿完了");
   } catch (error) {
     alert("投稿エラー");
   } finally {
     setLoading(false);
-    alert("投稿完了");
   }
 }
 

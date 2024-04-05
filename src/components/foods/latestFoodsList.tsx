@@ -68,7 +68,11 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
                 color="inherit"
                 underline="none"
               >
-                <PreviewImg url={lfd.food_img_url!} bucket="food_img" />
+                {lfd.food_img_url && lfd.food_img_url[0] ? (
+                  <PreviewImg url={lfd.food_img_url[0]} />
+                ) : (
+                  <PreviewImg url={null} />
+                )}
               </Link>
               <ImageListItemBar
                 title={lfd.food_text}
@@ -79,7 +83,8 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
                   <IconButton
                     sx={{ color: "rgba(255, 255, 255, 0.54)" }}
                     aria-label={`info about ${lfd.food_text}`}
-                    onClick={() => handleDelete(lfd.id, lfd.food_img_url!)}
+                    //todo 画像削除　調整
+                    // onClick={() => handleDelete(lfd.id, lfd.food_img_url!)}
                   >
                     <DeleteIcon />
                   </IconButton>

@@ -10,10 +10,8 @@ import { useEffect, useState } from "react";
 
 export default function PreviewImg({
   url,
-  bucket,
 }: {
   url: string | null;
-  bucket: string;
 }) {
   const supabase = createClientComponentClient<DiariesType>();
   const [imgUrl, setImgUrl] = useState<string | null>(url);
@@ -22,7 +20,7 @@ export default function PreviewImg({
     async function downloadImage(path: string) {
       try {
         const { data, error } = await supabase.storage
-          .from(bucket)
+          .from("food_img")
           .download(path);
         if (error) {
           throw error;

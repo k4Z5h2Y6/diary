@@ -56,8 +56,8 @@ export const AllFoodsList = ({ user }: { user: User | null }) => {
     }
   }, [rangeStart]);
 
-  const handleDelete = async (id: number, foodImgUrl: string | null) => {
-    if (foodImgUrl) {
+  const handleDelete = async (id: number, foodImgUrl: string[] | null) => {
+    if (foodImgUrl && foodImgUrl.length > 0) {
       await deleteFoodImg(user, foodImgUrl, () => {
         deleteFoods(id, setFoodsData);
       });
@@ -106,17 +106,21 @@ export const AllFoodsList = ({ user }: { user: User | null }) => {
                   color="inherit"
                   underline="none"
                 >
-                  <PreviewImg url={lfd.food_img_url!} bucket="food_img" />
+                  {lfd.food_img_url && lfd.food_img_url[0] ? (
+                    <PreviewImg url={lfd.food_img_url[0]} />
+                  ) : (
+                    <PreviewImg url={null} />
+                  )}
                 </Link>
                 <ImageListItemBar
-                  title={lfd.food_text}
+                  title={lfd.food_title}
                   subtitle={`${formatDate(lfd.created_at!)} ${formatTime(
                     lfd.created_at!
                   )}`}
                   actionIcon={
                     <IconButton
                       sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                      aria-label={`info about ${lfd.food_text}`}
+                      aria-label={`info about ${lfd.food_title}`}
                       onClick={() => handleDelete(lfd.id, lfd.food_img_url!)}
                     >
                       <DeleteIcon />

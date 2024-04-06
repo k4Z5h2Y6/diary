@@ -9,8 +9,9 @@ import { createFood, uploadFoodImgs } from "@/hooks/foods";
 export default function FoodsForm({ user }: { user: User | null }) {
   const [loading, setLoading] = useState<boolean>(false);
   const [imgUploading, setImgUploading] = useState(false);
-  const foodTextRef = useRef<HTMLTextAreaElement>(null);
+  const foodTitleRef = useRef<HTMLTextAreaElement>(null);
   const ingredientRef = useRef<HTMLTextAreaElement>(null);
+  const foodMemoRef = useRef<HTMLTextAreaElement>(null);
   const [foodImgUrls, setFoodImgUrls] = useState<string[] | null>([]);
   const [foodImgFiles, setFoodImgFiles] = useState<File[] | null>([]);
 
@@ -39,12 +40,14 @@ export default function FoodsForm({ user }: { user: User | null }) {
   };
 
   const handleSubmit = async () => {
-    const foodText = foodTextRef.current?.value || "";
-    const ingredient = ingredientRef.current?.value || "";
+    const foodText = foodTitleRef.current?.value || null;
+    const ingredient = ingredientRef.current?.value || null;
+    const foodMemo = foodMemoRef.current?.value || null;
 
     if (
-      foodText === "" &&
-      ingredient === "" &&
+      !foodText &&
+      !ingredient && 
+      !foodMemo &&
       (!foodImgUrls || foodImgUrls.length === 0)
     ) {
       alert("コンテンツがありません");
@@ -61,19 +64,22 @@ export default function FoodsForm({ user }: { user: User | null }) {
           foodImgUrls,
           foodImgFiles,
           () => {
-            createFood(user, setLoading, foodText, ingredient, foodImgUrls);
+            createFood(user, setLoading, foodText, ingredient, foodMemo, foodImgUrls);
           }
         );
       } else {
-        createFood(user, setLoading, foodText, ingredient, null);
+        createFood(user, setLoading, foodText, ingredient, foodMemo, null);
       }
     }
 
-    if (foodTextRef.current) {
-      foodTextRef.current.value = "";
+    if (foodTitleRef.current) {
+      foodTitleRef.current.value = "";
     }
     if (ingredientRef.current) {
       ingredientRef.current.value = "";
+    }
+    if (foodMemoRef.current) {
+      foodMemoRef.current.value = "";
     }
     setFoodImgUrls(null);
     setFoodImgFiles(null);
@@ -86,7 +92,6 @@ export default function FoodsForm({ user }: { user: User | null }) {
     updatedFiles.splice(index, 1);
     setFoodImgUrls(updatedUrls.length > 0 ? updatedUrls : null);
     setFoodImgFiles(updatedFiles.length > 0 ? updatedFiles : null);
-    
   };
 
   return (
@@ -94,7 +99,7 @@ export default function FoodsForm({ user }: { user: User | null }) {
       <TextField
         label="料理名"
         variant="outlined"
-        inputRef={foodTextRef}
+        inputRef={foodTitleRef}
         multiline
         size="small"
         fullWidth
@@ -104,6 +109,15 @@ export default function FoodsForm({ user }: { user: User | null }) {
         label="食材"
         variant="outlined"
         inputRef={ingredientRef}
+        multiline
+        size="small"
+        fullWidth
+        sx={{ marginBottom: "16px" }}
+      />
+      <TextField
+        label="点数、レシピ、感想、調理時間"
+        variant="outlined"
+        inputRef={foodMemoRef}
         multiline
         size="small"
         fullWidth

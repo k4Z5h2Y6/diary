@@ -10,16 +10,18 @@ const supabase = createClientComponentClient<FoodsType>();
 export async function createFood(
   user: User | null,
   setLoading: Dispatch<SetStateAction<boolean>>,
-  foodText: string,
-  ingredient: string,
+  foodText: string | null,
+  ingredient: string | null,
+  foodMemo: string | null,
   foodImgUrls: string[] | null,
 ) {
   try {
     setLoading(true);
     const { error } = await supabase.from("foods").insert({
       user_id: user?.id as string,
-      food_text: foodText,
+      food_title: foodText,
       ingredient: ingredient,
+      food_memo: foodMemo,
       food_img_url: foodImgUrls,
     });
     if (error) throw error;

@@ -1,5 +1,4 @@
-import FoodEditor from "@/components/foods/foodEditor";
-import FoodForm from "@/components/foods/foodForm";
+import FoodFetcher from "@/components/foods/foodFetcher";
 import { Database } from "@/consts/database.types";
 import { FoodDataType } from "@/consts/foods.types";
 import { Container } from "@mui/material";
@@ -22,7 +21,7 @@ export default async function Page() {
           flexDirection: "column",
         }}
       >
-        {/* <FoodEditor user={user}/> */}
+        <FoodFetcher user={user}/>
       </Container>
     </>
   );

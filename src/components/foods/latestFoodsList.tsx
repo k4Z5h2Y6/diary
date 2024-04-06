@@ -75,14 +75,14 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
                 )}
               </Link>
               <ImageListItemBar
-                title={lfd.food_text}
+                title={lfd.food_title}
                 subtitle={`${formatDate(lfd.created_at!)} ${formatTime(
                   lfd.created_at!
                 )}`}
                 actionIcon={
                   <IconButton
                     sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                    aria-label={`info about ${lfd.food_text}`}
+                    aria-label={`info about ${lfd.food_title}`}
                     onClick={() => handleDelete(lfd.id, lfd.food_img_url!)}
                   >
                     <DeleteIcon />

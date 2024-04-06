@@ -6,25 +6,31 @@ export interface FoodsType {
           id: number;
           user_id: string;
           created_at: string | null;
-          food_text: string | null;
-          food_img_url: string[] | null;
+          food_title: string | null;
           ingredient: string | null;
+          food_memo: string | null;
+          food_img_url: string[] | null;
+          
         };
         Insert: {
           id?: number;
           user_id: string;
           created_at?: string | null;
-          food_text?: string | null;
-          food_img_url?: string[] | null;
+          food_title?: string | null;
           ingredient?: string | null;
+          food_memo?: string | null;
+          food_img_url?: string[] | null;
+          
         };
         Delete: {
           id: number;
           user_id: string;
           created_at?: string | null;
-          food_text?: string | null;
-          food_img_url?: string[] | null;
+          food_title?: string | null;
           ingredient?: string | null;
+          food_memo?: string | null;
+          food_img_url?: string[] | null;
+          
         };
       };
     };
@@ -44,7 +50,9 @@ export interface FoodDataType {
   id: number;
   user_id: string;
   created_at?: string | null;
-  food_text?: string | null;
-  food_img_url?: string[] | null;
+  food_title?: string | null;
   ingredient?: string | null;
+  food_memo?: string | null;
+  food_img_url?: string[] | null;
+  
 }

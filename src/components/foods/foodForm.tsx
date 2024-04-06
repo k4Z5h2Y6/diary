@@ -4,7 +4,7 @@ import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useRef, useState } from "react";
 import { Box, Button, IconButton, TextField } from "@mui/material";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
-import { createFood, uploadFoodImg } from "@/hooks/foods";
+import { createFood, uploadFoodImgs } from "@/hooks/foods";
 import { FoodDataType } from "@/consts/foods.types";
 import Image from "next/image";
 
@@ -19,8 +19,8 @@ export default function FoodForm({
   const [imgUploading, setImgUploading] = useState(false);
   const foodTextRef = useRef<HTMLTextAreaElement>(null);
   const ingredientRef = useRef<HTMLTextAreaElement>(null);
-  const [foodImgUrl, setFoodImgUrl] = useState<string | null>(null);
-  const [foodImgFile, setFoodImgFile] = useState<File | null>(null);
+  const [foodImgUrl, setFoodImgUrl] = useState<string[] | null>(null);
+  const [foodImgFile, setFoodImgFile] = useState<File[] | null>(null);
 
   //ここ　最初はnullが渡されている　todo
   useEffect(() => {

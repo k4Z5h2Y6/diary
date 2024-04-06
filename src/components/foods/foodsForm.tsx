@@ -79,6 +79,16 @@ export default function FoodsForm({ user }: { user: User | null }) {
     setFoodImgFiles(null);
   };
 
+  const handleClickCancelImg = (index: number) => {
+    const updatedUrls = [...foodImgUrls!];
+    const updatedFiles = [...foodImgFiles!];
+    updatedUrls.splice(index, 1);
+    updatedFiles.splice(index, 1);
+    setFoodImgUrls(updatedUrls.length > 0 ? updatedUrls : null);
+    setFoodImgFiles(updatedFiles.length > 0 ? updatedFiles : null);
+    
+  };
+
   return (
     <>
       <TextField
@@ -144,16 +154,7 @@ export default function FoodsForm({ user }: { user: User | null }) {
               }}
             >
               <IconButton
-                onClick={() => {
-                  const updatedUrls = [...foodImgUrls!];
-                  const updatedFiles = [...foodImgFiles!];
-                  updatedUrls.splice(index, 1);
-                  updatedFiles.splice(index, 1);
-                  setFoodImgUrls(updatedUrls.length > 0 ? updatedUrls : null);
-                  setFoodImgFiles(
-                    updatedFiles.length > 0 ? updatedFiles : null
-                  );
-                }}
+                onClick={() => handleClickCancelImg(index)}
                 style={{
                   position: "absolute",
                   top: 0,
@@ -180,7 +181,7 @@ export default function FoodsForm({ user }: { user: User | null }) {
       <Button
         variant="contained"
         type="submit"
-        onClick={handleSubmit}
+        onClick={() => handleSubmit()}
         fullWidth
         sx={{ marginBottom: "16px" }}
       >

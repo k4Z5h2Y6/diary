@@ -23,8 +23,8 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
     readLatestFoods(setLatestFoodsData);
   }, []);
 
-  const handleDelete = async (id: number, foodImgUrl: string | null) => {
-    if (foodImgUrl) {
+  const handleDelete = async (id: number, foodImgUrl: string[] | null) => {
+    if (foodImgUrl && foodImgUrl.length > 0) {
       await deleteFoodImg(user, foodImgUrl, () => {
         deleteFoods(id, setLatestFoodsData);
       });
@@ -83,8 +83,7 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
                   <IconButton
                     sx={{ color: "rgba(255, 255, 255, 0.54)" }}
                     aria-label={`info about ${lfd.food_text}`}
-                    //todo 画像削除　調整
-                    // onClick={() => handleDelete(lfd.id, lfd.food_img_url!)}
+                    onClick={() => handleDelete(lfd.id, lfd.food_img_url!)}
                   >
                     <DeleteIcon />
                   </IconButton>

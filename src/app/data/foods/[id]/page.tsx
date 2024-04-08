@@ -1,10 +1,8 @@
 import FoodFetcher from "@/components/foods/foodFetcher";
 import { Database } from "@/consts/database.types";
-import { FoodDataType } from "@/consts/foods.types";
 import { Container, Divider } from "@mui/material";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import { useParams } from "next/navigation";
 
 export default async function Page() {
   const supabase = createServerComponentClient<Database>({ cookies });

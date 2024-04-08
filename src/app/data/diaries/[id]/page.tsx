@@ -1,8 +1,27 @@
-'use client';
+import DiaryFetcher from "@/components/diaries/diaryFetcher";
+import { Database } from "@/consts/database.types";
+import { Container, Divider } from "@mui/material";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 
-import { usePathname } from 'next/navigation';
+export default async function Page() {
+  const supabase = createServerComponentClient<Database>({ cookies });
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-export default function Page() {
-	const Pathname = usePathname();
-	return <h1 className="text-3xl font-bold">パス: {Pathname}</h1>;
+  return (
+    <>
+      <Container
+        maxWidth="md"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Divider>記録詳細</Divider>
+        <DiaryFetcher user={user}/>
+      </Container>
+    </>
+  );
 }

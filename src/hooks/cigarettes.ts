@@ -27,20 +27,28 @@ export async function createCigarette(
 
 //単数
 export async function readLatestCigarette(
+  setLoading: Dispatch<SetStateAction<boolean>>,
   setLatestCigaretteData: Dispatch<SetStateAction<CigaretteDataType | null>>,
 ) {
-  // "cigarettes" テーブルから作成日が最新の行を取得するクエリを定義します
-  const { data, error } = await supabase
+  try {
+    setLoading(true)
+    const { data, error, status } = await supabase
     .from("cigarettes")
     .select("*")
     .order("created_at", { ascending: false })
     .limit(1);
-  if (error) {
-    console.error("Error fetching data:", error.message);
-    return;
-  }
-  if (data[0]) {
-    setLatestCigaretteData(data[0])
+
+    if (error && status !== 406) {
+      throw error;
+    }
+    
+    if (data) {
+      setLatestCigaretteData(data[0])
+    }
+  } catch (error) {
+    console.error("Error fetching ciga");
+  } finally {
+    setLoading(false);
   }
 }
 

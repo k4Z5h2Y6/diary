@@ -127,8 +127,6 @@ export default function FoodForm({
 
   //todo
   const handleUpdate = async () => {
-    console.log(foodImgUrls);
-    console.log(foodImgFiles);
   };
 
   return (
@@ -243,11 +241,11 @@ export default function FoodForm({
         <Button
           variant="contained"
           type="submit"
-          onClick={() => handleUpdate()}
+          // onClick={() => handleUpdate()}
           fullWidth
           sx={{ marginBottom: "16px" }}
         >
-          更新
+          更新システム作成中
         </Button>
       ) : (
         <Button

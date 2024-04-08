@@ -1,8 +1,5 @@
 import { FoodDataType, FoodsType } from "@/consts/foods.types";
-import {
-  User,
-  createClientComponentClient,
-} from "@supabase/auth-helpers-nextjs";
+import { User, createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Dispatch, SetStateAction } from "react";
 
 const supabase = createClientComponentClient<FoodsType>();
@@ -13,7 +10,7 @@ export async function createFood(
   foodText: string | null,
   ingredient: string | null,
   foodMemo: string | null,
-  foodImgUrls: string[] | null,
+  foodImgUrls: string[] | null
 ) {
   try {
     setLoading(true);
@@ -32,7 +29,7 @@ export async function createFood(
     setLoading(false);
   }
 }
-
+//詳細ページ用
 export async function readFood(
   id: number,
   setFoodData: Dispatch<SetStateAction<FoodDataType[] | null>>
@@ -177,8 +174,12 @@ export async function uploadFoodImgs(
   callback: () => void
 ) {
   try {
-    setLoading(true)
-    if (!foodImgUrls || !foodImgFiles || foodImgUrls.length !== foodImgFiles.length) {
+    setLoading(true);
+    if (
+      !foodImgUrls ||
+      !foodImgFiles ||
+      foodImgUrls.length !== foodImgFiles.length
+    ) {
       throw new Error("You must provide matching image URLs and files.");
     }
 

@@ -8,13 +8,14 @@ import { useEffect, useState } from "react";
 import CountUpButton from "./countUpButton";
 import { readLatestCigarette } from "@/hooks/cigarettes";
 import CountDownButton from "./countDownButton";
-import { Grid, Skeleton, Typography } from "@mui/material";
+import { CircularProgress, Grid, Skeleton, Typography } from "@mui/material";
 
 export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
   const supabase = createClientComponentClient<CigarettesType>();
+
+  const [loading, setLoading] = useState<boolean>(false);
   const [latestCigaretteData, setLatestCigaretteData] =
     useState<CigaretteDataType | null>(null);
-
   const [currentId, setCurrentId] = useState<number | null>(null);
   const [cigarettesCounter, setCigarettesCounter] = useState<number | null>(
     null
@@ -40,7 +41,7 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
         },
         (payload) => {
           // 変更後のデータに対しての処理を記載
-          readLatestCigarette(setLatestCigaretteData);
+          readLatestCigarette(setLoading, setLatestCigaretteData);
         }
       )
       .subscribe();
@@ -52,7 +53,7 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
   }, [supabase]);
 
   useEffect(() => {
-    readLatestCigarette(setLatestCigaretteData);
+    readLatestCigarette(setLoading, setLatestCigaretteData);
   }, []);
 
   const calculateNoSmokingTime = (date: Date) => {
@@ -119,7 +120,8 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
           </Grid>
           <Grid item xs={4}>
             <Typography sx={{ textAlign: "center" }}>
-              {cigarettesCounter}
+              {loading ? <CircularProgress size={24} /> : cigarettesCounter}
+              {/* {cigarettesCounter} */}
             </Typography>
           </Grid>
           <Grid item xs={4}>

@@ -8,11 +8,9 @@ import { Dispatch, SetStateAction } from "react";
 const supabase = createClientComponentClient<CategoriesType>();
 
 export async function readCategories(
-  setLoading: Dispatch<SetStateAction<boolean>>,
   setDiaryCategories: Dispatch<SetStateAction<any[]>>
 ) {
   try {
-    setLoading(true);
     let { data, error, status } = await supabase.from("categories").select("*");
     // .order("created_at", { ascending: false })
 
@@ -30,6 +28,5 @@ export async function readCategories(
   } catch (error) {
     alert("Error loading user category!");
   } finally {
-    setLoading(false);
   }
 }

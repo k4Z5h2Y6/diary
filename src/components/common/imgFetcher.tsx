@@ -2,13 +2,12 @@
 import { DiariesType } from "@/consts/diaries.types";
 import { Box } from "@mui/material";
 import {
-  User,
   createClientComponentClient,
 } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export default function PreviewImg({
+export default function ImgFetcher({
   url,
   bucket,
 }: {
@@ -39,25 +38,31 @@ export default function PreviewImg({
 
   return (
     <>
-      {imgUrl ? (
-        <Image
-          src={imgUrl}
-          alt=""
-          width={100}
-          height={100}
-          style={{ height: 100, width: 100 }}
-          unoptimized={true}
-        />
-      ) : (
-        <Image
-          src="/no_image.jpeg"
-          alt=""
-          width={100}
-          height={100}
-          style={{ height: 100, width: 100 }}
-          unoptimized={true}
-        />
-      )}
+      <Box
+        sx={{
+          width: "100%",
+          height: "100%",
+          position: "relative",
+        }}
+      >
+        {imgUrl ? (
+          <Image
+            src={imgUrl}
+            alt=""
+            fill
+            objectFit="contain"
+            unoptimized={true}
+          />
+        ) : (
+          <Image
+            src="/no_image.jpeg"
+            alt=""
+            fill
+            objectFit="contain"
+            unoptimized={true}
+          />
+        )}
+      </Box>
     </>
   );
 }

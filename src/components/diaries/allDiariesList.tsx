@@ -11,7 +11,7 @@ import {
   readDiariesCount,
   readRangedDiaries,
 } from "@/hooks/diaries";
-import PreviewImg from "./previewImg";
+import PreviewImg from "../common/imgFetcher";
 
 const parPage = 5;
 

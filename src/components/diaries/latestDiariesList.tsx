@@ -9,7 +9,7 @@ import {
 import { Box, Button, Card, Link, Typography } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
-import PreviewImg from "./previewImg";
+import ImgFetcher from "../common/imgFetcher";
 
 export const LatestDiariesList = ({ user }: { user: User | null }) => {
   const [latestDiariesData, setLatestDiariesData] = useState<
@@ -99,7 +99,7 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
                     height: 100,
                   }}
                 >
-                  <PreviewImg url={ldd.diary_img_url} bucket="diary_img" />
+                  <ImgFetcher url={ldd.diary_img_url} bucket="diary_img" />
                 </Box>
                 <Box
                   id="zzz"

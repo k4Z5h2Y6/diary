@@ -171,12 +171,13 @@ export async function deleteFoods(
 
 export async function uploadFoodImgs(
   user: User | null,
-  setImgUploading: Dispatch<SetStateAction<boolean>>,
+  setLoading: Dispatch<SetStateAction<boolean>>,
   foodImgUrls: string[] | null,
   foodImgFiles: File[] | null,
   callback: () => void
 ) {
   try {
+    setLoading(true)
     if (!foodImgUrls || !foodImgFiles || foodImgUrls.length !== foodImgFiles.length) {
       throw new Error("You must provide matching image URLs and files.");
     }
@@ -193,11 +194,11 @@ export async function uploadFoodImgs(
     });
 
     await Promise.all(uploadPromises);
-    setImgUploading(false);
     console.log("画像完了");
     callback();
   } catch (error) {
     alert("Error uploading food images!");
   } finally {
+    setLoading(false);
   }
 }

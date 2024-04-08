@@ -2,11 +2,17 @@
 
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useRef, useState } from "react";
-import { Box, Button, IconButton, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  TextField,
+} from "@mui/material";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import { createFood, uploadFoodImgs } from "@/hooks/foods";
 import { FoodDataType } from "@/consts/foods.types";
-import PreviewImg from "./previewImg";
+import ImgFetcher from "../common/imgFetcher";
 
 export default function FoodForm({
   user,
@@ -16,7 +22,7 @@ export default function FoodForm({
   foodData: FoodDataType[] | null;
 }) {
   const [loading, setLoading] = useState<boolean>(false);
-  const [imgUploading, setImgUploading] = useState(false);
+
   const foodTitleRef = useRef<HTMLTextAreaElement>(null);
   const ingredientRef = useRef<HTMLTextAreaElement>(null);
   const foodMemoRef = useRef<HTMLTextAreaElement>(null);
@@ -54,13 +60,13 @@ export default function FoodForm({
       setFoodImgUrls(null);
       setFoodImgFiles(null);
     }
+    console.log("hello");
   };
 
   const handleSubmit = async () => {
     const foodText = foodTitleRef.current?.value || null;
     const ingredient = ingredientRef.current?.value || null;
     const foodMemo = foodMemoRef.current?.value || null;
-
     if (
       !foodText &&
       !ingredient &&
@@ -77,7 +83,7 @@ export default function FoodForm({
       ) {
         await uploadFoodImgs(
           user,
-          setImgUploading,
+          setLoading,
           foodImgUrls,
           foodImgFiles,
           () => {
@@ -95,7 +101,6 @@ export default function FoodForm({
         createFood(user, setLoading, foodText, ingredient, foodMemo, null);
       }
     }
-
     if (foodTitleRef.current) {
       foodTitleRef.current.value = "";
     }
@@ -116,6 +121,14 @@ export default function FoodForm({
     updatedFiles.splice(index, 1);
     setFoodImgUrls(updatedUrls.length > 0 ? updatedUrls : null);
     setFoodImgFiles(updatedFiles.length > 0 ? updatedFiles : null);
+    console.log(foodImgUrls);
+    console.log(foodImgFiles);
+  };
+
+  //todo
+  const handleUpdate = async () => {
+    console.log(foodImgUrls);
+    console.log(foodImgFiles);
   };
 
   return (
@@ -124,7 +137,8 @@ export default function FoodForm({
         label="料理名"
         variant="outlined"
         inputRef={foodTitleRef}
-        defaultValue={foodTitleRef}
+        InputLabelProps={{ shrink: true }}
+        defaultValue={foodTitleRef.current?.value}
         multiline
         size="small"
         fullWidth
@@ -134,7 +148,8 @@ export default function FoodForm({
         label="食材"
         variant="outlined"
         inputRef={ingredientRef}
-        defaultValue={ingredientRef}
+        InputLabelProps={{ shrink: true }}
+        defaultValue={ingredientRef.current?.value}
         multiline
         size="small"
         fullWidth
@@ -144,7 +159,8 @@ export default function FoodForm({
         label="点数、レシピ、感想、調理時間"
         variant="outlined"
         inputRef={foodMemoRef}
-        defaultValue={foodMemoRef}
+        InputLabelProps={{ shrink: true }}
+        defaultValue={foodMemoRef.current?.value}
         multiline
         size="small"
         fullWidth
@@ -154,14 +170,12 @@ export default function FoodForm({
         <Button
           variant="outlined"
           component="span"
-          disabled={imgUploading}
           fullWidth
           sx={{ marginBottom: "16px" }}
         >
           画像を選択
         </Button>
       </label>
-
       <input
         style={{
           visibility: "hidden",
@@ -173,17 +187,11 @@ export default function FoodForm({
         multiple
       />
 
-      <Box
-        sx={{
-          display: "flex",
-          // flexDirection: "column",
-        }}
-      >
-
-        {/* ここから編集　画像表示で問題あり */}
-        {foodImgFiles &&
-          foodImgFiles.length > 0 &&
-          foodImgFiles.map((foodImgFile, index) => (
+      {/* 画像表示エリア */}
+      <Box sx={{ display: "flex" }}>
+        {foodImgUrls &&
+          foodImgUrls.length > 0 &&
+          foodImgUrls!.map((fiu, index) => (
             <Box
               key={index}
               sx={{
@@ -196,49 +204,63 @@ export default function FoodForm({
                 position: "relative",
               }}
             >
-              <IconButton
-                onClick={() => handleClickCancelImg(index)}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  zIndex: 1,
-                  color: "#aaa",
-                }}
-              >
-                <CancelRoundedIcon />
-              </IconButton>
-              {/* <img
-                src={URL.createObjectURL(foodImgFile)}
-                alt=""
-                style={{
-                  width: "160px",
-                  height: "160px",
-                  objectFit: "contain",
-                  aspectRatio: "1 / 1",
-                }}
-              /> */}
-              {foodImgUrls ? (
-                <>
-                  {foodImgUrls.map((fiu) => {
-                    <PreviewImg url={fiu[0]} />;
-                  })}
-                </>
+              {/* todo foodDataがない場合は画像を削除できない */}
+              {foodData ? (
+                <ImgFetcher url={fiu} bucket={"food_img"} />
               ) : (
-                <PreviewImg url={null} />
+                <>
+                  <IconButton
+                    onClick={() => handleClickCancelImg(index)}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      zIndex: 1,
+                      color: "#aaa",
+                    }}
+                  >
+                    <CancelRoundedIcon />
+                  </IconButton>
+                  <picture>
+                    <img
+                      src={URL.createObjectURL(foodImgFiles![index])}
+                      alt=""
+                      style={{
+                        width: "160px",
+                        height: "160px",
+                        objectFit: "contain",
+                        aspectRatio: "1 / 1",
+                      }}
+                    />
+                  </picture>
+                </>
               )}
             </Box>
           ))}
       </Box>
-      <Button
-        variant="contained"
-        type="submit"
-        onClick={() => handleSubmit()}
-        fullWidth
-        sx={{ marginBottom: "16px" }}
-      >
-        送信
-      </Button>
+
+      {foodData ? (
+        <Button
+          variant="contained"
+          type="submit"
+          onClick={() => handleUpdate()}
+          fullWidth
+          sx={{ marginBottom: "16px" }}
+        >
+          更新
+        </Button>
+      ) : (
+        <Button
+          variant="contained"
+          type="submit"
+          onClick={() => handleSubmit()}
+          disabled={loading}
+          fullWidth
+          sx={{ marginBottom: "16px" }}
+        >
+          {loading ? <CircularProgress size={24} /> : "送信"}
+        </Button>
+      )}
     </>
   );
 }

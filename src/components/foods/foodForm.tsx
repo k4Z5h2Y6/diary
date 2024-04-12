@@ -53,14 +53,12 @@ export default function FoodForm({
         urls.push(filePath);
         files.push(file);
       }
-
       setFoodImgUrls(urls);
       setFoodImgFiles(files);
     } else {
       setFoodImgUrls(null);
       setFoodImgFiles(null);
     }
-    console.log("hello");
   };
 
   const handleSubmit = async () => {
@@ -121,8 +119,6 @@ export default function FoodForm({
     updatedFiles.splice(index, 1);
     setFoodImgUrls(updatedUrls.length > 0 ? updatedUrls : null);
     setFoodImgFiles(updatedFiles.length > 0 ? updatedFiles : null);
-    console.log(foodImgUrls);
-    console.log(foodImgFiles);
   };
 
   //todo

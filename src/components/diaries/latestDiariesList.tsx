@@ -10,14 +10,17 @@ import { Box, Button, Card, Link, Typography } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import ImgFetcher from "../common/imgFetcher";
+import { readCategories } from "@/hooks/categories";
 
 export const LatestDiariesList = ({ user }: { user: User | null }) => {
   const [latestDiariesData, setLatestDiariesData] = useState<
     DiaryDataType[] | null
   >(null);
+  const [diaryCategories, setDiaryCategories] = useState<any[]>([]);
 
   useEffect(() => {
     readLatestDiaries(setLatestDiariesData);
+    readCategories(setDiaryCategories);
   }, []);
 
   const formatDate = (ts: string) => {
@@ -44,19 +47,20 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
     }
   };
 
-  const formatCategory = (n: number) => {
-    switch (n) {
-      case 1:
-        return "禁煙日記";
-      case 2:
-        return "pombio";
-      default:
-        return "カテゴリーなし";
+  const formatCategory = (categoryId: number | null) => {
+    if (categoryId) {
+      for (let i = 0; i < diaryCategories.length; i++) {
+        if (categoryId === diaryCategories[i].id) {
+          return diaryCategories[i].label
+        }
+      }
+    } else {
+      return "カテゴリーなし";
     }
   };
 
-  const handleDelete = async (id: number, diaryImgUrl: string | null) => {
-    if (diaryImgUrl) {
+  const handleDelete = async (id: number, diaryImgUrl: string[] | null) => {
+    if (diaryImgUrl && diaryImgUrl.length > 0) {
       await deleteDiaryImg(user, diaryImgUrl, () => {
         deleteDiaries(id, setLatestDiariesData);
       });
@@ -93,23 +97,27 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
                 }}
               >
                 <Box
-                  id="yyy"
                   sx={{
                     width: 100,
                     height: 100,
                   }}
                 >
-                  <ImgFetcher url={ldd.diary_img_url} bucket="diary_img" />
+                  {ldd.diary_img_url && ldd.diary_img_url[0] ? (
+                    <ImgFetcher url={ldd.diary_img_url[0]} bucket="diary_img" />
+                  ) : (
+                    <ImgFetcher url={null} bucket="diary_img" />
+                  )}
                 </Box>
                 <Box
-                  id="zzz"
                   sx={{
                     flex: 1,
                     overflow: "hidden",
                   }}
                 >
                   <Typography>
-                    {formatDate(ldd.created_at!)} {formatTime(ldd.created_at!)} {formatCategory(ldd.diary_category!)}
+                    {/* todo */}
+                    {formatDate(ldd.created_at!)} {formatTime(ldd.created_at!)}{" "}
+                    {formatCategory(ldd.diary_category)}
                   </Typography>
                   <Typography
                     sx={{
@@ -123,7 +131,6 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
                 </Box>
               </Link>
               <Box
-                id="xxx"
                 sx={{
                   width: 64, //
                   height: 100,

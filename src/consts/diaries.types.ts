@@ -16,7 +16,7 @@ export interface DiariesType {
           created_at: string | null;
           update_at: string | null;
           diary_text: string | null;
-          diary_img_url: string | null;
+          diary_img_url: string[] | null;
           diary_category: number | null;
         };
         Insert: {
@@ -25,7 +25,7 @@ export interface DiariesType {
           created_at?: string | null;
           update_at?: string | null;
           diary_text?: string | null;
-          diary_img_url?: string | null;
+          diary_img_url?: string[] | null;
           diary_category?: number | null;
         };
         Update: {
@@ -34,7 +34,7 @@ export interface DiariesType {
           created_at?: string | null;
           update_at: string | null;
           diary_text?: string | null;
-          diary_img_url?: string | null;
+          diary_img_url?: string[] | null;
           diary_category?: number | null;
         };
         Delete: {
@@ -43,7 +43,7 @@ export interface DiariesType {
           created_at?: string | null;
           update_at?: string | null;
           diary_text?: string | null;
-          diary_img_url?: string | null;
+          diary_img_url?: string[] | null;
           diary_category?: number | null;
         };
       };
@@ -71,6 +71,6 @@ export interface DiaryDataType {
   created_at: string | null;
   update_at: string | null;
   diary_text: string | null;
-  diary_img_url: string | null;
+  diary_img_url: string[] | null;
   diary_category: number | null;
 }

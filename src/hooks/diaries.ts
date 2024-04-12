@@ -1,5 +1,8 @@
 import { DiariesType, DiaryDataType } from "@/consts/diaries.types";
-import { User, createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import {
+  User,
+  createClientComponentClient,
+} from "@supabase/auth-helpers-nextjs";
 import { Dispatch, SetStateAction } from "react";
 
 const supabase = createClientComponentClient<DiariesType>();
@@ -8,23 +11,23 @@ export async function createDiary(
   user: User | null,
   setLoading: Dispatch<SetStateAction<boolean>>,
   diaryText: string,
-  diaryImgUrl: string | null,
   diaryCategory: number | null,
+  diaryImgUrls: string[] | null
 ) {
   try {
     setLoading(true);
     const { error } = await supabase.from("diaries").insert({
       user_id: user?.id as string,
       diary_text: diaryText,
-      diary_img_url: diaryImgUrl,
+      diary_img_url: diaryImgUrls,
       diary_category: diaryCategory,
     });
     if (error) throw error;
+    alert("投稿完了");
   } catch (error) {
     alert("投稿エラー");
   } finally {
     setLoading(false);
-    alert("投稿完了")
   }
 }
 
@@ -54,14 +57,14 @@ export async function readDiary(
 }
 
 export async function readLatestDiaries(
-  setLatestDiariesList: Dispatch<SetStateAction<DiaryDataType[] | null>>,
+  setLatestDiariesList: Dispatch<SetStateAction<DiaryDataType[] | null>>
 ) {
   try {
     let { data, error, status } = await supabase
-    .from("diaries")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .limit(5);
+      .from("diaries")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(5);
 
     if (error && status !== 406) {
       throw error;
@@ -107,7 +110,7 @@ export async function readRangedDiaries(
       .from("diaries")
       .select("*")
       .order("created_at", { ascending: false })
-      .range(rangeStart, rangeEnd) //
+      .range(rangeStart, rangeEnd); //
 
     if (error && status !== 406) {
       throw error;
@@ -124,19 +127,21 @@ export async function readRangedDiaries(
 
 export async function deleteDiaryImg(
   user: User | null,
-  diaryImgUrl: string,
+  diaryImgUrl: string[],
   callback: () => void
 ) {
   try {
-    const { error: uploadError } = await supabase.storage.from('diary_img').remove([diaryImgUrl])
+    const { error: uploadError } = await supabase.storage
+      .from("diary_img")
+      .remove(diaryImgUrl);
 
     if (uploadError) {
-      throw uploadError
+      throw uploadError;
     }
-    alert('写真削除完了')
+    alert("写真削除完了");
     callback();
   } catch (error) {
-    alert('Error delete diary_img!')
+    alert("Error delete diary_img!");
   } finally {
   }
 }
@@ -163,25 +168,41 @@ export async function deleteDiaries(
   }
 }
 
-export async function uploadDiaryImg(
+export async function uploadDiaryImgs(
   user: User | null,
-  diaryImgUrl: string | null,
-  diaryImgFile: File | null,
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  diaryImgUrls: string[] | null,
+  diaryImgFiles: File[] | null,
   callback: () => void
 ) {
   try {
-    if (diaryImgUrl === null || diaryImgFile === null ) {
-      throw new Error('You must select an image to upload.')
-    }
-    const { error: uploadError } = await supabase.storage.from('diary_img').upload(diaryImgUrl, diaryImgFile)
+    setLoading(true);
 
-    if (uploadError) {
-      throw uploadError
+    if (
+      !diaryImgUrls ||
+      !diaryImgFiles ||
+      diaryImgUrls.length !== diaryImgFiles.length
+    ) {
+      throw new Error("You must provide matching image URLs and files.");
     }
-    alert("画像アップロード完了")
+    const uploadPromises = diaryImgUrls.map(async (diaryImgUrl, index) => {
+      const diaryImgFile = diaryImgFiles[index];
+      const { error: uploadError } = await supabase.storage
+        .from("diary_img")
+        .upload(diaryImgUrl, diaryImgFile);
+
+      if (uploadError) {
+        throw uploadError;
+      }
+    });
+
+    await Promise.all(uploadPromises);
+
+    console.log("画像完了");
     callback();
   } catch (error) {
-    alert('Error uploading diary_img!')
+    alert("Error uploading diary_img!");
   } finally {
+    setLoading(false);
   }
 }

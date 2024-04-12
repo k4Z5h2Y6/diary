@@ -1,6 +1,6 @@
 "use client";
 
-import { createDiary, uploadDiaryImg } from "@/hooks/diaries";
+import { createDiary, uploadDiaryImgs } from "@/hooks/diaries";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -15,6 +15,7 @@ import { readCategories } from "@/hooks/categories";
 import { LabelCategoriesType } from "@/consts/categories.types";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import { DiaryDataType } from "@/consts/diaries.types";
+import ImgFetcher from "../common/imgFetcher";
 
 export default function DiaryForm({
   user,
@@ -24,21 +25,17 @@ export default function DiaryForm({
   diaryData: DiaryDataType[] | null;
 }) {
   const [loading, setLoading] = useState<boolean>(false);
-  const [imgUploading, setImgUploading] = useState(false);
+
   const diaryTextRef = useRef<HTMLTextAreaElement>(null);
-  const [diaryImgUrls, setDiaryImgUrls] = useState<string | null>(null);
-  const [diaryImgFiles, setDiaryImgFiles] = useState<File | null>(null);
-  const [diaryCategoyLabel, setDiaryCategoyLabel] = useState<string | null>(
+  const [diaryCategory, setDiaryCategory] = useState<number | null>(null);
+  const [diaryImgUrls, setDiaryImgUrls] = useState<string[] | null>([]);
+  const [diaryImgFiles, setDiaryImgFiles] = useState<File[] | null>([]);
+  //カテゴリー呼び出し
+  const [diaryCategories, setDiaryCategories] = useState<any[]>([]);
+  const [diaryCategoryLabel, setDiaryCategoryLabel] = useState<string | null>(
     null
   );
-  const [diaryCategory, setDiaryCategory] = useState<number | null>(null);
-  const [diaryCategories, setDiaryCategories] = useState<any[]>([]);
 
-
-
-  //同期処理の必要性
-  //カテゴリー呼び出し後
-  //詳細呼び出し
   useEffect(() => {
     readCategories(setDiaryCategories);
   }, []);
@@ -46,71 +43,95 @@ export default function DiaryForm({
   useEffect(() => {
     if (diaryData) {
       diaryTextRef.current!.value = diaryData[0].diary_text!;
-      setDiaryCategory(diaryData[0].diary_category)
-      console.log(diaryCategory)
-      for (let i = 0; i < diaryCategories.length; i++) {
-        if (diaryCategory === diaryCategories[i].id) {
-          console.log(diaryCategories[i].category_name)
-          setDiaryCategoyLabel(diaryCategories[i].category_name)
-        }
-      }
-      setDiaryImgUrls(diaryData[0].diary_img_url!)
+      setDiaryCategory(diaryData[0].diary_category);
+      setDiaryImgUrls(diaryData[0].diary_img_url!);
     }
   }, [diaryData]);
 
-  // useEffect(() => {
+  useEffect(() => {
+    for (let i = 0; i < diaryCategories.length; i++) {
+      if (diaryCategory === diaryCategories[i].id) {
+        setDiaryCategoryLabel(diaryCategories[i].label);
+      }
+    } 
+  }, [diaryCategories, diaryCategory]);
 
-  // }, [diaryCategory]);
-
-
-
-
-
-
-
+  //todo 複数画像の削除処理
   const imgChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     if (event.target.files) {
-      const file = event.target.files[0];
-      const fileExt = file.name.split(".").pop();
-      const filePath = `${user!.id}-${Math.random()}.${fileExt}`;
+      const fileList = event.target.files;
+      const urls = [];
+      const files = [];
 
-      setDiaryImgFiles(file);
-      setDiaryImgUrls(filePath);
+      for (let i = 0; i < fileList.length; i++) {
+        const file = fileList[i];
+        const fileExt = file.name.split(".").pop();
+        const filePath = `${user!.id}-${Math.random()}.${fileExt}`;
+
+        urls.push(filePath);
+        files.push(file);
+      }
+      setDiaryImgUrls(urls);
+      setDiaryImgFiles(files);
     } else {
-      setDiaryImgFiles(null);
       setDiaryImgUrls(null);
+      setDiaryImgFiles(null);
     }
   };
 
   const handleSubmit = async () => {
-    console.log(diaryCategories)
-    // const diaryText = diaryTextRef.current?.value || "";
+    const diaryText = diaryTextRef.current?.value || null;
 
-    // if (diaryText) {
-    //   if (diaryImgUrls) {
-    //     await uploadDiaryImg(user, diaryImgUrls, diaryImgFiles, () => {
-    //       createDiary(user, setLoading, diaryText, diaryImgUrls, diaryCategory);
-    //     });
-    //   } else {
-    //     createDiary(user, setLoading, diaryText, diaryImgUrls, diaryCategory);
-    //   }
-    // } else {
-    //   alert("テキストがありません");
-    // }
+    if (diaryText) {
+      if (
+        diaryImgUrls &&
+        diaryImgFiles &&
+        diaryImgUrls.length > 0 &&
+        diaryImgUrls.length === diaryImgFiles.length
+      ) {
+        await uploadDiaryImgs(
+          user,
+          setLoading,
+          diaryImgUrls,
+          diaryImgFiles,
+          () => {
+            createDiary(
+              user,
+              setLoading,
+              diaryText,
+              diaryCategory,
+              diaryImgUrls
+            );
+          }
+        );
+      } else {
+        createDiary(user, setLoading, diaryText, diaryCategory, null);
+      }
+    } else {
+      alert("テキストがありません");
+    }
 
-    // // フォームを送信した後、textarea をクリアする
-    // if (diaryTextRef.current) {
-    //   diaryTextRef.current.value = "";
-    // }
-    // setDiaryImgFiles(null);
-    // setDiaryImgUrls(null);
-    // setDiaryCategoyLabel(null);
+    if (diaryTextRef.current) {
+      diaryTextRef.current.value = "";
+    }
+    setDiaryCategory(null)
+    setDiaryImgUrls(null);
+    setDiaryImgFiles(null);
+  };
+
+  const handleClickCancelImg = (index: number) => {
+    const updatedUrls = [...diaryImgUrls!];
+    const updatedFiles = [...diaryImgFiles!];
+    updatedUrls.splice(index, 1);
+    updatedFiles.splice(index, 1);
+    setDiaryImgUrls(updatedUrls.length > 0 ? updatedUrls : null);
+    setDiaryImgFiles(updatedFiles.length > 0 ? updatedFiles : null);
+    console.log(diaryImgUrls);
+    console.log(diaryImgFiles);
   };
 
   //todo
-  const handleUpdate = async () => {
-    console.log(diaryCategoyLabel)
-  };
+  const handleUpdate = async () => {};
 
   return (
     <>
@@ -125,25 +146,36 @@ export default function DiaryForm({
         sx={{ marginBottom: "16px" }}
       />
       <Autocomplete
-        value={diaryCategoyLabel}
-        inputValue={diaryCategoyLabel!}
+        options={diaryCategories}
+        value={diaryCategoryLabel}
         onChange={(event: any, newValue: LabelCategoriesType | null) => {
           if (newValue) {
-            setDiaryCategoyLabel(newValue!.label);
+            setDiaryCategoryLabel(newValue!.label);
             setDiaryCategory(newValue!.id);
           } else {
-            setDiaryCategoyLabel(null);
+            setDiaryCategoryLabel(null);
             setDiaryCategory(null);
           }
         }}
-        options={diaryCategories}
+        // inputValue={diaryCategoryLabel!}
+        // onInputChange={(event, newValue) => {
+        //     // setDiaryCategoryLabel(newValue!.label);
+        //     // setDiaryCategory(newValue!.id);
+        //     console.log(newValue)
+        // }}
         renderInput={(params) => (
-          <TextField {...params} label="カテゴリー" fullWidth />
+          <TextField
+            {...params}
+            label="カテゴリー"
+            defaultValue={diaryCategoryLabel}
+            InputLabelProps={{ shrink: true }}
+            fullWidth
+          />
         )}
         size="small"
         sx={{ marginBottom: "16px" }}
       />
-      <label htmlFor="single">
+      <label htmlFor="diaries">
         <Button
           variant="outlined"
           component="span"
@@ -159,13 +191,63 @@ export default function DiaryForm({
           position: "absolute",
         }}
         type="file"
-        id="single"
-        // accept="image/*"
+        id="diaries"
         onChange={imgChange}
-        disabled={imgUploading}
+        multiple
       />
 
-      {diaryImgFiles ? (
+      {/* 画像表示エリア */}
+      <Box sx={{ display: "flex" }}>
+        {diaryImgUrls &&
+          diaryImgUrls.length > 0 &&
+          diaryImgUrls!.map((fiu, index) => (
+            <Box
+              key={index}
+              sx={{
+                width: "160px",
+                height: "160px",
+                marginBottom: "16px",
+                display: "flex",
+                justifyContent: "start",
+                alignItems: "center",
+                position: "relative",
+              }}
+            >
+              {/* todo diaryDataがない場合は画像を削除できない */}
+              {diaryData ? (
+                <ImgFetcher url={fiu} bucket={"diary_img"} />
+              ) : (
+                <>
+                  <IconButton
+                    onClick={() => handleClickCancelImg(index)}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      zIndex: 1,
+                      color: "#aaa",
+                    }}
+                  >
+                    <CancelRoundedIcon />
+                  </IconButton>
+                  <picture>
+                    <img
+                      src={URL.createObjectURL(diaryImgFiles![index])}
+                      alt=""
+                      style={{
+                        width: "160px",
+                        height: "160px",
+                        objectFit: "contain",
+                        aspectRatio: "1 / 1",
+                      }}
+                    />
+                  </picture>
+                </>
+              )}
+            </Box>
+          ))}
+      </Box>
+      {/* {diaryImgFiles ? (
         <Box
           sx={{
             width: "160px",
@@ -207,7 +289,7 @@ export default function DiaryForm({
         </Box>
       ) : (
         <></>
-      )}
+      )} */}
 
       {diaryData ? (
         <Button

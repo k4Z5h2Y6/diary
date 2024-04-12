@@ -12,14 +12,18 @@ import {
   readRangedDiaries,
 } from "@/hooks/diaries";
 import PreviewImg from "../common/imgFetcher";
+import { readCategories } from "@/hooks/categories";
+import ImgFetcher from "../common/imgFetcher";
 
-const parPage = 5;
+const parPage = 10;
 
 export const AllDiariesList = ({ user }: { user: User | null }) => {
   const [diariesData, setDiariesData] = useState<DiaryDataType[] | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rangeStart, setRangeStart] = useState<number>(0);
   const [allDiariesCount, setAllDiariesCount] = useState<number | null>(null);
+  const [diaryCategories, setDiaryCategories] = useState<any[]>([]);
+
   const pageCount = (allDiariesCount: number | null, parPage: number) => {
     if (allDiariesCount! % parPage === 0) {
       return allDiariesCount! / parPage;
@@ -31,6 +35,7 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
   useEffect(() => {
     readDiariesCount(setAllDiariesCount);
     readRangedDiaries(0, parPage - 1, setDiariesData);
+    readCategories(setDiaryCategories);
   }, []);
 
   useEffect(() => {
@@ -49,14 +54,15 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
     }
   }, [rangeStart]);
 
-  const formatCategory = (n: number) => {
-    switch (n) {
-      case 1:
-        return "禁煙日記";
-      case 2:
-        return "pombio";
-      default:
-        return "カテゴリーなし";
+  const formatCategory = (categoryId: number | null) => {
+    if (categoryId) {
+      for (let i = 0; i < diaryCategories.length; i++) {
+        if (categoryId === diaryCategories[i].id) {
+          return diaryCategories[i].label
+        }
+      }
+    } else {
+      return "カテゴリーなし";
     }
   };
 
@@ -88,8 +94,8 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
     }
   };
 
-  const handleDelete = async (id: number, diaryImgUrl: string | null) => {
-    if (diaryImgUrl) {
+  const handleDelete = async (id: number, diaryImgUrl: string[] | null) => {
+    if (diaryImgUrl && diaryImgUrl.length > 0) {
       await deleteDiaryImg(user, diaryImgUrl, () => {
         deleteDiaries(id, setDiariesData);
       });
@@ -126,17 +132,19 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
                 }}
               >
                 <Box
-                  id="yyy"
                   sx={{
                     width: 100,
                     height: 100,
                   }}
                 >
-                  <PreviewImg url={dd.diary_img_url} bucket="diary_img" />
+                  {dd.diary_img_url && dd.diary_img_url[0] ? (
+                    <ImgFetcher url={dd.diary_img_url[0]} bucket="diary_img" />
+                  ) : (
+                    <ImgFetcher url={null} bucket="diary_img" />
+                  )}
                 </Box>
 
                 <Box
-                  id="zzz"
                   sx={{
                     flex: 1,
                     overflow: "hidden",
@@ -144,7 +152,7 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
                 >
                   <Typography>
                     {formatDate(dd.created_at!)} {formatTime(dd.created_at!)}
-                    {formatCategory(dd.diary_category!)}
+                    {formatCategory(dd.diary_category)}
                   </Typography>
                   <Typography
                     sx={{
@@ -159,7 +167,6 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
               </Link>
 
               <Box
-                id="xxx"
                 sx={{
                   width: 64,
                   height: 100,

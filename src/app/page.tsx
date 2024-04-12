@@ -4,9 +4,9 @@ import { Database } from "@/consts/database.types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { LatestStudiesListener } from "@/components/studies/latestStudiesListener";
-import DiariesForm from "@/components/diaries/diariesForm";
 import { Container, Divider } from "@mui/material";
 import FoodForm from "@/components/foods/foodForm";
+import DiaryForm from "@/components/diaries/diaryForm";
 
 export default async function Home() {
   const supabase = createServerComponentClient<Database>({ cookies });
@@ -31,7 +31,7 @@ export default async function Home() {
         <Divider>喫煙本数</Divider>
         <LatestCigarettesListener user={user} />
         <Divider>記録</Divider>
-        <DiariesForm user={user} />
+        <DiaryForm user={user} diaryData={null}/>
         <Divider>食事</Divider>
         <FoodForm user={user} foodData={null} />
       </Container>

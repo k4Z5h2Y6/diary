@@ -48,7 +48,13 @@ export interface InputCategoriesType {
   category_name: string;
 }
 
-export interface LabelCategoriesType {
+// export interface LabelCategoriesType {
+//   id: number;
+//   label: string;
+//   // category_name: string;
+// }
+
+export interface OptionsCategoriesType {
   id: number;
   label: string;
 }

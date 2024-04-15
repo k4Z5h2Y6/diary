@@ -11,16 +11,17 @@ import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import ImgFetcher from "../common/imgFetcher";
 import { readCategories } from "@/hooks/categories";
+import { CategoryType } from "@/consts/categories.types";
 
 export const LatestDiariesList = ({ user }: { user: User | null }) => {
   const [latestDiariesData, setLatestDiariesData] = useState<
     DiaryDataType[] | null
   >(null);
-  const [diaryCategories, setDiaryCategories] = useState<any[]>([]);
+  const [diaryCategories, setDiaryCategories] = useState<CategoryType[]>([]);
 
   useEffect(() => {
-    readLatestDiaries(setLatestDiariesData);
     readCategories(setDiaryCategories);
+    readLatestDiaries(setLatestDiariesData);
   }, []);
 
   const formatDate = (ts: string) => {
@@ -51,7 +52,7 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
     if (categoryId) {
       for (let i = 0; i < diaryCategories.length; i++) {
         if (categoryId === diaryCategories[i].id) {
-          return diaryCategories[i].label
+          return diaryCategories[i].category_name
         }
       }
     } else {

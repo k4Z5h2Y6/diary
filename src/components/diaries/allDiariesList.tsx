@@ -14,6 +14,7 @@ import {
 import PreviewImg from "../common/imgFetcher";
 import { readCategories } from "@/hooks/categories";
 import ImgFetcher from "../common/imgFetcher";
+import { CategoryType } from "@/consts/categories.types";
 
 const parPage = 10;
 
@@ -22,7 +23,7 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rangeStart, setRangeStart] = useState<number>(0);
   const [allDiariesCount, setAllDiariesCount] = useState<number | null>(null);
-  const [diaryCategories, setDiaryCategories] = useState<any[]>([]);
+  const [diaryCategories, setDiaryCategories] = useState<CategoryType[]>([]);
 
   const pageCount = (allDiariesCount: number | null, parPage: number) => {
     if (allDiariesCount! % parPage === 0) {
@@ -58,7 +59,7 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
     if (categoryId) {
       for (let i = 0; i < diaryCategories.length; i++) {
         if (categoryId === diaryCategories[i].id) {
-          return diaryCategories[i].label
+          return diaryCategories[i].category_name
         }
       }
     } else {

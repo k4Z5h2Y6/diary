@@ -6,11 +6,12 @@ import { readLatestCigarette } from "@/hooks/cigarettes";
 import { Typography } from "@mui/material";
 
 export const CigaretteCounter = () => {
+  const [loading, setLoading] = useState<boolean>(false); //todo
   const [latestCigaretteData, setLatestCigaretteData] =
     useState<CigaretteDataType | null>(null);
 
   useEffect(() => {
-    readLatestCigarette(setLatestCigaretteData);
+    readLatestCigarette(setLoading, setLatestCigaretteData);
   }, []);
 
   return (

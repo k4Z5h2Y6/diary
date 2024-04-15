@@ -3,7 +3,7 @@
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import DiaryForm from "./diaryForm";
+// import DiaryForm from "./diaryForm";
 import { readDiary } from "@/hooks/diaries";
 import { DiaryDataType } from "@/consts/diaries.types";
 
@@ -19,7 +19,7 @@ export default function DiaryFetcher({ user }: { user: User | null }) {
 
   return (
     <>
-      <DiaryForm user={user} diaryData={diaryData} />
+      {/* <DiaryForm user={user} diaryData={diaryData} /> */}
     </>
   );
 }

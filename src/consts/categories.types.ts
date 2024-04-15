@@ -4,18 +4,22 @@ export interface CategoriesType {
       categories: {
         Row: {
           id: number;
+          user_id: string;
           category_name: string;
         };
         Insert: {
-          id: number;
+          id?: number;
+          user_id: string;
           category_name: string;
         };
         Update: {
-          id: number;
+          id?: number;
+          user_id: string;
           category_name: string;
         };
         Delete: {
-          id: number;
+          id?: number;
+          user_id: string;
           category_name: string;
         };
       };
@@ -32,8 +36,15 @@ export interface CategoriesType {
   };
 }
 
+export interface CategoryType {
+  id: number;
+  user_id: string;
+  category_name: string;
+}
+
 export interface InputCategoriesType {
   id: number;
+  user_id: string;
   category_name: string;
 }
 

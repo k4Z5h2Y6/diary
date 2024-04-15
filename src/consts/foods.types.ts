@@ -54,5 +54,4 @@ export interface FoodDataType {
   ingredient?: string | null;
   food_memo?: string | null;
   food_img_url?: string[] | null;
-  
 }

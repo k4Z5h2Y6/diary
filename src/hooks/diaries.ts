@@ -1,4 +1,4 @@
-import { DiariesType, DiaryDataType } from "@/consts/diaries.types";
+import { DiariesType, DiaryDataType, UpdateDiaryType } from "@/consts/diaries.types";
 import {
   User,
   createClientComponentClient,
@@ -9,10 +9,11 @@ const supabase = createClientComponentClient<DiariesType>();
 
 export async function createDiary(
   user: User | null,
-  setLoading: Dispatch<SetStateAction<boolean>>,
   diaryText: string,
   diaryCategory: number | null,
-  diaryImgUrls: string[] | null
+  diaryImgUrls: string[] | null,
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>
 ) {
   try {
     setLoading(true);
@@ -122,6 +123,32 @@ export async function readRangedDiaries(
   } catch (error) {
     alert("Error loading user Diaries list!");
   } finally {
+  }
+}
+
+export async function updateDiary(
+  userId: string,
+  id: number,
+  newData: UpdateDiaryType,
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>
+) {
+  try {
+    setLoading(true)
+    const { data, error } = await supabase
+      .from("diaries")
+      .update(newData)
+      .eq("user_id", userId)
+      .eq("id", id)
+      .single();
+    if (error) {
+      throw error;
+    }
+    setIsOpenSnackbar(true)
+  } catch (error) {
+    alert("記録更新エラー");
+  } finally {
+    setLoading(false)
   }
 }
 

@@ -11,7 +11,7 @@ export default function SleepOnsetButton({
   user: User | null;
   isSleeping: boolean;
 }) {
-  const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
+  const [isOpenSnackbar, setIsOpenSnackbar] = useState<boolean>(false);
 
   const handleClickSleepOnset = () => {
     createSleepOnset(user, setIsOpenSnackbar);

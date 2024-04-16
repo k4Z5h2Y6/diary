@@ -1,4 +1,4 @@
-import { FoodDataType, FoodsType } from "@/consts/foods.types";
+import { FoodDataType, FoodsType, UpdateFoodType } from "@/consts/foods.types";
 import { User, createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Dispatch, SetStateAction } from "react";
 
@@ -120,6 +120,32 @@ export async function readRangedFoods(
   } catch (error) {
     alert("Error loading user Foods list!");
   } finally {
+  }
+}
+
+export async function updateFood(
+  userId: string,
+  id: number,
+  newData: UpdateFoodType,
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>
+) {
+  try {
+    setLoading(true)
+    const { data, error } = await supabase
+      .from("foods")
+      .update(newData)
+      .eq("user_id", userId)
+      .eq("id", id)
+      .single();
+    if (error) {
+      throw error;
+    }
+    setIsOpenSnackbar(true)
+  } catch (error) {
+    alert("記録更新エラー");
+  } finally {
+    setLoading(false)
   }
 }
 

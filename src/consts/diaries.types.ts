@@ -60,11 +60,6 @@ export interface DiariesType {
   };
 }
 
-export interface UpdateDiaryType {
-  update_at: string;
-  diary: string;
-}
-
 export interface DiaryDataType {
   id: number;
   user_id: string;
@@ -74,3 +69,11 @@ export interface DiaryDataType {
   diary_img_url: string[] | null;
   diary_category: number | null;
 }
+
+export interface UpdateDiaryType {
+  update_at: string;
+  diary_text: string | null;
+  diary_category: number | null;
+}
+
+

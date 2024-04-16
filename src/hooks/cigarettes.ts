@@ -88,7 +88,6 @@ export async function updateCigarette(
     }
   } catch (error) {
     alert("喫煙更新エラー");
-    console.log(error)
   } finally {
   }
 }

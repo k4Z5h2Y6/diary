@@ -42,18 +42,6 @@ export interface CategoryType {
   category_name: string;
 }
 
-export interface InputCategoriesType {
-  id: number;
-  user_id: string;
-  category_name: string;
-}
-
-// export interface LabelCategoriesType {
-//   id: number;
-//   label: string;
-//   // category_name: string;
-// }
-
 export interface OptionsCategoriesType {
   id: number;
   label: string;

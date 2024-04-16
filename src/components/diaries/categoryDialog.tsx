@@ -93,7 +93,7 @@ export const CategoryDialog = ({
         <Alert
           severity="success"
         >
-          入眠しました
+          カテゴリーを追加しました
         </Alert>
       </Snackbar>
     </>

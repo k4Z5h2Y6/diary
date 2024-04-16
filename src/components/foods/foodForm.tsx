@@ -3,15 +3,17 @@
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useRef, useState } from "react";
 import {
+  Alert,
   Box,
   Button,
   CircularProgress,
   IconButton,
+  Snackbar,
   TextField,
 } from "@mui/material";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
-import { createFood, uploadFoodImgs } from "@/hooks/foods";
-import { FoodDataType } from "@/consts/foods.types";
+import { createFood, updateFood, uploadFoodImgs } from "@/hooks/foods";
+import { FoodDataType, UpdateFoodType } from "@/consts/foods.types";
 import ImgFetcher from "../common/imgFetcher";
 
 export default function FoodForm({
@@ -21,13 +23,14 @@ export default function FoodForm({
   user: User | null;
   foodData: FoodDataType[] | null;
 }) {
-  const [loading, setLoading] = useState<boolean>(false);
-
   const foodTitleRef = useRef<HTMLTextAreaElement>(null);
   const ingredientRef = useRef<HTMLTextAreaElement>(null);
   const foodMemoRef = useRef<HTMLTextAreaElement>(null);
   const [foodImgUrls, setFoodImgUrls] = useState<string[] | null>([]);
   const [foodImgFiles, setFoodImgFiles] = useState<File[] | null>([]);
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isOpenSnackbar, setIsOpenSnackbar] = useState<boolean>(false);
 
   useEffect(() => {
     if (foodData) {
@@ -121,8 +124,31 @@ export default function FoodForm({
     setFoodImgFiles(updatedFiles.length > 0 ? updatedFiles : null);
   };
 
-  //todo
-  const handleUpdate = async () => {
+  const handleUpdate = () => {
+    const currentDate = new Date().toISOString();
+    const newData: UpdateFoodType = {
+      update_at: currentDate,
+      food_title: foodTitleRef.current?.value || null,
+      ingredient: ingredientRef.current?.value || null,
+      food_memo: foodMemoRef.current?.value || null,
+    };
+    updateFood(
+      user!.id,
+      foodData![0].id,
+      newData,
+      setLoading,
+      setIsOpenSnackbar
+    );
+  };
+
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setIsOpenSnackbar(false);
   };
 
   return (
@@ -237,11 +263,12 @@ export default function FoodForm({
         <Button
           variant="contained"
           type="submit"
-          // onClick={() => handleUpdate()}
+          onClick={() => handleUpdate()}
+          disabled={loading}
           fullWidth
           sx={{ marginBottom: "16px" }}
         >
-          更新システム作成中
+          {loading ? <CircularProgress size={24} /> : "更新(写真は更新不可)"}
         </Button>
       ) : (
         <Button
@@ -255,6 +282,14 @@ export default function FoodForm({
           {loading ? <CircularProgress size={24} /> : "送信"}
         </Button>
       )}
+
+      <Snackbar
+        open={isOpenSnackbar}
+        autoHideDuration={2000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert severity="success">完了しました</Alert>
+      </Snackbar>
     </>
   );
 }

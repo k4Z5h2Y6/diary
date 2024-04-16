@@ -1,4 +1,4 @@
-import { CategoriesType, InputCategoriesType } from "@/consts/categories.types";
+import { CategoriesType } from "@/consts/categories.types";
 import {
   User,
   createClientComponentClient,

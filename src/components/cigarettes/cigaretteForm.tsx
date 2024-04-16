@@ -1,22 +1,34 @@
 "use client";
-import { CigaretteDataType, CigarettesType } from "@/consts/cigarettes.types";
 import {
-  User,
-  createClientComponentClient,
-} from "@supabase/auth-helpers-nextjs";
+  CigaretteDataType,
+  UpdateCigaretteType,
+} from "@/consts/cigarettes.types";
+import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
-import CountUpButton from "./countUpButton";
-import { readLatestCigarette } from "@/hooks/cigarettes";
-import CountDownButton from "./countDownButton";
-import { CircularProgress, Grid, Skeleton, Typography } from "@mui/material";
+import {
+  createCigarette,
+  deleteCigarette,
+  readLatestCigarette,
+  updateCigarette,
+} from "@/hooks/cigarettes";
+import {
+  Button,
+  CircularProgress,
+  Grid,
+  Skeleton,
+  Typography,
+} from "@mui/material";
 
-export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
-  const supabase = createClientComponentClient<CigarettesType>();
-
+export const CigarettesForm = ({
+  user,
+  cigarettesData,
+}: {
+  user: User | null;
+  cigarettesData: CigaretteDataType | null;
+}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [latestCigaretteData, setLatestCigaretteData] =
     useState<CigaretteDataType | null>(null);
-  const [currentId, setCurrentId] = useState<number | null>(null);
   const [cigarettesCounter, setCigarettesCounter] = useState<number | null>(
     null
   );
@@ -29,32 +41,12 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
   );
 
   useEffect(() => {
-    // Realtimeクライアントを使用してsleepsテーブルを監視
-    const subscription = supabase
-      .channel("cigarettes")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "cigarettes",
-        },
-        (payload) => {
-          // 変更後のデータに対しての処理を記載
-          readLatestCigarette(setLoading, setLatestCigaretteData);
-        }
-      )
-      .subscribe();
-
-    // コンポーネントがアンマウントされたときにサブスクリプションを解除
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [supabase]);
-
-  useEffect(() => {
-    readLatestCigarette(setLoading, setLatestCigaretteData);
-  }, []);
+    if (cigarettesData) {
+      setLatestCigaretteData(cigarettesData);
+    } else {
+      readLatestCigarette(setLoading, setLatestCigaretteData);
+    }
+  }, [cigarettesData]);
 
   const calculateNoSmokingTime = (date: Date) => {
     const today = new Date();
@@ -73,8 +65,8 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
     );
   };
 
+  //latestCigaretteDataが昨日か今日か判定
   const DoseResetCounter = (date: Date) => {
-    setCurrentId(latestCigaretteData!.id);
     const today = new Date();
     if (
       today.getFullYear() === date.getFullYear() &&
@@ -89,6 +81,7 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
     }
   };
 
+  //喫煙間隔時間の参照がupdate_atかcreated_atか判定
   useEffect(() => {
     if (latestCigaretteData) {
       if (latestCigaretteData.update_at) {
@@ -105,38 +98,78 @@ export const LatestCigarettesListener = ({ user }: { user: User | null }) => {
     }
   }, [latestCigaretteData]);
 
+  const countDownBranch = async () => {
+    if (cigarettesCounter === 0) {
+      return;
+    } else if (cigarettesCounter === 1) {
+      await deleteCigarette(latestCigaretteData!.id);
+      await readLatestCigarette(setLoading, setLatestCigaretteData);
+    } else {
+      const currentDate = new Date().toISOString();
+      const newData: UpdateCigaretteType = {
+        update_at: currentDate,
+        cigarettes_counter: cigarettesCounter! - 1,
+      };
+      await updateCigarette(user!.id, latestCigaretteData!.id, newData);
+      await readLatestCigarette(setLoading, setLatestCigaretteData);
+    }
+  };
+
+  const countUpBranch = async () => {
+    if (cigarettesCounter! && cigarettesCounter > 0) {
+      const currentDate = new Date().toISOString();
+      const newData: UpdateCigaretteType = {
+        update_at: currentDate,
+        cigarettes_counter: cigarettesCounter + 1,
+      };
+      await updateCigarette(user!.id, latestCigaretteData!.id, newData);
+      await readLatestCigarette(setLoading, setLatestCigaretteData);
+    } else if (cigarettesCounter! && cigarettesCounter === 0) {
+      await createCigarette(user);
+      await readLatestCigarette(setLoading, setLatestCigaretteData);
+    }
+  };
+
   return (
     <>
-      {cigarettesCounter === null ? (
-        <Skeleton variant="rounded" height={36.5} />
-      ) : (
+      {cigarettesCounter ? (
         <Grid container spacing={2}>
           <Grid item xs={4}>
-            <CountDownButton
-              user={user}
-              currentId={currentId}
-              cigarettesCounter={cigarettesCounter}
-            />
+            <Button
+              variant="outlined"
+              disabled={cigarettesCounter === 0}
+              onClick={() => countDownBranch()}
+              sx={{ width: "100%" }}
+            >
+              ー
+            </Button>
           </Grid>
           <Grid item xs={4}>
             <Typography sx={{ textAlign: "center" }}>
               {loading ? <CircularProgress size={24} /> : cigarettesCounter}
-              {/* {cigarettesCounter} */}
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            <CountUpButton
-              user={user}
-              currentId={currentId}
-              cigarettesCounter={cigarettesCounter}
-            />
+            <Button
+              variant="outlined"
+              onClick={() => countUpBranch()}
+              sx={{ width: "100%" }}
+            >
+              ＋
+            </Button>
           </Grid>
         </Grid>
+      ) : (
+        <Skeleton variant="rounded" height={36.5} />
       )}
-      <Typography sx={{ textAlign: "center" }}>
-        {noCigaretteYear}年{noCigaretteMonth}月{noCigaretteDay}日
-        {noCigaretteHour}時間{noCigaretteMinute}分前に喫煙
-      </Typography>
+      {cigarettesData ? (
+        <></>
+      ) : (
+        <Typography sx={{ textAlign: "center" }}>
+          {noCigaretteYear}年{noCigaretteMonth}月{noCigaretteDay}日
+          {noCigaretteHour}時間{noCigaretteMinute}分前に喫煙
+        </Typography>
+      )}
     </>
   );
 };

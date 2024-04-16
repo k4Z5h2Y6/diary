@@ -2,7 +2,6 @@
 
 import {
   Button,
-  Grid,
   Paper,
   Table,
   TableBody,
@@ -15,13 +14,12 @@ import {
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import { PaginationDiary } from "../common/pagenationDiary";
-import CountDownButton from "./countDownButton";
-import CountUpButton from "./countUpButton";
 import { useRouter } from "next/navigation";
 import { CigaretteDataType } from "@/consts/cigarettes.types";
 import { deleteCigarettes, readCigarettesCount, readRangedCigarettes } from "@/hooks/cigarettes";
+import { CigarettesForm } from "./cigaretteForm";
 
-const parPage = 5;
+const parPage = 50;
 
 export const AllCigarettesList = ({ user }: { user: User | null }) => {
   const router = useRouter();
@@ -87,43 +85,23 @@ export const AllCigarettesList = ({ user }: { user: User | null }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {cigarettesData.map((lcd) => (
+                {cigarettesData.map((cd) => (
                   <TableRow
-                    key={lcd.id}
+                    key={cd.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell align="center">
-                      {formatDate(lcd.created_at)}
+                      {formatDate(cd.created_at)}
                     </TableCell>
 
                     <TableCell align="center">
-                      <Grid container>
-                        <Grid item xs={4} >
-                          <CountDownButton
-                            user={user}
-                            currentId={lcd.id}
-                            cigarettesCounter={lcd.cigarettes_counter}
-                          />
-                        </Grid>
-                        <Grid item xs={4}>
-                          <Typography sx={{ textAlign: "center" }}>
-                            {lcd.cigarettes_counter}
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={4} >
-                          <CountUpButton
-                            user={user}
-                            currentId={lcd.id}
-                            cigarettesCounter={lcd.cigarettes_counter}
-                          />
-                        </Grid>
-                      </Grid>
+                      <CigarettesForm user={user} cigarettesData={cd} />
                     </TableCell>
 
                     <TableCell align="center">
                       <Button
                         onClick={() => {
-                          deleteCigarettes(lcd.id, setCigarettesData);
+                          deleteCigarettes(cd.id, setCigarettesData);
                           router.refresh();
                         }}
                       >

@@ -1,4 +1,4 @@
-import { LatestCigarettesListener } from "@/components/cigarettes/latestCigarettesListener";
+import { CigarettesForm } from "@/components/cigarettes/cigaretteForm";
 import { LatestSleepsListener } from "@/components/sleeps/latestSleepsListener";
 import { Database } from "@/consts/database.types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -29,7 +29,7 @@ export default async function Home() {
         <Divider>作業時間</Divider>
         <LatestStudiesListener user={user} />
         <Divider>喫煙本数</Divider>
-        <LatestCigarettesListener user={user} />
+        <CigarettesForm user={user} cigarettesData={null}/>
         <Divider>記録</Divider>
         <DiaryForm user={user} diaryData={null}/>
         <Divider>食事</Divider>

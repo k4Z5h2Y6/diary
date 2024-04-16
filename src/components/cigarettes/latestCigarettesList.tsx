@@ -1,7 +1,6 @@
 "use client";
 import {
   Button,
-  Grid,
   Paper,
   Table,
   TableBody,
@@ -9,15 +8,13 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import { CigaretteDataType } from "@/consts/cigarettes.types";
 import { deleteCigarettes, readLatestCigarettes } from "@/hooks/cigarettes";
-import CountDownButton from "./countDownButton";
-import CountUpButton from "./countUpButton";
 import { useRouter } from "next/navigation";
+import { CigarettesForm } from "./cigaretteForm";
 
 export const LatestCigarettesList = ({ user }: { user: User | null }) => {
   const [latestCigarettesData, setLatestCigarettesData] = useState<
@@ -68,27 +65,7 @@ export const LatestCigarettesList = ({ user }: { user: User | null }) => {
                     </TableCell>
 
                     <TableCell align="center">
-                      <Grid container>
-                        <Grid item xs={4} >
-                          <CountDownButton
-                            user={user}
-                            currentId={lcd.id}
-                            cigarettesCounter={lcd.cigarettes_counter}
-                          />
-                        </Grid>
-                        <Grid item xs={4}>
-                          <Typography sx={{ textAlign: "center" }}>
-                            {lcd.cigarettes_counter}
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={4} >
-                          <CountUpButton
-                            user={user}
-                            currentId={lcd.id}
-                            cigarettesCounter={lcd.cigarettes_counter}
-                          />
-                        </Grid>
-                      </Grid>
+                      <CigarettesForm user={user} cigarettesData={lcd} />
                     </TableCell>
 
                     <TableCell align="center">

@@ -52,6 +52,7 @@ export async function readLatestCigarette(
   }
 }
 
+// todo tryに
 //複数
 export async function readLatestCigarettes(
   setLatestCigarettesData: Dispatch<SetStateAction<CigaretteDataType[] | null>>,
@@ -144,7 +145,7 @@ export async function readCigarettesCount(
       setAllCigarettesCount(count);
     }
   } catch (error) {
-    alert("Error loading user sleeps list!");
+    alert("Error loading cigarette");
   } finally {
   }
 }
@@ -169,7 +170,7 @@ export async function readRangedCigarettes(
       setCigarettesData(data);
     }
   } catch (error) {
-    alert("Error loading user sleeps list!");
+    alert("Error loading cigarette");
   } finally {
   }
 }

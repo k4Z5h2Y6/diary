@@ -75,11 +75,27 @@ export const CigarettesForm = ({
     ) {
       //最新喫煙データが今日である場合
       setCigarettesCounter(latestCigaretteData!.cigarettes_counter);
-    } else {
+    } else if (cigarettesData) {
       //最新喫煙データが今日ではない場合
-      setCigarettesCounter(0);
+      setCigarettesCounter(cigarettesData.cigarettes_counter);
+    } else {
+      setCigarettesCounter(0)
     }
   };
+  // const DoseResetCounter = (date: Date) => {
+  //   const today = new Date();
+  //   if (
+  //     today.getFullYear() === date.getFullYear() &&
+  //     today.getMonth() === date.getMonth() &&
+  //     today.getDate() === date.getDate()
+  //   ) {
+  //     //最新喫煙データが今日である場合
+  //     setCigarettesCounter(latestCigaretteData!.cigarettes_counter);
+  //   } else {
+  //     //最新喫煙データが今日ではない場合
+  //     setCigarettesCounter(0);
+  //   }
+  // };
 
   //喫煙間隔時間の参照がupdate_atかcreated_atか判定
   useEffect(() => {
@@ -116,15 +132,16 @@ export const CigarettesForm = ({
   };
 
   const countUpBranch = async () => {
-    if (cigarettesCounter! && cigarettesCounter > 0) {
+    if (cigarettesCounter! > 0) {
       const currentDate = new Date().toISOString();
       const newData: UpdateCigaretteType = {
         update_at: currentDate,
-        cigarettes_counter: cigarettesCounter + 1,
+        cigarettes_counter: cigarettesCounter! + 1,
       };
       await updateCigarette(user!.id, latestCigaretteData!.id, newData);
       await readLatestCigarette(setLoading, setLatestCigaretteData);
-    } else if (cigarettesCounter! && cigarettesCounter === 0) {
+    } 
+    if (cigarettesCounter === 0) {
       await createCigarette(user);
       await readLatestCigarette(setLoading, setLatestCigaretteData);
     }
@@ -132,7 +149,7 @@ export const CigarettesForm = ({
 
   return (
     <>
-      {cigarettesCounter ? (
+      {cigarettesCounter !== null ? (
         <Grid container spacing={2}>
           <Grid item xs={4}>
             <Button

@@ -200,11 +200,9 @@ export async function uploadDiaryImgs(
   setLoading: Dispatch<SetStateAction<boolean>>,
   diaryImgUrls: string[] | null,
   diaryImgFiles: File[] | null,
-  callback: () => void
 ) {
   try {
     setLoading(true);
-
     if (
       !diaryImgUrls ||
       !diaryImgFiles ||
@@ -224,9 +222,7 @@ export async function uploadDiaryImgs(
     });
 
     await Promise.all(uploadPromises);
-
     console.log("画像完了");
-    callback();
   } catch (error) {
     alert("Error uploading diary_img!");
   } finally {

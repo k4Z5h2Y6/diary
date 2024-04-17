@@ -98,6 +98,8 @@ export default function DiaryForm({
   };
 
   const handleSubmit = async () => {
+    console.log(diaryImgFiles)
+    console.log(diaryImgUrls)
     const diaryText = diaryTextRef.current?.value || null;
 
     if (diaryText) {
@@ -107,21 +109,14 @@ export default function DiaryForm({
         diaryImgUrls.length > 0 &&
         diaryImgUrls.length === diaryImgFiles.length
       ) {
-        await uploadDiaryImgs(
+        await uploadDiaryImgs(user, setLoading, diaryImgUrls, diaryImgFiles);
+        await createDiary(
           user,
-          setLoading,
+          diaryText,
+          diaryCategory,
           diaryImgUrls,
-          diaryImgFiles,
-          () => {
-            createDiary(
-              user,
-              diaryText,
-              diaryCategory,
-              diaryImgUrls,
-              setLoading,
-              setIsOpenSnackbar
-            );
-          }
+          setLoading,
+          setIsOpenSnackbar
         );
       } else {
         createDiary(
@@ -143,6 +138,7 @@ export default function DiaryForm({
     setDiaryCategory(null);
     setDiaryImgUrls(null);
     setDiaryImgFiles(null);
+    setDiaryCategoryLabel(null)
   };
 
   const handleClickCancelImg = (index: number) => {
@@ -150,8 +146,8 @@ export default function DiaryForm({
     const updatedFiles = [...diaryImgFiles!];
     updatedUrls.splice(index, 1);
     updatedFiles.splice(index, 1);
-    setDiaryImgUrls(updatedUrls.length > 0 ? updatedUrls : null);
-    setDiaryImgFiles(updatedFiles.length > 0 ? updatedFiles : null);
+    setDiaryImgUrls(updatedUrls.length > 0 ? updatedUrls : []);
+    setDiaryImgFiles(updatedFiles.length > 0 ? updatedFiles : []);
   };
 
   const handleUpdate = () => {

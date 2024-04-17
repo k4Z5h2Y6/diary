@@ -76,26 +76,13 @@ export const CigarettesForm = ({
       //最新喫煙データが今日である場合
       setCigarettesCounter(latestCigaretteData!.cigarettes_counter);
     } else if (cigarettesData) {
-      //最新喫煙データが今日ではない場合
+      //最新喫煙データが今日ではない、かつcigarettesDataを受け取っている場合
       setCigarettesCounter(cigarettesData.cigarettes_counter);
     } else {
+      //最新喫煙データが今日ではない、かつcigarettesDataを受け取ってない場合
       setCigarettesCounter(0)
     }
   };
-  // const DoseResetCounter = (date: Date) => {
-  //   const today = new Date();
-  //   if (
-  //     today.getFullYear() === date.getFullYear() &&
-  //     today.getMonth() === date.getMonth() &&
-  //     today.getDate() === date.getDate()
-  //   ) {
-  //     //最新喫煙データが今日である場合
-  //     setCigarettesCounter(latestCigaretteData!.cigarettes_counter);
-  //   } else {
-  //     //最新喫煙データが今日ではない場合
-  //     setCigarettesCounter(0);
-  //   }
-  // };
 
   //喫煙間隔時間の参照がupdate_atかcreated_atか判定
   useEffect(() => {

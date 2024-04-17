@@ -82,22 +82,8 @@ export default function FoodForm({
         foodImgUrls.length > 0 &&
         foodImgUrls.length === foodImgFiles.length
       ) {
-        await uploadFoodImgs(
-          user,
-          setLoading,
-          foodImgUrls,
-          foodImgFiles,
-          () => {
-            createFood(
-              user,
-              setLoading,
-              foodText,
-              ingredient,
-              foodMemo,
-              foodImgUrls
-            );
-          }
-        );
+        await uploadFoodImgs(user,setLoading,foodImgUrls,foodImgFiles)
+        await createFood(user,setLoading,foodText,ingredient,foodMemo,foodImgUrls)
       } else {
         createFood(user, setLoading, foodText, ingredient, foodMemo, null);
       }
@@ -120,8 +106,8 @@ export default function FoodForm({
     const updatedFiles = [...foodImgFiles!];
     updatedUrls.splice(index, 1);
     updatedFiles.splice(index, 1);
-    setFoodImgUrls(updatedUrls.length > 0 ? updatedUrls : null);
-    setFoodImgFiles(updatedFiles.length > 0 ? updatedFiles : null);
+    setFoodImgUrls(updatedUrls.length > 0 ? updatedUrls : []);
+    setFoodImgFiles(updatedFiles.length > 0 ? updatedFiles : []);
   };
 
   const handleUpdate = () => {

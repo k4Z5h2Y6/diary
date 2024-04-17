@@ -1,20 +1,23 @@
 "use client";
 import { User } from "@supabase/auth-helpers-nextjs";
-import { createStudy } from "@/hooks/studies";
+import { createStudy, readLatestStudy } from "@/hooks/studies";
 import { Alert, Button, Snackbar } from "@mui/material";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 export default function StartStudyingButton({
   user,
   isStudying,
-} : {
-  user: User | null
-  isStudying: boolean
+  setIsStudying,
+}: {
+  user: User | null;
+  isStudying: boolean;
+  setIsStudying: Dispatch<SetStateAction<boolean | null>>;
 }) {
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
 
-  const handleClickStartStudying = () => {
-    createStudy(user, setIsOpenSnackbar);
+  const handleClickStartStudying = async () => {
+    await createStudy(user, setIsOpenSnackbar);
+    await readLatestStudy(setIsStudying);
   };
 
   const handleCloseSnackbar = (
@@ -32,7 +35,7 @@ export default function StartStudyingButton({
         variant="outlined"
         disabled={isStudying}
         onClick={() => handleClickStartStudying()}
-        sx={{width: "100%"}}
+        sx={{ width: "100%" }}
       >
         作業開始
       </Button>
@@ -41,11 +44,7 @@ export default function StartStudyingButton({
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
       >
-        <Alert
-          severity="success"
-        >
-          作業開始しました
-        </Alert>
+        <Alert severity="success">作業開始しました</Alert>
       </Snackbar>
     </>
   );

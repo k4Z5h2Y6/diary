@@ -1,20 +1,23 @@
 "use client";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { Alert, Button, Snackbar } from "@mui/material";
-import { createSleepOnset } from "@/hooks/sleeps";
-import { useState } from "react";
+import { createSleepOnset, readLatestSleep } from "@/hooks/sleeps";
+import { Dispatch, SetStateAction, useState } from "react";
 
 export default function SleepOnsetButton({
   user,
   isSleeping,
+  setIsSleeping,
 }: {
   user: User | null;
   isSleeping: boolean;
+  setIsSleeping: Dispatch<SetStateAction<boolean | null>>;
 }) {
   const [isOpenSnackbar, setIsOpenSnackbar] = useState<boolean>(false);
 
-  const handleClickSleepOnset = () => {
-    createSleepOnset(user, setIsOpenSnackbar);
+  const handleClickSleepOnset = async () => {
+    await createSleepOnset(user, setIsOpenSnackbar);
+    await readLatestSleep(setIsSleeping);
   };
 
   const handleCloseSnackbar = (

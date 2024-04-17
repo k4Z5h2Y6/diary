@@ -1,28 +1,31 @@
 "use client";
 
 import { User } from "@supabase/auth-helpers-nextjs";
-import { useState } from "react";
-import { updateFinishStudying } from "@/hooks/studies";
+import { Dispatch, SetStateAction, useState } from "react";
+import { readLatestStudy, updateFinishStudying } from "@/hooks/studies";
 import { UpdateFinishStudyingType } from "@/consts/studies.types";
 import { Alert, Button, Snackbar } from "@mui/material";
 
 export default function FinishStudyingButton({
   user,
   isStudying,
+  setIsStudying,
 }: {
   user: User | null;
   isStudying: boolean;
+  setIsStudying: Dispatch<SetStateAction<boolean | null>>;
 }) {
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
 
-  function handleClickFinishStudying() {
+  const handleClickFinishStudying = async () => {
     const currentDate = new Date().toISOString(); // 現在時刻をISO形式の文字列に変換
     const newData: UpdateFinishStudyingType = {
       update_at: currentDate,
       finish_studying: currentDate,
     };
     if (user) {
-      updateFinishStudying(user.id, newData, setIsOpenSnackbar);
+      await updateFinishStudying(user.id, newData, setIsOpenSnackbar);
+      await readLatestStudy(setIsStudying);
     }
   }
 
@@ -42,7 +45,7 @@ export default function FinishStudyingButton({
         variant="outlined"
         disabled={!isStudying}
         onClick={() => handleClickFinishStudying()}
-        sx={{width: "100%"}}
+        sx={{ width: "100%" }}
       >
         作業終了
       </Button>
@@ -51,11 +54,7 @@ export default function FinishStudyingButton({
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
       >
-        <Alert
-          severity="success"
-        >
-          作業終了しました
-        </Alert>
+        <Alert severity="success">作業終了しました</Alert>
       </Snackbar>
     </>
   );

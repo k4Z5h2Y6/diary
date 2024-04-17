@@ -8,35 +8,37 @@ import { useEffect, useState } from "react";
 import WakeUpButton from "./wakeUpButton";
 import { readLatestSleep } from "@/hooks/sleeps";
 import { SleepsType } from "@/consts/sleeps.types";
-import { Box, Grid, Skeleton } from "@mui/material";
+import { Grid, Skeleton } from "@mui/material";
 
 export const LatestSleepsListener = ({ user }: { user: User | null }) => {
-  const supabase = createClientComponentClient<SleepsType>();
+  
   const [isSleeping, setIsSleeping] = useState<boolean | null>(null);
 
-  useEffect(() => {
-    // Realtimeクライアントを使用してsleepsテーブルを監視
-    const subscription = supabase
-      .channel("sleeps")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "sleeps",
-        },
-        (payload) => {
-          // 変更後のデータに対しての処理を記載
-          readLatestSleep(setIsSleeping);
-        }
-      )
-      .subscribe();
+  //リアルタイム通信用
+  //const supabase = createClientComponentClient<SleepsType>();
+  // useEffect(() => {
+  //   // Realtimeクライアントを使用してsleepsテーブルを監視
+  //   const subscription = supabase
+  //     .channel("sleeps")
+  //     .on(
+  //       "postgres_changes",
+  //       {
+  //         event: "*",
+  //         schema: "public",
+  //         table: "sleeps",
+  //       },
+  //       (payload) => {
+  //         // 変更後のデータに対しての処理を記載
+  //         readLatestSleep(setIsSleeping);
+  //       }
+  //     )
+  //     .subscribe();
 
-    // コンポーネントがアンマウントされたときにサブスクリプションを解除
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [supabase]);
+  //   // コンポーネントがアンマウントされたときにサブスクリプションを解除
+  //   return () => {
+  //     subscription.unsubscribe();
+  //   };
+  // }, [supabase]);
 
   useEffect(() => {
     readLatestSleep(setIsSleeping);
@@ -49,10 +51,10 @@ export const LatestSleepsListener = ({ user }: { user: User | null }) => {
       ) : (
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <SleepOnsetButton user={user} isSleeping={isSleeping} />
+            <SleepOnsetButton user={user} isSleeping={isSleeping} setIsSleeping={setIsSleeping}/>
           </Grid>
           <Grid item xs={6}>
-            <WakeUpButton user={user} isSleeping={isSleeping} />
+            <WakeUpButton user={user} isSleeping={isSleeping} setIsSleeping={setIsSleeping}/>
           </Grid>
         </Grid>
       )}

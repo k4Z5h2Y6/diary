@@ -330,7 +330,7 @@ export default function DiaryForm({
 
       <Snackbar
         open={isOpenSnackbar}
-        autoHideDuration={2000}
+        autoHideDuration={1000}
         onClose={handleCloseSnackbar}
       >
         <Alert severity="success">完了しました</Alert>

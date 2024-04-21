@@ -51,7 +51,7 @@ export default function FinishStudyingButton({
       </Button>
       <Snackbar
         open={isOpenSnackbar}
-        autoHideDuration={3000}
+        autoHideDuration={1000}
         onClose={handleCloseSnackbar}
       >
         <Alert severity="success">作業終了しました</Alert>

@@ -42,7 +42,7 @@ export default function SleepOnsetButton({
       </Button>
       <Snackbar
         open={isOpenSnackbar}
-        autoHideDuration={3000}
+        autoHideDuration={1000}
         onClose={handleCloseSnackbar}
       >
         <Alert

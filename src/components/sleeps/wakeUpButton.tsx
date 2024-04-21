@@ -51,7 +51,7 @@ export default function WakeUpButton({
       </Button>
       <Snackbar
         open={isOpenSnackbar}
-        autoHideDuration={3000}
+        autoHideDuration={1000}
         onClose={handleCloseSnackbar}
       >
         <Alert

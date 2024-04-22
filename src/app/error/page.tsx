@@ -1,6 +1,6 @@
 // "use client";
 
-export const Error = () => {
+export default function Error() {
   return (
     <>
       エラー

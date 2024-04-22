@@ -1,6 +1,6 @@
 "use client";
 import { deleteStudies, readLatestStudies } from "@/hooks/studies";
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Button, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import {
   User,
 } from "@supabase/auth-helpers-nextjs";
@@ -12,7 +12,7 @@ export const LatestSudiesList = ({ user }: { user: User | null }) => {
   const [latestStudiesData, setLatestStudiesData] = useState<StudyDataType[] | null>([]);
 
   useEffect(() => {
-    readLatestStudies(setLatestStudiesData);
+    readLatestStudies(setLatestStudiesData, user?.id!);
   }, []);
 
   const formatDate = (ts: string | null) => {
@@ -48,7 +48,7 @@ export const LatestSudiesList = ({ user }: { user: User | null }) => {
 
   return (
     <>
-      {latestStudiesData ? (
+      {latestStudiesData?.length! > 0 ? (
         <>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -62,7 +62,7 @@ export const LatestSudiesList = ({ user }: { user: User | null }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {latestStudiesData.map((lsd) => (
+                {latestStudiesData!.map((lsd) => (
                   <TableRow
                     key={lsd.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -103,8 +103,11 @@ export const LatestSudiesList = ({ user }: { user: User | null }) => {
               </TableBody>
             </Table>
           </TableContainer>
+          <Link href="/data/studies">もっと見る</Link>
         </>
-      ) : null}
+      ) : (
+        <>まだデータがありません</>
+      )}
     </>
   );
 };

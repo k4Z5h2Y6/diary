@@ -44,7 +44,7 @@ export const CigarettesForm = ({
     if (cigarettesData) {
       setLatestCigaretteData(cigarettesData);
     } else {
-      readLatestCigarette(setLoading, setLatestCigaretteData);
+      readLatestCigarette(setLoading, user?.id!, setLatestCigaretteData);
     }
   }, [cigarettesData]);
 
@@ -98,6 +98,8 @@ export const CigarettesForm = ({
         DoseResetCounter(date);
         calculateNoSmokingTime(date);
       }
+    } else {
+      setCigarettesCounter(0)
     }
   }, [latestCigaretteData]);
 
@@ -106,7 +108,7 @@ export const CigarettesForm = ({
       return;
     } else if (cigarettesCounter === 1) {
       await deleteCigarette(latestCigaretteData!.id);
-      await readLatestCigarette(setLoading, setLatestCigaretteData);
+      await readLatestCigarette(setLoading, user?.id!, setLatestCigaretteData);
     } else {
       const currentDate = new Date().toISOString();
       const newData: UpdateCigaretteType = {
@@ -114,7 +116,7 @@ export const CigarettesForm = ({
         cigarettes_counter: cigarettesCounter! - 1,
       };
       await updateCigarette(user!.id, latestCigaretteData!.id, newData);
-      await readLatestCigarette(setLoading, setLatestCigaretteData);
+      await readLatestCigarette(setLoading, user?.id!, setLatestCigaretteData);
     }
   };
 
@@ -126,11 +128,11 @@ export const CigarettesForm = ({
         cigarettes_counter: cigarettesCounter! + 1,
       };
       await updateCigarette(user!.id, latestCigaretteData!.id, newData);
-      await readLatestCigarette(setLoading, setLatestCigaretteData);
+      await readLatestCigarette(setLoading, user?.id!, setLatestCigaretteData);
     } 
     if (cigarettesCounter === 0) {
       await createCigarette(user);
-      await readLatestCigarette(setLoading, setLatestCigaretteData);
+      await readLatestCigarette(setLoading, user?.id!, setLatestCigaretteData);
     }
   };
 

@@ -28,21 +28,28 @@ export async function createStudy(
   }
 }
 
+//単数用
 export async function readLatestStudy(
-  setIsStudying: Dispatch<SetStateAction<boolean | null>>
+  setIsStudying: Dispatch<SetStateAction<boolean | null>>,
+  userId: string
 ) {
   // "studies" テーブルから作成日が最新の行を取得するクエリを定義します
   const { data, error } = await supabase
     .from("studies")
     .select("*")
     .order("created_at", { ascending: false })
+    .eq("user_id", userId)
     .limit(1);
   if (error) {
     console.error("Error fetching data:", error.message);
     return;
   }
 
-  if (data[0] && data[0].start_studying !== null && data[0].finish_studying === null) {
+  if (
+    data[0] &&
+    data[0].start_studying !== null &&
+    data[0].finish_studying === null
+  ) {
     setIsStudying(true);
   } else {
     setIsStudying(false);
@@ -50,22 +57,20 @@ export async function readLatestStudy(
 }
 
 export async function readLatestStudies(
-  setLatestStudiesData: Dispatch<SetStateAction<StudyDataType[] | null>>
+  setLatestStudiesData: Dispatch<SetStateAction<StudyDataType[] | null>>,
+  userId: string
 ) {
   try {
-    let { data, error, status } = await supabase
+    let { data, error } = await supabase
       .from("studies")
       .select("*")
       .order("created_at", { ascending: false })
+      .eq("user_id", userId)
       .limit(5);
-
-    if (error && status !== 406) {
+    if (error) {
       throw error;
     }
-
-    if (data) {
-      setLatestStudiesData(data);
-    }
+    setLatestStudiesData(data);
   } catch (error) {
     alert("Error loading user study list!");
   } finally {
@@ -168,7 +173,7 @@ export async function readRangedStudies(
       .from("studies")
       .select("*")
       .order("created_at", { ascending: false })
-      .range(rangeStart, rangeEnd) //
+      .range(rangeStart, rangeEnd); //
 
     if (error && status !== 406) {
       throw error;

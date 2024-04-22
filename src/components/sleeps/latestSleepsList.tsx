@@ -3,6 +3,7 @@ import { SleepDataType } from "@/consts/sleeps.types";
 import { deleteSleeps, readLatestSleeps } from "@/hooks/sleeps";
 import {
   Button,
+  Link,
   Paper,
   Table,
   TableBody,
@@ -16,10 +17,10 @@ import { useEffect, useState } from "react";
 import { DatePickerDiary } from "../common/datePickerDiary";
 
 export const LatestSleepsList = ({ user }: { user: User | null }) => {
-  const [latestSleepsData, setLatestSleepsData] = useState<SleepDataType[] | null>([]);
+  const [latestSleepsData, setLatestSleepsData] = useState<SleepDataType[] | null>([]); //null必要
 
   useEffect(() => {
-    readLatestSleeps(setLatestSleepsData);
+    readLatestSleeps(setLatestSleepsData, user?.id!);
   }, []);
 
   const formatDate = (ts: string | null) => {
@@ -55,7 +56,7 @@ export const LatestSleepsList = ({ user }: { user: User | null }) => {
 
   return (
     <>
-      {latestSleepsData ? (
+      {latestSleepsData?.length! > 0 ? (
         <>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -69,7 +70,7 @@ export const LatestSleepsList = ({ user }: { user: User | null }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {latestSleepsData.map((lsd) => (
+                {latestSleepsData!.map((lsd) => (
                   <TableRow
                     key={lsd.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -110,8 +111,11 @@ export const LatestSleepsList = ({ user }: { user: User | null }) => {
               </TableBody>
             </Table>
           </TableContainer>
+          <Link href="/data/sleeps">もっと見る</Link>
         </>
-      ) : null}
+      ) : (
+        <>まだデータがありません</>
+      )}
     </>
   );
 };

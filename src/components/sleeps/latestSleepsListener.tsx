@@ -41,7 +41,7 @@ export const LatestSleepsListener = ({ user }: { user: User | null }) => {
   // }, [supabase]);
 
   useEffect(() => {
-    readLatestSleep(setIsSleeping);
+    readLatestSleep(setIsSleeping, user?.id!);
   }, []);
 
   return (

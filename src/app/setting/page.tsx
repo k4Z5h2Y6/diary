@@ -11,14 +11,14 @@ export default function Setting() {
         }}
       >
         <Divider>設定</Divider>
-        <form action="/auth/logout" method="post">
+        <form action="/auth/signout" method="post">
           <Button
             variant="contained"
             type="submit"
             fullWidth
             sx={{ marginBottom: "16px" }}
           >
-            ログアウト
+            サインアウト
           </Button>
         </form>
       </Container>

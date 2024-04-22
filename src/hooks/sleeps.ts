@@ -30,20 +30,26 @@ export async function createSleepOnset(
 
 //単数用
 export async function readLatestSleep(
-  setIsSleeping: Dispatch<SetStateAction<boolean | null>>
+  setIsSleeping: Dispatch<SetStateAction<boolean | null>>,
+  userId: string
 ) {
   // "sleeps" テーブルから作成日が最新の行を取得するクエリを定義します
   const { data, error } = await supabase
     .from("sleeps")
     .select("*")
     .order("created_at", { ascending: false })
+    .eq("user_id", userId)
     .limit(1);
   if (error) {
     console.error("Error fetching data:", error.message);
     return;
   }
 
-  if (data[0] && data[0].sleep_onset_at !== null && data[0].wake_up_at === null) {
+  if (
+    data[0] &&
+    data[0].sleep_onset_at !== null &&
+    data[0].wake_up_at === null
+  ) {
     setIsSleeping(true);
   } else {
     setIsSleeping(false);
@@ -52,22 +58,20 @@ export async function readLatestSleep(
 
 //複数用
 export async function readLatestSleeps(
-  setLatestSleepsData: Dispatch<SetStateAction<SleepDataType[] | null>>
+  setLatestSleepsData: Dispatch<SetStateAction<SleepDataType[] | null>>,
+  userId: string
 ) {
   try {
-    let { data, error, status } = await supabase
+    let { data, error } = await supabase
       .from("sleeps")
       .select("*")
       .order("created_at", { ascending: false })
+      .eq("user_id", userId)
       .limit(5);
-
-    if (error && status !== 406) {
+    if (error) {
       throw error;
     }
-
-    if (data) {
-      setLatestSleepsData(data);
-    }
+    setLatestSleepsData(data);
   } catch (error) {
     alert("Error loading user sleeps list!");
   } finally {
@@ -171,7 +175,7 @@ export async function readRangedSleeps(
       .from("sleeps")
       .select("*")
       .order("created_at", { ascending: false })
-      .range(rangeStart, rangeEnd) //
+      .range(rangeStart, rangeEnd); //
 
     if (error && status !== 406) {
       throw error;

@@ -28,6 +28,7 @@ export async function createCigarette(
 //単数
 export async function readLatestCigarette(
   setLoading: Dispatch<SetStateAction<boolean>>,
+  userId: string,
   setLatestCigaretteData: Dispatch<SetStateAction<CigaretteDataType | null>>,
 ) {
   try {
@@ -36,6 +37,7 @@ export async function readLatestCigarette(
     .from("cigarettes")
     .select("*")
     .order("created_at", { ascending: false })
+    .eq("user_id", userId)
     .limit(1);
 
     if (error && status !== 406) {
@@ -56,12 +58,14 @@ export async function readLatestCigarette(
 //複数
 export async function readLatestCigarettes(
   setLatestCigarettesData: Dispatch<SetStateAction<CigaretteDataType[] | null>>,
+  userId: string
 ) {
   // "cigarettes" テーブルから作成日が最新の行を取得するクエリを定義します
   const { data, error } = await supabase
     .from("cigarettes")
     .select("*")
     .order("created_at", { ascending: false })
+    .eq("user_id", userId)
     .limit(5);
   if (error) {
     console.error("Error fetching data:", error.message);

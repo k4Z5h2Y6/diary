@@ -1,6 +1,7 @@
 "use client";
 import {
   Button,
+  Link,
   Paper,
   Table,
   TableBody,
@@ -24,7 +25,7 @@ export const LatestCigarettesList = ({ user }: { user: User | null }) => {
   const router = useRouter();
 
   useEffect(() => {
-    readLatestCigarettes(setLatestCigarettesData);
+    readLatestCigarettes(setLatestCigarettesData, user?.id!);
   }, []);
 
   const formatDate = (ts: string | null) => {
@@ -43,7 +44,7 @@ export const LatestCigarettesList = ({ user }: { user: User | null }) => {
 
   return (
     <>
-      {latestCigarettesData ? (
+      {latestCigarettesData?.length! > 0 ? (
         <>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -55,7 +56,7 @@ export const LatestCigarettesList = ({ user }: { user: User | null }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {latestCigarettesData.map((lcd) => (
+                {latestCigarettesData!.map((lcd) => (
                   <TableRow
                     key={lcd.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -83,8 +84,11 @@ export const LatestCigarettesList = ({ user }: { user: User | null }) => {
               </TableBody>
             </Table>
           </TableContainer>
+          <Link href="/data/cigarettes">もっと見る</Link>
         </>
-      ) : null}
+      ) : (
+        <>まだデータがありません</>
+      )}
     </>
   );
 };

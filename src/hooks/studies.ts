@@ -42,7 +42,7 @@ export async function readLatestStudy(
     return;
   }
 
-  if (data[0].start_studying !== null && data[0].finish_studying === null) {
+  if (data[0] && data[0].start_studying !== null && data[0].finish_studying === null) {
     setIsStudying(true);
   } else {
     setIsStudying(false);

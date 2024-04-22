@@ -43,7 +43,7 @@ export async function readLatestSleep(
     return;
   }
 
-  if (data[0].sleep_onset_at !== null && data[0].wake_up_at === null) {
+  if (data[0] && data[0].sleep_onset_at !== null && data[0].wake_up_at === null) {
     setIsSleeping(true);
   } else {
     setIsSleeping(false);

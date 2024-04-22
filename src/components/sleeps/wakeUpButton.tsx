@@ -25,7 +25,7 @@ export default function WakeUpButton({
     };
     if (user) {
       await updateSleepWakeUp(user.id, newData, setIsOpenSnackbar);
-      await readLatestSleep(setIsSleeping);
+      await readLatestSleep(setIsSleeping, user?.id!);
     }
   }
 

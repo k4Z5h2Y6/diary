@@ -25,7 +25,7 @@ export default function FinishStudyingButton({
     };
     if (user) {
       await updateFinishStudying(user.id, newData, setIsOpenSnackbar);
-      await readLatestStudy(setIsStudying);
+      await readLatestStudy(setIsStudying, user?.id!);
     }
   }
 

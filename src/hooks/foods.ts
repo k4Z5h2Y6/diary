@@ -7,11 +7,12 @@ const supabase = createClientComponentClient<FoodsType>();
 //todo snackbar追加
 export async function createFood(
   userId: string,
-  setLoading: Dispatch<SetStateAction<boolean>>,
   foodText: string | null,
   ingredient: string | null,
   foodMemo: string | null,
-  foodImgUrls: string[] | null
+  foodImgUrls: string[] | null,
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>,
 ) {
   try {
     setLoading(true);
@@ -23,7 +24,7 @@ export async function createFood(
       food_img_url: foodImgUrls,
     });
     if (error) throw error;
-    alert("食事投稿完了");
+    setIsOpenSnackbar(true)
   } catch (error) {
     alert("食事投稿エラー");
   } finally {
@@ -159,7 +160,6 @@ export async function deleteFoodImg(
   }
 }
 
-//todo snackbar追加
 export async function deleteFoods(
   userId: string,
   id: number,
@@ -174,7 +174,6 @@ export async function deleteFoods(
       .eq("id", id);
 
     if (error) throw error;
-
     // 削除が成功したら、foodsList からも該当する id のデータを削除します
     setLatestDiariesData((prevDiariesList) =>
       prevDiariesList!.filter((dl) => dl.id !== id)
@@ -186,7 +185,6 @@ export async function deleteFoods(
   }
 }
 
-//todo userId: string,
 export async function uploadFoodImgs(
   setLoading: Dispatch<SetStateAction<boolean>>,
   foodImgUrls: string[] | null,
@@ -199,7 +197,7 @@ export async function uploadFoodImgs(
       !foodImgFiles ||
       foodImgUrls.length !== foodImgFiles.length
     ) {
-      throw new Error("You must provide matching image URLs and files.");
+      throw new Error("食事写真アップロードエラー");
     }
 
     const uploadPromises = foodImgUrls.map(async (foodImgUrl, index) => {

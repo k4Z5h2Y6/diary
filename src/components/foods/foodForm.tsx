@@ -41,7 +41,6 @@ export default function FoodForm({
     }
   }, [foodData]);
 
-  //todo 複数画像の削除処理
   const imgChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     if (event.target.files) {
       const fileList = event.target.files;
@@ -83,9 +82,9 @@ export default function FoodForm({
         foodImgUrls.length === foodImgFiles.length
       ) {
         await uploadFoodImgs(setLoading, foodImgUrls, foodImgFiles)
-        await createFood(user?.id!, setLoading,foodText,ingredient,foodMemo,foodImgUrls)
+        await createFood(user?.id!, foodText, ingredient, foodMemo, foodImgUrls, setLoading, setIsOpenSnackbar)
       } else {
-        createFood(user?.id!, setLoading, foodText, ingredient, foodMemo, null);
+        createFood(user?.id!, foodText, ingredient, foodMemo, null, setLoading, setIsOpenSnackbar);
       }
     }
     if (foodTitleRef.current) {
@@ -210,7 +209,6 @@ export default function FoodForm({
                 position: "relative",
               }}
             >
-              {/* todo foodDataがない場合は画像を削除できない */}
               {foodData ? (
                 <ImgFetcher url={fiu} bucket={"food_img"} />
               ) : (

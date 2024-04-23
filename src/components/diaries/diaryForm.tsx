@@ -74,7 +74,6 @@ export default function DiaryForm({
     setOptions(options);
   }, [diaryCategories, diaryCategory]);
 
-  //todo 複数画像の削除処理
   const imgChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     if (event.target.files) {
       const fileList = event.target.files;
@@ -260,7 +259,6 @@ export default function DiaryForm({
                 position: "relative",
               }}
             >
-              {/* todo diaryDataがない場合は画像を削除できない */}
               {diaryData ? (
                 <ImgFetcher url={fiu} bucket={"diary_img"} />
               ) : (

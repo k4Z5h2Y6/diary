@@ -81,7 +81,6 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
                   color="inherit"
                   underline="none"
                 >
-                  {/* todo PreviewImg内で条件分岐が必要？ */}
                   {lfd.food_img_url && lfd.food_img_url[0] ? (
                     <PreviewImg url={lfd.food_img_url[0]} />
                   ) : (

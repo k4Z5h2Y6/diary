@@ -22,7 +22,7 @@ import { useEffect, useState } from "react";
 import { DatePickerDiary } from "../common/datePickerDiary";
 import { PaginationDiary } from "../common/pagenationDiary";
 
-const parPage = 5;
+const parPage = 20;
 
 export const AllSleepsList = ({ user }: { user: User | null }) => {
   const [sleepsData, setSleepsData] = useState<SleepDataType[] | null>(null);

@@ -22,7 +22,7 @@ import {
   readRangedFoods,
 } from "@/hooks/foods";
 
-const parPage = 15;
+const parPage = 30;
 
 export const AllFoodsList = ({ user }: { user: User | null }) => {
   const [foodsData, setFoodsData] = useState<FoodDataType[] | null>(null);

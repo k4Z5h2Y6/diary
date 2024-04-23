@@ -18,7 +18,7 @@ import { PaginationDiary } from "../common/pagenationDiary";
 import { StudyDataType } from "@/consts/studies.types";
 import { deleteStudies, readRangedStudies, readStudiesCount } from "@/hooks/studies";
 
-const parPage = 5;
+const parPage = 20;
 
 export const AllStudiesList = ({ user }: { user: User | null }) => {
   const [studiesData, setStudiesData] = useState<StudyDataType[] | null>(null);

@@ -24,7 +24,7 @@ import { readCategories } from "@/hooks/categories";
 import ImgFetcher from "../common/imgFetcher";
 import { CategoryType } from "@/consts/categories.types";
 
-const parPage = 10;
+const parPage = 20;
 
 export const AllDiariesList = ({ user }: { user: User | null }) => {
   const [diariesData, setDiariesData] = useState<DiaryDataType[] | null>(null);

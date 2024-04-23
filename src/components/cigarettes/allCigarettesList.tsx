@@ -19,7 +19,7 @@ import { CigaretteDataType } from "@/consts/cigarettes.types";
 import { deleteCigarettes, readCigarettesCount, readRangedCigarettes } from "@/hooks/cigarettes";
 import { CigarettesForm } from "./cigaretteForm";
 
-const parPage = 50;
+const parPage = 20;
 
 export const AllCigarettesList = ({ user }: { user: User | null }) => {
   const router = useRouter();

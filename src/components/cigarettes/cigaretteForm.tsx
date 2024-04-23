@@ -44,7 +44,8 @@ export const CigarettesForm = ({
     if (cigarettesData) {
       setLatestCigaretteData(cigarettesData);
     } else {
-      readLatestCigarette(user?.id!, setLatestCigaretteData, setLoading);
+      //サインアップ後のエラーアラート防止でif (user)
+      if (user) readLatestCigarette(user.id, setLatestCigaretteData, setLoading);
     }
   }, [cigarettesData]);
 

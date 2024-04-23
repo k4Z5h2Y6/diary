@@ -31,10 +31,7 @@ export async function signup(
     email: email,
     password: password,
   });
-
-  if (error) {
-    redirect("/error");
-  }
+  if (error) redirect("/error");
 
   revalidatePath("/", "layout");
   redirect("/");

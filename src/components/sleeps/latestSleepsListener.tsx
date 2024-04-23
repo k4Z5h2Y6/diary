@@ -40,7 +40,8 @@ export const LatestSleepsListener = ({ user }: { user: User | null }) => {
   // }, [supabase]);
 
   useEffect(() => {
-    readLatestSleep(user?.id!, setIsSleeping);
+    //サインアップ後のエラーアラート防止でif (user)
+    if (user) readLatestSleep(user?.id!, setIsSleeping);
   }, []);
 
   return (

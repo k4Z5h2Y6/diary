@@ -40,7 +40,8 @@ export const LatestStudiesListener = ({ user }: { user: User | null }) => {
   // }, [supabase]);
 
   useEffect(() => {
-    readLatestStudy(user?.id!, setIsStudying);
+    //サインアップ後のエラーアラート防止でif (user)
+    if (user) readLatestStudy(user?.id!, setIsStudying);
   }, []);
 
   return (

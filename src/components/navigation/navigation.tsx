@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 export const Navigation = ({ session }: { session: Session | null }) => {
   const router = useRouter();
   if (session === null) {
-    router.push("/login");
+    router.push("/sign");
   }
 
   const [value, setValue] = useState<string | null>(null);

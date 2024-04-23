@@ -17,13 +17,13 @@ export async function middleware(req: NextRequest) {
   //   return NextResponse.redirect(new URL('/account', req.url))
   // }
 
-  if (!user && req.nextUrl.pathname !== '/login') {
-    return NextResponse.redirect(new URL('/login', req.url))
+  if (!user && req.nextUrl.pathname !== '/sign') {
+    return NextResponse.redirect(new URL('/sign', req.url))
   }
 
   return res
 }
 
 export const config = {
-  matcher: ['/', '/login'],
+  matcher: ['/', '/sign'],
 }

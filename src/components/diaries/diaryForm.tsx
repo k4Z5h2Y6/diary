@@ -46,7 +46,8 @@ export default function DiaryForm({
   const [isOpenSnackbar, setIsOpenSnackbar] = useState<boolean>(false);
 
   useEffect(() => {
-    readCategories(user?.id!, setDiaryCategories);
+    //サインアップ後のエラーアラート防止でif (user)
+    if (user) readCategories(user.id, setDiaryCategories);
   }, []);
 
   useEffect(() => {

@@ -1,11 +1,13 @@
 "use client";
 
 import {
+  Alert,
   IconButton,
   ImageList,
   ImageListItem,
   ImageListItemBar,
   Link,
+  Snackbar,
 } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
@@ -27,6 +29,9 @@ export const AllFoodsList = ({ user }: { user: User | null }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rangeStart, setRangeStart] = useState<number>(0);
   const [allFoodsCount, setAllFoodsCount] = useState<number | null>(null);
+
+  const [isOpenSnackbar, setIsOpenSnackbar] = useState<boolean>(false);
+
   const pageCount = (allFoodsCount: number | null, parPage: number) => {
     if (allFoodsCount! % parPage === 0) {
       return allFoodsCount! / parPage;
@@ -52,17 +57,21 @@ export const AllFoodsList = ({ user }: { user: User | null }) => {
     if (currentPage === 1) {
       readRangedFoods(user?.id!, 0, parPage - 1, setFoodsData);
     } else {
-      readRangedFoods(user?.id!, rangeStart, rangeStart + parPage - 1, setFoodsData);
+      readRangedFoods(
+        user?.id!,
+        rangeStart,
+        rangeStart + parPage - 1,
+        setFoodsData
+      );
     }
   }, [rangeStart]);
 
   const handleDelete = async (id: number, foodImgUrl: string[] | null) => {
     if (foodImgUrl && foodImgUrl.length > 0) {
-      await deleteFoodImg(foodImgUrl, () => {
-        deleteFoods(user?.id!, id, setFoodsData);
-      });
+      await deleteFoodImg(foodImgUrl);
+      await deleteFoods(user?.id!, id, setFoodsData, setIsOpenSnackbar);
     } else {
-      deleteFoods(user?.id!, id, setFoodsData);
+      deleteFoods(user?.id!, id, setFoodsData, setIsOpenSnackbar);
     }
   };
 
@@ -92,6 +101,16 @@ export const AllFoodsList = ({ user }: { user: User | null }) => {
     } else {
       return null;
     }
+  };
+
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setIsOpenSnackbar(false);
   };
 
   return (
@@ -135,7 +154,16 @@ export const AllFoodsList = ({ user }: { user: User | null }) => {
             setCurrentPage={setCurrentPage}
           />
         </>
-      ) : null}
+      ) : (
+        <>まだデータがありません</>
+      )}
+      <Snackbar
+        open={isOpenSnackbar}
+        autoHideDuration={1000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert severity="success">完了しました</Alert>
+      </Snackbar>
     </>
   );
 };

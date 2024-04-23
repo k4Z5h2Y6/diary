@@ -1,6 +1,15 @@
 "use client";
 
-import { Box, Button, Card, Grid, Link, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  Grid,
+  Link,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import { PaginationDiary } from "../common/pagenationDiary";
@@ -11,7 +20,6 @@ import {
   readDiariesCount,
   readRangedDiaries,
 } from "@/hooks/diaries";
-import PreviewImg from "../common/imgFetcher";
 import { readCategories } from "@/hooks/categories";
 import ImgFetcher from "../common/imgFetcher";
 import { CategoryType } from "@/consts/categories.types";
@@ -24,6 +32,8 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
   const [rangeStart, setRangeStart] = useState<number>(0);
   const [allDiariesCount, setAllDiariesCount] = useState<number | null>(null);
   const [diaryCategories, setDiaryCategories] = useState<CategoryType[]>([]);
+
+  const [isOpenSnackbar, setIsOpenSnackbar] = useState<boolean>(false);
 
   const pageCount = (allDiariesCount: number | null, parPage: number) => {
     if (allDiariesCount! % parPage === 0) {
@@ -51,7 +61,12 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
     if (currentPage === 1) {
       readRangedDiaries(user?.id!, 0, parPage - 1, setDiariesData);
     } else {
-      readRangedDiaries(user?.id!, rangeStart, rangeStart + parPage - 1, setDiariesData);
+      readRangedDiaries(
+        user?.id!,
+        rangeStart,
+        rangeStart + parPage - 1,
+        setDiariesData
+      );
     }
   }, [rangeStart]);
 
@@ -59,7 +74,7 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
     if (categoryId) {
       for (let i = 0; i < diaryCategories.length; i++) {
         if (categoryId === diaryCategories[i].id) {
-          return diaryCategories[i].category_name
+          return diaryCategories[i].category_name;
         }
       }
     } else {
@@ -95,15 +110,23 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
     }
   };
 
-  //todo
   const handleDelete = async (id: number, diaryImgUrl: string[] | null) => {
     if (diaryImgUrl && diaryImgUrl.length > 0) {
-      await deleteDiaryImg(diaryImgUrl, () => {
-        deleteDiaries(user?.id!, id, setDiariesData);
-      });
+      await deleteDiaryImg(diaryImgUrl);
+      await deleteDiaries(user?.id!, id, setDiariesData, setIsOpenSnackbar);
     } else {
-      deleteDiaries(user?.id!, id, setDiariesData);
+      deleteDiaries(user?.id!, id, setDiariesData, setIsOpenSnackbar);
     }
+  };
+
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setIsOpenSnackbar(false);
   };
 
   return (
@@ -118,7 +141,7 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
                 minWidth: 275,
                 marginBottom: "16px",
                 display: "flex",
-                position: "relative"
+                position: "relative",
               }}
             >
               <Link
@@ -188,7 +211,16 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
             setCurrentPage={setCurrentPage}
           />
         </>
-      ) : null}
+      ) : (
+        <>まだデータがありません</>
+      )}
+      <Snackbar
+        open={isOpenSnackbar}
+        autoHideDuration={1000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert severity="success">完了しました</Alert>
+      </Snackbar>
     </>
   );
 };

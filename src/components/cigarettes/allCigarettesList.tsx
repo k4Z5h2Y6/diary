@@ -118,7 +118,9 @@ export const AllCigarettesList = ({ user }: { user: User | null }) => {
             setCurrentPage={setCurrentPage}
           />
         </>
-      ) : null}
+      ) : (
+        <>まだデータがありません</>
+      )}
     </>
   );
 };

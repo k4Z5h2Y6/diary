@@ -150,7 +150,9 @@ export const AllSleepsList = ({ user }: { user: User | null }) => {
             setCurrentPage={setCurrentPage}
           />
         </>
-      ) : null}
+      ) : (
+        <>まだデータがありません</>
+      )}
     </>
   );
 };

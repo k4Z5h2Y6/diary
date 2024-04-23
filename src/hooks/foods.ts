@@ -147,18 +147,12 @@ export async function updateFood(
 
 export async function deleteFoodImg(
   foodImgUrl: string[],
-  callback: () => void  //todo
 ) {
   try {
     const { error: uploadError } = await supabase.storage
       .from("food_img")
       .remove(foodImgUrl);
-
-    if (uploadError) {
-      throw uploadError;
-    }
-    alert("食事写真削除完了");
-    callback();
+    if (uploadError) throw uploadError;
   } catch (error) {
     alert("食事写真削除エラー");
   } finally {
@@ -169,7 +163,8 @@ export async function deleteFoodImg(
 export async function deleteFoods(
   userId: string,
   id: number,
-  setLatestDiariesData: Dispatch<SetStateAction<FoodDataType[] | null>>
+  setLatestDiariesData: Dispatch<SetStateAction<FoodDataType[] | null>>,
+  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>
 ) {
   try {
     const { error } = await supabase
@@ -184,7 +179,7 @@ export async function deleteFoods(
     setLatestDiariesData((prevDiariesList) =>
       prevDiariesList!.filter((dl) => dl.id !== id)
     );
-    alert("食事削除完了");
+    setIsOpenSnackbar(true);
   } catch (error) {
     alert("食事削除エラー");
   } finally {

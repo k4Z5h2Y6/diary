@@ -18,9 +18,7 @@ export async function readCategories(
       .eq("user_id", userId);
     // .order("created_at", { ascending: false })
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
     setDiaryCategories(data);
   } catch (error) {
     alert("カテゴリー読み込みエラー");

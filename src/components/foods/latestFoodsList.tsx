@@ -3,11 +3,13 @@
 import { FoodDataType } from "@/consts/foods.types";
 import { deleteFoodImg, deleteFoods, readLatestFoods } from "@/hooks/foods";
 import {
+  Alert,
   IconButton,
   ImageList,
   ImageListItem,
   ImageListItemBar,
   Link,
+  Snackbar,
 } from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
@@ -18,6 +20,7 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
   const [latestFoodsData, setLatestFoodsData] = useState<FoodDataType[] | null>(
     null
   );
+  const [isOpenSnackbar, setIsOpenSnackbar] = useState<boolean>(false);
 
   useEffect(() => {
     readLatestFoods(user?.id!, setLatestFoodsData);
@@ -25,11 +28,10 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
 
   const handleDelete = async (id: number, foodImgUrl: string[] | null) => {
     if (foodImgUrl && foodImgUrl.length > 0) {
-      await deleteFoodImg(foodImgUrl, () => {
-        deleteFoods(user?.id!, id, setLatestFoodsData);
-      });
+      await deleteFoodImg(foodImgUrl);
+      await deleteFoods(user?.id!, id, setLatestFoodsData, setIsOpenSnackbar);
     } else {
-      deleteFoods(user?.id!, id, setLatestFoodsData);
+      deleteFoods(user?.id!, id, setLatestFoodsData, setIsOpenSnackbar);
     }
   };
 
@@ -55,6 +57,16 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
     } else {
       return null;
     }
+  };
+
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setIsOpenSnackbar(false);
   };
 
   return (
@@ -99,6 +111,13 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
       ) : (
         <>まだデータがありません</>
       )}
+      <Snackbar
+        open={isOpenSnackbar}
+        autoHideDuration={1000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert severity="success">完了しました</Alert>
+      </Snackbar>
     </>
   );
 };

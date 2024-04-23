@@ -17,7 +17,7 @@ export async function createDiary(
   diaryCategory: number | null,
   diaryImgUrls: string[] | null,
   setLoading: Dispatch<SetStateAction<boolean>>,
-  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>> //todo
+  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>
 ) {
   try {
     setLoading(true);
@@ -28,7 +28,7 @@ export async function createDiary(
       diary_category: diaryCategory,
     });
     if (error) throw error;
-    alert("投稿完了");
+    setIsOpenSnackbar(true);
   } catch (error) {
     alert("投稿エラー");
   } finally {
@@ -43,7 +43,7 @@ export async function readDiary(
   setDiaryData: Dispatch<SetStateAction<DiaryDataType[] | null>>
 ) {
   try {
-    const { data, error, status } = await supabase
+    const { data, error } = await supabase
       .from("diaries")
       .select("*")
       .eq("user_id", userId)
@@ -82,13 +82,11 @@ export async function readDiariesCount(
   setAllDiariesCount: Dispatch<SetStateAction<number | null>>
 ) {
   try {
-    const { count, error, status } = await supabase
+    const { count, error } = await supabase
       .from("diaries")
       .select("*", { count: "exact", head: true })
       .eq("user_id", userId);
-
     if (error) throw error;
-
     if (count) {
       setAllDiariesCount(count);
     }
@@ -111,9 +109,7 @@ export async function readRangedDiaries(
       .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .range(rangeStart, rangeEnd); //
-
     if (error) throw error;
-
     if (data) {
       setDiariesData(data);
     }
@@ -132,15 +128,13 @@ export async function updateDiary(
 ) {
   try {
     setLoading(true);
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("diaries")
       .update(newData)
       .eq("user_id", userId)
       .eq("id", id)
       .single();
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
     setIsOpenSnackbar(true);
   } catch (error) {
     alert("記録更新エラー");
@@ -149,32 +143,25 @@ export async function updateDiary(
   }
 }
 
-//todo user関係
 export async function deleteDiaryImg(
   diaryImgUrl: string[],
-  callback: () => void
 ) {
   try {
     const { error: uploadError } = await supabase.storage
       .from("diary_img")
       .remove(diaryImgUrl);
-
-    if (uploadError) {
-      throw uploadError;
-    }
-    alert("写真削除完了");
-    callback();
+    if (uploadError) throw uploadError;
   } catch (error) {
-    alert("Error delete diary_img!");
+    alert("記録写真削除エラー");
   } finally {
   }
 }
 
-
 export async function deleteDiaries(
   userId: string,
   id: number,
-  setLatestDiariesData: Dispatch<SetStateAction<DiaryDataType[] | null>>
+  setLatestDiariesData: Dispatch<SetStateAction<DiaryDataType[] | null>>,
+  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>
 ) {
   try {
     const { error } = await supabase
@@ -182,14 +169,12 @@ export async function deleteDiaries(
       .delete()
       .eq("user_id", userId)
       .eq("id", id);
-
     if (error) throw error;
-
     // 削除が成功したら、DiariesList からも該当する id のデータを削除します
     setLatestDiariesData((prevDiariesList) =>
       prevDiariesList!.filter((dl) => dl.id !== id)
     );
-    alert("記録削除完了");
+    setIsOpenSnackbar(true);
   } catch (error) {
     alert("記録削除エラー");
   } finally {
@@ -197,8 +182,7 @@ export async function deleteDiaries(
 }
 
 export async function uploadDiaryImgs(
-  user: User | null,
-  setLoading: Dispatch<SetStateAction<boolean>>,
+  setLoading: Dispatch<SetStateAction<boolean>>, //これ
   diaryImgUrls: string[] | null,
   diaryImgFiles: File[] | null
 ) {
@@ -217,14 +201,11 @@ export async function uploadDiaryImgs(
         .from("diary_img")
         .upload(diaryImgUrl, diaryImgFile);
 
-      if (uploadError) {
-        throw uploadError;
-      }
+      if (uploadError) throw uploadError;
     });
-
     await Promise.all(uploadPromises);
   } catch (error) {
-    alert("Error uploading diary_img!");
+    alert("記録写真アップロードエラー");
   } finally {
     setLoading(false);
   }

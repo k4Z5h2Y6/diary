@@ -98,10 +98,7 @@ export default function DiaryForm({
   };
 
   const handleSubmit = async () => {
-    console.log(diaryImgFiles)
-    console.log(diaryImgUrls)
     const diaryText = diaryTextRef.current?.value || null;
-
     if (diaryText) {
       if (
         diaryImgUrls &&
@@ -109,9 +106,9 @@ export default function DiaryForm({
         diaryImgUrls.length > 0 &&
         diaryImgUrls.length === diaryImgFiles.length
       ) {
-        await uploadDiaryImgs(user, setLoading, diaryImgUrls, diaryImgFiles);
+        await uploadDiaryImgs(setLoading, diaryImgUrls, diaryImgFiles);
         await createDiary(
-          user,
+          user?.id!, 
           diaryText,
           diaryCategory,
           diaryImgUrls,
@@ -120,7 +117,7 @@ export default function DiaryForm({
         );
       } else {
         createDiary(
-          user,
+          user?.id!, 
           diaryText,
           diaryCategory,
           null,

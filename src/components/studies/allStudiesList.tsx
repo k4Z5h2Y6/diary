@@ -146,7 +146,9 @@ export const AllStudiesList = ({ user }: { user: User | null }) => {
             setCurrentPage={setCurrentPage}
           />
         </>
-      ) : null}
+      ) : (
+        <>まだデータがありません</>
+      )}
     </>
   );
 };

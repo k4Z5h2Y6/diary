@@ -6,7 +6,15 @@ import {
   deleteDiaryImg,
   readLatestDiaries,
 } from "@/hooks/diaries";
-import { Box, Button, Card, Link, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  Link,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import ImgFetcher from "../common/imgFetcher";
@@ -18,6 +26,8 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
     DiaryDataType[] | null
   >(null);
   const [diaryCategories, setDiaryCategories] = useState<CategoryType[]>([]);
+
+  const [isOpenSnackbar, setIsOpenSnackbar] = useState<boolean>(false);
 
   useEffect(() => {
     readCategories(user?.id!, setDiaryCategories);
@@ -52,7 +62,7 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
     if (categoryId) {
       for (let i = 0; i < diaryCategories.length; i++) {
         if (categoryId === diaryCategories[i].id) {
-          return diaryCategories[i].category_name
+          return diaryCategories[i].category_name;
         }
       }
     } else {
@@ -60,15 +70,28 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
     }
   };
 
-  //todo
   const handleDelete = async (id: number, diaryImgUrl: string[] | null) => {
     if (diaryImgUrl && diaryImgUrl.length > 0) {
-      await deleteDiaryImg(diaryImgUrl, () => {
-        deleteDiaries(user?.id!, id, setLatestDiariesData);
-      });
+      await deleteDiaryImg(diaryImgUrl);
+      await deleteDiaries(
+        user?.id!,
+        id,
+        setLatestDiariesData,
+        setIsOpenSnackbar
+      );
     } else {
-      deleteDiaries(user?.id!, id, setLatestDiariesData);
+      deleteDiaries(user?.id!, id, setLatestDiariesData, setIsOpenSnackbar);
     }
+  };
+
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setIsOpenSnackbar(false);
   };
 
   return (
@@ -117,7 +140,6 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
                   }}
                 >
                   <Typography>
-                    {/* todo */}
                     {formatDate(ldd.created_at!)} {formatTime(ldd.created_at!)}{" "}
                     {formatCategory(ldd.diary_category)}
                   </Typography>
@@ -152,6 +174,13 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
       ) : (
         <>まだデータがありません</>
       )}
+      <Snackbar
+        open={isOpenSnackbar}
+        autoHideDuration={1000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert severity="success">完了しました</Alert>
+      </Snackbar>
     </>
   );
 };

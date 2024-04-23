@@ -20,16 +20,16 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
   );
 
   useEffect(() => {
-    readLatestFoods(setLatestFoodsData);
+    readLatestFoods(user?.id!, setLatestFoodsData);
   }, []);
 
   const handleDelete = async (id: number, foodImgUrl: string[] | null) => {
     if (foodImgUrl && foodImgUrl.length > 0) {
-      await deleteFoodImg(user, foodImgUrl, () => {
-        deleteFoods(id, setLatestFoodsData);
+      await deleteFoodImg(foodImgUrl, () => {
+        deleteFoods(user?.id!, id, setLatestFoodsData);
       });
     } else {
-      deleteFoods(id, setLatestFoodsData);
+      deleteFoods(user?.id!, id, setLatestFoodsData);
     }
   };
 
@@ -59,41 +59,46 @@ export const LatestFoodsList = ({ user }: { user: User | null }) => {
 
   return (
     <>
-      {latestFoodsData ? (
-        <ImageList cols={3} rowHeight={280}>
-          {latestFoodsData.map((lfd) => (
-            <ImageListItem key={lfd.id}>
-              <Link
-                href={`/data/foods/${lfd.id}`}
-                color="inherit"
-                underline="none"
-              >
-                {/* todo PreviewImg内で条件分岐が必要？ */}
-                {lfd.food_img_url && lfd.food_img_url[0] ? (
-                  <PreviewImg url={lfd.food_img_url[0]} />
-                ) : (
-                  <PreviewImg url={null} />
-                )}
-              </Link>
-              <ImageListItemBar
-                title={lfd.food_title}
-                subtitle={`${formatDate(lfd.created_at!)} ${formatTime(
-                  lfd.created_at!
-                )}`}
-                actionIcon={
-                  <IconButton
-                    sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                    aria-label={`info about ${lfd.food_title}`}
-                    onClick={() => handleDelete(lfd.id, lfd.food_img_url!)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                }
-              />
-            </ImageListItem>
-          ))}
-        </ImageList>
-      ) : null}
+      {latestFoodsData?.length! > 0 ? (
+        <>
+          <ImageList cols={3} rowHeight={280}>
+            {latestFoodsData!.map((lfd) => (
+              <ImageListItem key={lfd.id}>
+                <Link
+                  href={`/data/foods/${lfd.id}`}
+                  color="inherit"
+                  underline="none"
+                >
+                  {/* todo PreviewImg内で条件分岐が必要？ */}
+                  {lfd.food_img_url && lfd.food_img_url[0] ? (
+                    <PreviewImg url={lfd.food_img_url[0]} />
+                  ) : (
+                    <PreviewImg url={null} />
+                  )}
+                </Link>
+                <ImageListItemBar
+                  title={lfd.food_title}
+                  subtitle={`${formatDate(lfd.created_at!)} ${formatTime(
+                    lfd.created_at!
+                  )}`}
+                  actionIcon={
+                    <IconButton
+                      sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                      aria-label={`info about ${lfd.food_title}`}
+                      onClick={() => handleDelete(lfd.id, lfd.food_img_url!)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  }
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+          <Link href="/data/foods">記録一覧へ</Link>
+        </>
+      ) : (
+        <>まだデータがありません</>
+      )}
     </>
   );
 };

@@ -20,7 +20,7 @@ export const LatestSleepsList = ({ user }: { user: User | null }) => {
   const [latestSleepsData, setLatestSleepsData] = useState<SleepDataType[] | null>([]); //null必要
 
   useEffect(() => {
-    readLatestSleeps(setLatestSleepsData, user?.id!);
+    readLatestSleeps(user?.id!, setLatestSleepsData);
   }, []);
 
   const formatDate = (ts: string | null) => {
@@ -100,7 +100,7 @@ export const LatestSleepsList = ({ user }: { user: User | null }) => {
                     <TableCell align="center">
                       <Button
                         onClick={() =>
-                          deleteSleeps(lsd.id, setLatestSleepsData)
+                          deleteSleeps(user?.id!, lsd.id, setLatestSleepsData)
                         }
                       >
                         削除

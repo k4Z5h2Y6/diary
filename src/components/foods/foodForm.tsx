@@ -82,10 +82,10 @@ export default function FoodForm({
         foodImgUrls.length > 0 &&
         foodImgUrls.length === foodImgFiles.length
       ) {
-        await uploadFoodImgs(user,setLoading,foodImgUrls,foodImgFiles)
-        await createFood(user,setLoading,foodText,ingredient,foodMemo,foodImgUrls)
+        await uploadFoodImgs(setLoading, foodImgUrls, foodImgFiles)
+        await createFood(user?.id!, setLoading,foodText,ingredient,foodMemo,foodImgUrls)
       } else {
-        createFood(user, setLoading, foodText, ingredient, foodMemo, null);
+        createFood(user?.id!, setLoading, foodText, ingredient, foodMemo, null);
       }
     }
     if (foodTitleRef.current) {

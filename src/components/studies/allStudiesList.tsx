@@ -1,11 +1,5 @@
 "use client";
 
-import { SleepDataType } from "@/consts/sleeps.types";
-import {
-  deleteSleeps,
-  readRangedSleeps,
-  readSleepsCount,
-} from "@/hooks/sleeps";
 import {
   Button,
   Paper,
@@ -40,8 +34,8 @@ export const AllStudiesList = ({ user }: { user: User | null }) => {
   };
 
   useEffect(() => {
-    readStudiesCount(setAllStudiesCount);
-    readRangedStudies(0, parPage - 1, setStudiesData);
+    readStudiesCount(user?.id!, setAllStudiesCount);
+    readRangedStudies(user?.id!, 0, parPage - 1, setStudiesData);
   }, []);
 
   useEffect(() => {
@@ -54,9 +48,9 @@ export const AllStudiesList = ({ user }: { user: User | null }) => {
 
   useEffect(() => {
     if (currentPage === 1) {
-      readRangedStudies(0, parPage - 1, setStudiesData);
+      readRangedStudies(user?.id!, 0, parPage - 1, setStudiesData);
     } else {
-      readRangedStudies(rangeStart, rangeStart + parPage - 1, setStudiesData);
+      readRangedStudies(user?.id!, rangeStart, rangeStart + parPage - 1, setStudiesData);
     }
   }, [rangeStart]);
 
@@ -137,7 +131,7 @@ export const AllStudiesList = ({ user }: { user: User | null }) => {
                     </TableCell>
                     <TableCell align="center">
                       <Button
-                        onClick={() => deleteStudies(sd.id, setStudiesData)}
+                        onClick={() => deleteStudies(user?.id!, sd.id, setStudiesData)}
                       >
                         削除
                       </Button>

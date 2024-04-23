@@ -36,8 +36,8 @@ export const AllFoodsList = ({ user }: { user: User | null }) => {
   };
 
   useEffect(() => {
-    readFoodsCount(setAllFoodsCount);
-    readRangedFoods(0, parPage - 1, setFoodsData);
+    readFoodsCount(user?.id!, setAllFoodsCount);
+    readRangedFoods(user?.id!, 0, parPage - 1, setFoodsData);
   }, []);
 
   useEffect(() => {
@@ -50,19 +50,19 @@ export const AllFoodsList = ({ user }: { user: User | null }) => {
 
   useEffect(() => {
     if (currentPage === 1) {
-      readRangedFoods(0, parPage - 1, setFoodsData);
+      readRangedFoods(user?.id!, 0, parPage - 1, setFoodsData);
     } else {
-      readRangedFoods(rangeStart, rangeStart + parPage - 1, setFoodsData);
+      readRangedFoods(user?.id!, rangeStart, rangeStart + parPage - 1, setFoodsData);
     }
   }, [rangeStart]);
 
   const handleDelete = async (id: number, foodImgUrl: string[] | null) => {
     if (foodImgUrl && foodImgUrl.length > 0) {
-      await deleteFoodImg(user, foodImgUrl, () => {
-        deleteFoods(id, setFoodsData);
+      await deleteFoodImg(foodImgUrl, () => {
+        deleteFoods(user?.id!, id, setFoodsData);
       });
     } else {
-      deleteFoods(id, setFoodsData);
+      deleteFoods(user?.id!, id, setFoodsData);
     }
   };
 

@@ -23,11 +23,9 @@ export default function FinishStudyingButton({
       update_at: currentDate,
       finish_studying: currentDate,
     };
-    if (user) {
-      await updateFinishStudying(user.id, newData, setIsOpenSnackbar);
-      await readLatestStudy(setIsStudying, user?.id!);
-    }
-  }
+    await updateFinishStudying(user?.id!, newData, setIsOpenSnackbar);
+    await readLatestStudy(user?.id!, setIsStudying);
+  };
 
   const handleCloseSnackbar = (
     event: React.SyntheticEvent | Event,

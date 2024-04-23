@@ -16,8 +16,8 @@ export default function StartStudyingButton({
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
 
   const handleClickStartStudying = async () => {
-    await createStudy(user, setIsOpenSnackbar);
-    await readLatestStudy(setIsStudying, user?.id!);
+    await createStudy(user?.id!, setIsOpenSnackbar);
+    await readLatestStudy(user?.id!, setIsStudying);
   };
 
   const handleCloseSnackbar = (

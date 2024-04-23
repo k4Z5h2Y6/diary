@@ -12,7 +12,7 @@ export const LatestSudiesList = ({ user }: { user: User | null }) => {
   const [latestStudiesData, setLatestStudiesData] = useState<StudyDataType[] | null>([]);
 
   useEffect(() => {
-    readLatestStudies(setLatestStudiesData, user?.id!);
+    readLatestStudies(user?.id!, setLatestStudiesData);
   }, []);
 
   const formatDate = (ts: string | null) => {
@@ -92,7 +92,7 @@ export const LatestSudiesList = ({ user }: { user: User | null }) => {
                     <TableCell align="center">
                       <Button
                         onClick={() =>
-                          deleteStudies(lsd.id, setLatestStudiesData)
+                          deleteStudies(user?.id!, lsd.id, setLatestStudiesData)
                         }
                       >
                         削除

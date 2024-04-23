@@ -4,7 +4,7 @@ import { LatestFoodsList } from "@/components/foods/latestFoodsList";
 import { LatestSleepsList } from "@/components/sleeps/latestSleepsList";
 import { LatestSudiesList } from "@/components/studies/latestStudiesList";
 import { Database } from "@/consts/database.types";
-import { Container, Divider, Link } from "@mui/material";
+import { Container, Divider } from "@mui/material";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
@@ -31,12 +31,10 @@ export default async function Calendar() {
         <LatestSudiesList user={user} />
         <Divider>喫煙履歴</Divider>
         <LatestCigarettesList user={user} />
-        <Divider>投稿履歴</Divider>
+        <Divider>記録履歴</Divider>
         <LatestDiariesList user={user}/>
-        <Link href="/data/diaries">投稿一覧へ</Link>
         <Divider>食事履歴</Divider>
         <LatestFoodsList user={user}/>
-        <Link href="/data/foods">食事一覧へ</Link>
       </Container>
     </>
   );

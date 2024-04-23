@@ -36,8 +36,8 @@ export const AllCigarettesList = ({ user }: { user: User | null }) => {
   };
 
   useEffect(() => {
-    readCigarettesCount(setAllCigarettesCount);
-    readRangedCigarettes(0, parPage - 1, setCigarettesData);
+    readCigarettesCount(user?.id!, setAllCigarettesCount);
+    readRangedCigarettes(user?.id!, 0, parPage - 1, setCigarettesData);
   }, []);
 
   useEffect(() => {
@@ -50,9 +50,9 @@ export const AllCigarettesList = ({ user }: { user: User | null }) => {
 
   useEffect(() => {
     if (currentPage === 1) {
-      readRangedCigarettes(0, parPage - 1, setCigarettesData);
+      readRangedCigarettes(user?.id!, 0, parPage - 1, setCigarettesData);
     } else {
-      readRangedCigarettes(rangeStart, rangeStart + parPage - 1, setCigarettesData);
+      readRangedCigarettes(user?.id!, rangeStart, rangeStart + parPage - 1, setCigarettesData);
     }
   }, [rangeStart]);
 
@@ -101,7 +101,7 @@ export const AllCigarettesList = ({ user }: { user: User | null }) => {
                     <TableCell align="center">
                       <Button
                         onClick={() => {
-                          deleteCigarettes(cd.id, setCigarettesData);
+                          deleteCigarettes(user?.id!, cd.id, setCigarettesData);
                           router.refresh();
                         }}
                       >

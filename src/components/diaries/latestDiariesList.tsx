@@ -20,8 +20,8 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
   const [diaryCategories, setDiaryCategories] = useState<CategoryType[]>([]);
 
   useEffect(() => {
-    readCategories(setDiaryCategories);
-    readLatestDiaries(setLatestDiariesData);
+    readCategories(user?.id!, setDiaryCategories);
+    readLatestDiaries(user?.id!, setLatestDiariesData);
   }, []);
 
   const formatDate = (ts: string) => {
@@ -60,21 +60,22 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
     }
   };
 
+  //todo
   const handleDelete = async (id: number, diaryImgUrl: string[] | null) => {
     if (diaryImgUrl && diaryImgUrl.length > 0) {
-      await deleteDiaryImg(user, diaryImgUrl, () => {
-        deleteDiaries(id, setLatestDiariesData);
+      await deleteDiaryImg(diaryImgUrl, () => {
+        deleteDiaries(user?.id!, id, setLatestDiariesData);
       });
     } else {
-      deleteDiaries(id, setLatestDiariesData);
+      deleteDiaries(user?.id!, id, setLatestDiariesData);
     }
   };
 
   return (
     <>
-      {latestDiariesData ? (
+      {latestDiariesData?.length! > 0 ? (
         <>
-          {latestDiariesData.map((ldd) => (
+          {latestDiariesData!.map((ldd) => (
             <Card
               key={ldd.id}
               sx={{
@@ -146,8 +147,11 @@ export const LatestDiariesList = ({ user }: { user: User | null }) => {
               </Box>
             </Card>
           ))}
+          <Link href="/data/diaries">記録一覧へ</Link>
         </>
-      ) : null}
+      ) : (
+        <>まだデータがありません</>
+      )}
     </>
   );
 };

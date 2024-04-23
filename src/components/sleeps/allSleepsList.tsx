@@ -38,8 +38,8 @@ export const AllSleepsList = ({ user }: { user: User | null }) => {
   };
 
   useEffect(() => {
-    readSleepsCount(setAllSleepsCount);
-    readRangedSleeps(0, parPage - 1, setSleepsData);
+    readSleepsCount(user?.id!, setAllSleepsCount);
+    readRangedSleeps(user?.id!, 0, parPage - 1, setSleepsData);
   }, []);
 
   useEffect(() => {
@@ -52,9 +52,9 @@ export const AllSleepsList = ({ user }: { user: User | null }) => {
 
   useEffect(() => {
     if (currentPage === 1) {
-      readRangedSleeps(0, parPage - 1, setSleepsData);
+      readRangedSleeps(user?.id!, 0, parPage - 1, setSleepsData);
     } else {
-      readRangedSleeps(rangeStart, rangeStart + parPage - 1, setSleepsData);
+      readRangedSleeps(user?.id!, rangeStart, rangeStart + parPage - 1, setSleepsData);
     }
   }, [rangeStart]);
 
@@ -135,7 +135,7 @@ export const AllSleepsList = ({ user }: { user: User | null }) => {
                     </TableCell>
                     <TableCell align="center">
                       <Button
-                        onClick={() => deleteSleeps(sd.id, setSleepsData)}
+                        onClick={() => deleteSleeps(user?.id!, sd.id, setSleepsData)}
                       >
                         削除
                       </Button>

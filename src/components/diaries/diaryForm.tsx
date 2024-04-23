@@ -46,7 +46,7 @@ export default function DiaryForm({
   const [isOpenSnackbar, setIsOpenSnackbar] = useState<boolean>(false);
 
   useEffect(() => {
-    readCategories(setDiaryCategories);
+    readCategories(user?.id!, setDiaryCategories);
   }, []);
 
   useEffect(() => {

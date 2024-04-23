@@ -7,7 +7,6 @@ import SleepOnsetButton from "./sleepOnsetButton";
 import { useEffect, useState } from "react";
 import WakeUpButton from "./wakeUpButton";
 import { readLatestSleep } from "@/hooks/sleeps";
-import { SleepsType } from "@/consts/sleeps.types";
 import { Grid, Skeleton } from "@mui/material";
 
 export const LatestSleepsListener = ({ user }: { user: User | null }) => {
@@ -41,7 +40,7 @@ export const LatestSleepsListener = ({ user }: { user: User | null }) => {
   // }, [supabase]);
 
   useEffect(() => {
-    readLatestSleep(setIsSleeping, user?.id!);
+    readLatestSleep(user?.id!, setIsSleeping);
   }, []);
 
   return (

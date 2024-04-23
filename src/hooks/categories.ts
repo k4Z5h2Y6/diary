@@ -8,39 +8,40 @@ import { Dispatch, SetStateAction } from "react";
 const supabase = createClientComponentClient<CategoriesType>();
 
 export async function readCategories(
+  userId: string,
   setDiaryCategories: Dispatch<SetStateAction<any>>
 ) {
   try {
-    let { data, error, status } = await supabase.from("categories").select("*");
+    let { data, error } = await supabase
+      .from("categories")
+      .select("*")
+      .eq("user_id", userId);
     // .order("created_at", { ascending: false })
 
-    if (error && status !== 406) {
+    if (error) {
       throw error;
     }
-
-    if (data) {
-      setDiaryCategories(data)
-    }
+    setDiaryCategories(data);
   } catch (error) {
-    alert("Error loading user category!");
+    alert("カテゴリー読み込みエラー");
   } finally {
   }
 }
 
 export async function createCategory(
-  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>,
-  user: User | null,
+  userId: string,
   categoryName: string,
+  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>,
 ) {
   try {
     const { error } = await supabase.from("categories").insert({
-      user_id: user?.id as string,
+      user_id: userId,
       category_name: categoryName,
     });
     if (error) throw error;
-    setIsOpenSnackbar(true)
+    setIsOpenSnackbar(true);
   } catch (error) {
-    alert("投稿エラー");
+    alert("カテゴリー追加エラー");
   } finally {
   }
 }

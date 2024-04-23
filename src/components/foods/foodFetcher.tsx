@@ -13,7 +13,7 @@ export default function FoodFetcher({ user }: { user: User | null }) {
 
   useEffect(() => {
     if (params.id) {
-      readFood(Number(params.id), setFoodData);
+      readFood(user?.id!, Number(params.id), setFoodData);
     }
   }, []);
 

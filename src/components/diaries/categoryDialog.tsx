@@ -26,13 +26,13 @@ export const CategoryDialog = ({
   const handleFormSubmit = (event: any) => {
     event.preventDefault();
     if (formData) {
-      createCategory(setIsOpenSnackbar, user, formData);
+      createCategory(user?.id!, formData, setIsOpenSnackbar,);
     }
     handleClose();
   };
 
   const handleInputChange = (event: any) => {
-    const { name, value } = event.target;
+    const { value } = event.target;
     setFormData(value);
   };
 

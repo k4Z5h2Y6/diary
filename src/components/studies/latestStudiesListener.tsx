@@ -40,7 +40,7 @@ export const LatestStudiesListener = ({ user }: { user: User | null }) => {
   // }, [supabase]);
 
   useEffect(() => {
-    readLatestStudy(setIsStudying, user?.id!);
+    readLatestStudy(user?.id!, setIsStudying);
   }, []);
 
   return (

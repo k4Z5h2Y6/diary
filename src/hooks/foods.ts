@@ -1,11 +1,12 @@
 import { FoodDataType, FoodsType, UpdateFoodType } from "@/consts/foods.types";
-import { User, createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Dispatch, SetStateAction } from "react";
 
 const supabase = createClientComponentClient<FoodsType>();
 
+//todo snackbar追加
 export async function createFood(
-  user: User | null,
+  userId: string,
   setLoading: Dispatch<SetStateAction<boolean>>,
   foodText: string | null,
   ingredient: string | null,
@@ -15,22 +16,23 @@ export async function createFood(
   try {
     setLoading(true);
     const { error } = await supabase.from("foods").insert({
-      user_id: user?.id as string,
+      user_id: userId,
       food_title: foodText,
       ingredient: ingredient,
       food_memo: foodMemo,
       food_img_url: foodImgUrls,
     });
     if (error) throw error;
-    alert("投稿完了");
+    alert("食事投稿完了");
   } catch (error) {
-    alert("投稿エラー");
+    alert("食事投稿エラー");
   } finally {
     setLoading(false);
   }
 }
 //詳細ページ用
 export async function readFood(
+  userId: string,
   id: number,
   setFoodData: Dispatch<SetStateAction<FoodDataType[] | null>>
 ) {
@@ -38,12 +40,11 @@ export async function readFood(
     const { data, error, status } = await supabase
       .from("foods")
       .select("*")
+      .eq("user_id", userId)
       .eq("id", id)
       .limit(1);
 
-    if (error && status !== 406) {
-      throw error;
-    }
+    if (error) throw error;
 
     if (data) {
       setFoodData(data);
@@ -55,50 +56,48 @@ export async function readFood(
 }
 
 export async function readLatestFoods(
+  userId: string,
   setLatestFoodsList: Dispatch<SetStateAction<FoodDataType[] | null>>
 ) {
   try {
-    let { data, error, status } = await supabase
+    let { data, error } = await supabase
       .from("foods")
       .select("*")
       .order("created_at", { ascending: false })
+      .eq("user_id", userId)
       .limit(15);
 
-    if (error && status !== 406) {
-      throw error;
-    }
-
-    if (data) {
-      setLatestFoodsList(data);
-    }
+    if (error) throw error;
+    setLatestFoodsList(data);
   } catch (error) {
-    alert("記録読み込みエラー");
+    alert("食事読み込みエラー");
   } finally {
   }
 }
 
 export async function readFoodsCount(
+  userId: string,
   setAllFoodsCount: Dispatch<SetStateAction<number | null>>
 ) {
   try {
-    const { count, error, status } = await supabase
+    const { count, error } = await supabase
       .from("foods")
-      .select("*", { count: "exact", head: true });
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", userId);
 
-    if (error && status !== 406) {
-      throw error;
-    }
+    if (error) throw error;
 
     if (count) {
       setAllFoodsCount(count);
     }
   } catch (error) {
-    alert("Error loading user Foods list!");
+    alert("食事総数読み込みエラー");
   } finally {
   }
 }
 
 export async function readRangedFoods(
+  userId: string,
   rangeStart: number,
   rangeEnd: number,
   setFoodsData: Dispatch<SetStateAction<FoodDataType[] | null>>
@@ -107,18 +106,17 @@ export async function readRangedFoods(
     let { data, error, status } = await supabase
       .from("foods")
       .select("*")
+      .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .range(rangeStart, rangeEnd); //
 
-    if (error && status !== 406) {
-      throw error;
-    }
+    if (error) throw error;
 
     if (data) {
       setFoodsData(data);
     }
   } catch (error) {
-    alert("Error loading user Foods list!");
+    alert("食事読み込みエラー");
   } finally {
   }
 }
@@ -131,28 +129,25 @@ export async function updateFood(
   setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>
 ) {
   try {
-    setLoading(true)
+    setLoading(true);
     const { data, error } = await supabase
       .from("foods")
       .update(newData)
       .eq("user_id", userId)
       .eq("id", id)
       .single();
-    if (error) {
-      throw error;
-    }
-    setIsOpenSnackbar(true)
+    if (error) throw error;
+    setIsOpenSnackbar(true);
   } catch (error) {
-    alert("記録更新エラー");
+    alert("食事更新エラー");
   } finally {
-    setLoading(false)
+    setLoading(false);
   }
 }
 
 export async function deleteFoodImg(
-  user: User | null,
   foodImgUrl: string[],
-  callback: () => void
+  callback: () => void  //todo
 ) {
   try {
     const { error: uploadError } = await supabase.storage
@@ -162,24 +157,28 @@ export async function deleteFoodImg(
     if (uploadError) {
       throw uploadError;
     }
-    alert("写真削除完了");
+    alert("食事写真削除完了");
     callback();
   } catch (error) {
-    alert("Error delete food_img!");
+    alert("食事写真削除エラー");
   } finally {
   }
 }
 
+//todo snackbar追加
 export async function deleteFoods(
+  userId: string,
   id: number,
   setLatestDiariesData: Dispatch<SetStateAction<FoodDataType[] | null>>
 ) {
   try {
-    const { error } = await supabase.from("foods").delete().eq("id", id);
+    const { error } = await supabase
+      .from("foods")
+      .delete()
+      .eq("user_id", userId)
+      .eq("id", id);
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     // 削除が成功したら、foodsList からも該当する id のデータを削除します
     setLatestDiariesData((prevDiariesList) =>
@@ -192,11 +191,11 @@ export async function deleteFoods(
   }
 }
 
+//todo userId: string,
 export async function uploadFoodImgs(
-  user: User | null,
   setLoading: Dispatch<SetStateAction<boolean>>,
   foodImgUrls: string[] | null,
-  foodImgFiles: File[] | null,
+  foodImgFiles: File[] | null
 ) {
   try {
     setLoading(true);
@@ -220,9 +219,8 @@ export async function uploadFoodImgs(
     });
 
     await Promise.all(uploadPromises);
-    console.log("画像完了");
   } catch (error) {
-    alert("Error uploading food images!");
+    alert("食事写真アップロードエラー");
   } finally {
     setLoading(false);
   }

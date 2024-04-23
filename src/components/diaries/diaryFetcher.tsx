@@ -13,7 +13,7 @@ export default function DiaryFetcher({ user }: { user: User | null }) {
 
   useEffect(() => {
     if (params.id) {
-      readDiary(Number(params.id), setDiaryData);
+      readDiary(user?.id!, Number(params.id), setDiaryData);
     }
   }, []);
 

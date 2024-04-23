@@ -25,7 +25,7 @@ export const LatestCigarettesList = ({ user }: { user: User | null }) => {
   const router = useRouter();
 
   useEffect(() => {
-    readLatestCigarettes(setLatestCigarettesData, user?.id!);
+    readLatestCigarettes(user?.id!, setLatestCigarettesData);
   }, []);
 
   const formatDate = (ts: string | null) => {
@@ -72,7 +72,7 @@ export const LatestCigarettesList = ({ user }: { user: User | null }) => {
                     <TableCell align="center">
                       <Button
                         onClick={() => {
-                          deleteCigarettes(lcd.id, setLatestCigarettesData);
+                          deleteCigarettes(user?.id!, lcd.id, setLatestCigarettesData);
                           router.refresh();
                         }}
                       >

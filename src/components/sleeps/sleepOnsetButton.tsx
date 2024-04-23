@@ -16,8 +16,8 @@ export default function SleepOnsetButton({
   const [isOpenSnackbar, setIsOpenSnackbar] = useState<boolean>(false);
 
   const handleClickSleepOnset = async () => {
-    await createSleepOnset(user, setIsOpenSnackbar);
-    await readLatestSleep(setIsSleeping, user?.id!);
+    await createSleepOnset(user?.id!, setIsOpenSnackbar);
+    await readLatestSleep(user?.id!, setIsSleeping);
   };
 
   const handleCloseSnackbar = (

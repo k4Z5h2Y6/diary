@@ -34,9 +34,9 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
   };
 
   useEffect(() => {
-    readDiariesCount(setAllDiariesCount);
-    readRangedDiaries(0, parPage - 1, setDiariesData);
-    readCategories(setDiaryCategories);
+    readDiariesCount(user?.id!, setAllDiariesCount);
+    readRangedDiaries(user?.id!, 0, parPage - 1, setDiariesData);
+    readCategories(user?.id!, setDiaryCategories);
   }, []);
 
   useEffect(() => {
@@ -49,9 +49,9 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
 
   useEffect(() => {
     if (currentPage === 1) {
-      readRangedDiaries(0, parPage - 1, setDiariesData);
+      readRangedDiaries(user?.id!, 0, parPage - 1, setDiariesData);
     } else {
-      readRangedDiaries(rangeStart, rangeStart + parPage - 1, setDiariesData);
+      readRangedDiaries(user?.id!, rangeStart, rangeStart + parPage - 1, setDiariesData);
     }
   }, [rangeStart]);
 
@@ -95,13 +95,14 @@ export const AllDiariesList = ({ user }: { user: User | null }) => {
     }
   };
 
+  //todo
   const handleDelete = async (id: number, diaryImgUrl: string[] | null) => {
     if (diaryImgUrl && diaryImgUrl.length > 0) {
-      await deleteDiaryImg(user, diaryImgUrl, () => {
-        deleteDiaries(id, setDiariesData);
+      await deleteDiaryImg(diaryImgUrl, () => {
+        deleteDiaries(user?.id!, id, setDiariesData);
       });
     } else {
-      deleteDiaries(id, setDiariesData);
+      deleteDiaries(user?.id!, id, setDiariesData);
     }
   };
 

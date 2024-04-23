@@ -1,4 +1,8 @@
-import { DiariesType, DiaryDataType, UpdateDiaryType } from "@/consts/diaries.types";
+import {
+  DiariesType,
+  DiaryDataType,
+  UpdateDiaryType,
+} from "@/consts/diaries.types";
 import {
   User,
   createClientComponentClient,
@@ -8,17 +12,17 @@ import { Dispatch, SetStateAction } from "react";
 const supabase = createClientComponentClient<DiariesType>();
 
 export async function createDiary(
-  user: User | null,
+  userId: string,
   diaryText: string,
   diaryCategory: number | null,
   diaryImgUrls: string[] | null,
   setLoading: Dispatch<SetStateAction<boolean>>,
-  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>
+  setIsOpenSnackbar: Dispatch<SetStateAction<boolean>> //todo
 ) {
   try {
     setLoading(true);
     const { error } = await supabase.from("diaries").insert({
-      user_id: user?.id as string,
+      user_id: userId,
       diary_text: diaryText,
       diary_img_url: diaryImgUrls,
       diary_category: diaryCategory,
@@ -34,6 +38,7 @@ export async function createDiary(
 
 //詳細ページ用
 export async function readDiary(
+  userId: string,
   id: number,
   setDiaryData: Dispatch<SetStateAction<DiaryDataType[] | null>>
 ) {
@@ -41,16 +46,11 @@ export async function readDiary(
     const { data, error, status } = await supabase
       .from("diaries")
       .select("*")
+      .eq("user_id", userId)
       .eq("id", id)
       .limit(1);
-
-    if (error && status !== 406) {
-      throw error;
-    }
-
-    if (data) {
-      setDiaryData(data);
-    }
+    if (error) throw error;
+    setDiaryData(data);
   } catch (error) {
     alert("記録読み込みエラー");
   } finally {
@@ -58,22 +58,19 @@ export async function readDiary(
 }
 
 export async function readLatestDiaries(
+  userId: string,
   setLatestDiariesList: Dispatch<SetStateAction<DiaryDataType[] | null>>
 ) {
   try {
-    let { data, error, status } = await supabase
+    let { data, error } = await supabase
       .from("diaries")
       .select("*")
       .order("created_at", { ascending: false })
+      .eq("user_id", userId)
       .limit(5);
 
-    if (error && status !== 406) {
-      throw error;
-    }
-
-    if (data) {
-      setLatestDiariesList(data);
-    }
+    if (error) throw error;
+    setLatestDiariesList(data);
   } catch (error) {
     alert("記録読み込みエラー");
   } finally {
@@ -81,16 +78,16 @@ export async function readLatestDiaries(
 }
 
 export async function readDiariesCount(
+  userId: string,
   setAllDiariesCount: Dispatch<SetStateAction<number | null>>
 ) {
   try {
     const { count, error, status } = await supabase
       .from("diaries")
-      .select("*", { count: "exact", head: true });
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", userId);
 
-    if (error && status !== 406) {
-      throw error;
-    }
+    if (error) throw error;
 
     if (count) {
       setAllDiariesCount(count);
@@ -102,6 +99,7 @@ export async function readDiariesCount(
 }
 
 export async function readRangedDiaries(
+  userId: string,
   rangeStart: number,
   rangeEnd: number,
   setDiariesData: Dispatch<SetStateAction<DiaryDataType[] | null>>
@@ -110,12 +108,11 @@ export async function readRangedDiaries(
     let { data, error, status } = await supabase
       .from("diaries")
       .select("*")
+      .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .range(rangeStart, rangeEnd); //
 
-    if (error && status !== 406) {
-      throw error;
-    }
+    if (error) throw error;
 
     if (data) {
       setDiariesData(data);
@@ -134,7 +131,7 @@ export async function updateDiary(
   setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>
 ) {
   try {
-    setLoading(true)
+    setLoading(true);
     const { data, error } = await supabase
       .from("diaries")
       .update(newData)
@@ -144,16 +141,16 @@ export async function updateDiary(
     if (error) {
       throw error;
     }
-    setIsOpenSnackbar(true)
+    setIsOpenSnackbar(true);
   } catch (error) {
     alert("記録更新エラー");
   } finally {
-    setLoading(false)
+    setLoading(false);
   }
 }
 
+//todo user関係
 export async function deleteDiaryImg(
-  user: User | null,
   diaryImgUrl: string[],
   callback: () => void
 ) {
@@ -173,16 +170,20 @@ export async function deleteDiaryImg(
   }
 }
 
+
 export async function deleteDiaries(
+  userId: string,
   id: number,
   setLatestDiariesData: Dispatch<SetStateAction<DiaryDataType[] | null>>
 ) {
   try {
-    const { error } = await supabase.from("diaries").delete().eq("id", id);
+    const { error } = await supabase
+      .from("diaries")
+      .delete()
+      .eq("user_id", userId)
+      .eq("id", id);
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     // 削除が成功したら、DiariesList からも該当する id のデータを削除します
     setLatestDiariesData((prevDiariesList) =>
@@ -199,7 +200,7 @@ export async function uploadDiaryImgs(
   user: User | null,
   setLoading: Dispatch<SetStateAction<boolean>>,
   diaryImgUrls: string[] | null,
-  diaryImgFiles: File[] | null,
+  diaryImgFiles: File[] | null
 ) {
   try {
     setLoading(true);
@@ -222,7 +223,6 @@ export async function uploadDiaryImgs(
     });
 
     await Promise.all(uploadPromises);
-    console.log("画像完了");
   } catch (error) {
     alert("Error uploading diary_img!");
   } finally {

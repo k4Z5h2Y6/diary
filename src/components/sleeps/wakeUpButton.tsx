@@ -17,17 +17,15 @@ export default function WakeUpButton({
 }) {
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
 
-  const handleClickWakeUp = async() => {
+  const handleClickWakeUp = async () => {
     const currentDate = new Date().toISOString(); // 現在時刻をISO形式の文字列に変換
     const newData: UpdateWakeupType = {
       update_at: currentDate,
       wake_up_at: currentDate,
     };
-    if (user) {
-      await updateSleepWakeUp(user.id, newData, setIsOpenSnackbar);
-      await readLatestSleep(setIsSleeping, user?.id!);
-    }
-  }
+    await updateSleepWakeUp(user?.id!, newData, setIsOpenSnackbar);
+    await readLatestSleep(user?.id!, setIsSleeping);
+  };
 
   const handleCloseSnackbar = (
     event: React.SyntheticEvent | Event,
@@ -45,7 +43,7 @@ export default function WakeUpButton({
         variant="outlined"
         disabled={!isSleeping}
         onClick={() => handleClickWakeUp()}
-        sx={{width: "100%"}}
+        sx={{ width: "100%" }}
       >
         起床
       </Button>
@@ -54,11 +52,7 @@ export default function WakeUpButton({
         autoHideDuration={1000}
         onClose={handleCloseSnackbar}
       >
-        <Alert
-          severity="success"
-        >
-          起床しました
-        </Alert>
+        <Alert severity="success">起床しました</Alert>
       </Snackbar>
     </>
   );

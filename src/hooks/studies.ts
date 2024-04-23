@@ -4,21 +4,18 @@ import {
   UpdateFinishStudyingType,
   UpdateStudyType,
 } from "@/consts/studies.types";
-import {
-  User,
-  createClientComponentClient,
-} from "@supabase/auth-helpers-nextjs";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Dispatch, SetStateAction } from "react";
 
 const supabase = createClientComponentClient<StudiesType>();
 
 export async function createStudy(
-  user: User | null,
+  userId: string,
   setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>
 ) {
   try {
     const { error } = await supabase.from("studies").insert({
-      user_id: user?.id as string,
+      user_id: userId,
     });
     if (error) throw error;
     setIsOpenSnackbar(true);
@@ -30,35 +27,30 @@ export async function createStudy(
 
 //単数用
 export async function readLatestStudy(
-  setIsStudying: Dispatch<SetStateAction<boolean | null>>,
-  userId: string
+  userId: string,
+  setIsStudying: Dispatch<SetStateAction<boolean | null>>
 ) {
   // "studies" テーブルから作成日が最新の行を取得するクエリを定義します
-  const { data, error } = await supabase
-    .from("studies")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .eq("user_id", userId)
-    .limit(1);
-  if (error) {
-    console.error("Error fetching data:", error.message);
-    return;
-  }
-
-  if (
-    data[0] &&
-    data[0].start_studying !== null &&
-    data[0].finish_studying === null
-  ) {
-    setIsStudying(true);
-  } else {
-    setIsStudying(false);
+  try {
+    const { data, error } = await supabase
+      .from("studies")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .eq("user_id", userId)
+      .limit(1);
+    if (error) throw error;
+    setIsStudying(
+      data[0]?.start_studying !== null && data[0]?.finish_studying === null
+    );
+  } catch (error) {
+    alert("作業読み込みエラー");
+  } finally {
   }
 }
 
 export async function readLatestStudies(
-  setLatestStudiesData: Dispatch<SetStateAction<StudyDataType[] | null>>,
-  userId: string
+  userId: string,
+  setLatestStudiesData: Dispatch<SetStateAction<StudyDataType[] | null>>
 ) {
   try {
     let { data, error } = await supabase
@@ -67,12 +59,10 @@ export async function readLatestStudies(
       .order("created_at", { ascending: false })
       .eq("user_id", userId)
       .limit(5);
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
     setLatestStudiesData(data);
   } catch (error) {
-    alert("Error loading user study list!");
+    alert("作業読み込みエラー");
   } finally {
   }
 }
@@ -83,16 +73,13 @@ export async function updateFinishStudying(
   setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>
 ) {
   try {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("studies")
       .update(newData)
       .eq("user_id", userId)
       .order("created_at", { ascending: false }) // 作成日が最新の行を指定
-      .limit(1)
-      .single();
-    if (error) {
-      throw error;
-    }
+      .limit(1);
+    if (error) throw error;
     setIsOpenSnackbar(true);
   } catch (error) {
     alert("作業終了エラー");
@@ -106,31 +93,31 @@ export async function updateStudy(
   newData: UpdateStudyType
 ) {
   try {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("studies")
       .update(newData)
       .eq("user_id", userId)
       .eq("id", id)
-      .single();
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
   } catch (error) {
-    alert("Error updating study data");
+    alert("作業更新エラー");
   } finally {
   }
 }
 
 export async function deleteStudies(
+  userId: string,
   id: number,
   setLatestStudiesData: Dispatch<SetStateAction<StudyDataType[] | null>>
 ) {
   try {
-    const { error } = await supabase.from("studies").delete().eq("id", id);
+    const { error } = await supabase
+      .from("studies")
+      .delete()
+      .eq("user_id", userId)
+      .eq("id", id);
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     // 削除が成功したら、sleepsList からも該当する id のデータを削除します
     setLatestStudiesData((prevStudiesList) =>
@@ -143,47 +130,47 @@ export async function deleteStudies(
 }
 
 export async function readStudiesCount(
+  userId: string,
   setAllStudiesCount: Dispatch<SetStateAction<number | null>>
 ) {
   try {
     const { count, error, status } = await supabase
       .from("studies")
-      .select("*", { count: "exact", head: true });
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", userId);
 
-    if (error && status !== 406) {
-      throw error;
-    }
+    if (error) throw error;
 
     if (count) {
       setAllStudiesCount(count);
     }
   } catch (error) {
-    alert("Error loading user sleeps list!");
+    alert("作業総数読み込みエラー");
   } finally {
   }
 }
 
 export async function readRangedStudies(
+  userId: string,
   rangeStart: number,
   rangeEnd: number,
   setStudiesData: Dispatch<SetStateAction<StudyDataType[] | null>>
 ) {
   try {
-    let { data, error, status } = await supabase
+    let { data, error } = await supabase
       .from("studies")
       .select("*")
+      .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .range(rangeStart, rangeEnd); //
 
-    if (error && status !== 406) {
-      throw error;
-    }
+    if (error) throw error;
 
     if (data) {
       setStudiesData(data);
     }
   } catch (error) {
-    alert("Error loading user Studies list!");
+    alert("作業読み込みエラー");
   } finally {
   }
 }

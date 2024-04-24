@@ -40,12 +40,14 @@ export const AuthForm = () => {
     }
   };
 
+  //フォーム問題なし、修正後
   return (
     <>
       <TextField
         label="メールアドレス"
         variant="outlined"
         inputRef={emailRef}
+        defaultValue={emailRef.current}
         InputLabelProps={{ shrink: true }}
         size="small"
         fullWidth

@@ -47,7 +47,7 @@ export const AuthForm = () => {
         label="メールアドレス"
         variant="outlined"
         inputRef={emailRef}
-        defaultValue={emailRef.current}
+        defaultValue={emailRef.current?.value}
         InputLabelProps={{ shrink: true }}
         size="small"
         fullWidth

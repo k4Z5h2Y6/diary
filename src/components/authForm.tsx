@@ -1,11 +1,9 @@
 "use client";
 
 import { signin, signup } from "@/app/auth/sign/actions";
-import { supabase } from "@/consts/supabaseClient";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
-  CircularProgress,
   FormControl,
   IconButton,
   InputAdornment,
@@ -36,6 +34,7 @@ export const AuthForm = () => {
     const password = passwordRef.current?.value || null;
     if (email && password) {
       signup(email, password);
+      alert("メールを確認してください")
     } else {
       alert("正しく入力できていません");
     }

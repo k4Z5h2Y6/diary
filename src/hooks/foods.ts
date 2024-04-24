@@ -4,7 +4,6 @@ import { Dispatch, SetStateAction } from "react";
 
 const supabase = createClientComponentClient<FoodsType>();
 
-//todo snackbar追加
 export async function createFood(
   userId: string,
   foodText: string | null,

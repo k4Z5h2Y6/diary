@@ -2,13 +2,24 @@
 
 import { signin, signup } from "@/app/auth/sign/actions";
 import { supabase } from "@/consts/supabaseClient";
-import { Button, CircularProgress, TextField } from "@mui/material";
-import Head from "next/head";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  Button,
+  CircularProgress,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from "@mui/material";
 import { useRef, useState } from "react";
 
 export const AuthForm = () => {
   const emailRef = useRef<HTMLTextAreaElement>(null);
   const passwordRef = useRef<HTMLTextAreaElement>(null);
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSignin = () => {
     const email = emailRef.current?.value || null;
@@ -37,23 +48,42 @@ export const AuthForm = () => {
         variant="outlined"
         inputRef={emailRef}
         InputLabelProps={{ shrink: true }}
-        defaultValue={emailRef.current?.value}
-        multiline
         size="small"
         fullWidth
         sx={{ marginBottom: "16px" }}
       />
-      <TextField
-        label="パスワード"
-        variant="outlined"
-        inputRef={passwordRef}
-        InputLabelProps={{ shrink: true }}
-        defaultValue={passwordRef.current?.value}
-        multiline
-        size="small"
-        fullWidth
-        sx={{ marginBottom: "16px" }}
-      />
+      <FormControl variant="outlined" fullWidth sx={{ marginBottom: "16px" }}>
+        <InputLabel
+          htmlFor="outlined-adornment-password"
+          shrink={true}
+          size="small"
+        >
+          パスワード
+        </InputLabel>
+        <OutlinedInput
+          id="outlined-adornment-password"
+          type={showPassword ? "text" : "password"}
+          inputRef={passwordRef}
+          notched={true}
+          label="Password"
+          size="small"
+          fullWidth
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={() => setShowPassword((show) => !show)}
+                onMouseDown={(event: React.MouseEvent<HTMLButtonElement>) => {
+                  event.preventDefault();
+                }}
+                edge="end"
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          }
+        />
+      </FormControl>
       <Button
         variant="contained"
         type="submit"

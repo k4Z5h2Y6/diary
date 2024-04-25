@@ -1,3 +1,4 @@
+//コピペtemp
 // "use client";
 
 export const Temp = () => {

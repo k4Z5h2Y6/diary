@@ -1,7 +1,7 @@
 export default function Error() {
   return (
     <>
-      エラー
+      エラー(303)
     </>
   )
 };

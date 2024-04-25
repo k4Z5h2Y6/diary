@@ -22,16 +22,13 @@ export async function signin(
   redirect("/");
 }
 
-export async function signup(
-  email: string,
-  password: string,
-) {
+export async function signup(email: string, password: string) {
   const supabase = createClient();
   const { error } = await supabase.auth.signUp({
     email: email,
     password: password,
   });
-  
+
   if (error) {
     redirect("/error");
   }

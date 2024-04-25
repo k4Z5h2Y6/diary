@@ -51,7 +51,7 @@ export const AuthForm = () => {
         return;
       }
       if (!isValidPassword(password)) {
-        setPasswordError("パスワードは7文字以上のアルファベットで入力してください");
+        setPasswordError("パスワードは6文字以上のアルファベットで入力してください");
         return;
       }
       setEmailError("")
@@ -68,9 +68,9 @@ export const AuthForm = () => {
     return emailPattern.test(email);
   };
 
+  // パスワードが7文字以上のアルファベットか数字であるかをチェック
   const isValidPassword = (password: string) => {
-    // パスワードが7文字以上のアルファベットであるかをチェックする
-    return password.length >= 7 && /^[a-zA-Z0-9]+$/.test(password)
+    return password.length >= 6 && /^[a-zA-Z0-9]+$/.test(password)
   };
 
   return (
@@ -102,6 +102,7 @@ export const AuthForm = () => {
           inputRef={passwordRef}
           notched={true}
           label="Password"
+          placeholder="6文字以上の大文字小文字英数字のみ可"
           size="small"
           fullWidth
           error={!!passwordError}
@@ -139,7 +140,7 @@ export const AuthForm = () => {
         fullWidth
         sx={{ marginBottom: "16px" }}
       >
-        サインアップ
+        サインアップ(初めての方)
       </Button>
     </>
   );

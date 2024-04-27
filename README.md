@@ -20,6 +20,16 @@ https://diary-seven-rho.vercel.app/
 
 ### サインアップ方法と操作説明書
 
+![IMG_0380](https://github.com/k4Z5h2Y6/diary/assets/139014943/0f7405a2-0719-4b85-ae60-070c1687d554)
+
+![IMG_0381](https://github.com/k4Z5h2Y6/diary/assets/139014943/9eb823be-8342-453c-8cbd-56522f1da979)
+
+![IMG_0382](https://github.com/k4Z5h2Y6/diary/assets/139014943/766977bd-013d-401c-aa19-22cd1701cbfb)
+
+![IMG_0384](https://github.com/k4Z5h2Y6/diary/assets/139014943/c44f906c-d76b-4d9e-a6b2-42f5e17ca239)
+
+![IMG_0383](https://github.com/k4Z5h2Y6/diary/assets/139014943/d2a376e3-7c79-48bc-bbc2-2731c42cc7d3)
+
 ### 補足
 - ルーティングはApp Routerを採用。
 - 個人用で作成しましたが、複数アカウントで利用可能。メールアドレスとパスワードでサインアップ、サインイン、サインアウト可能。

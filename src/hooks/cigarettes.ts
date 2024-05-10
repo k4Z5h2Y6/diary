@@ -4,7 +4,6 @@ import {
   UpdateCigaretteType,
 } from "@/consts/cigarettes.types";
 import {
-  User,
   createClientComponentClient,
 } from "@supabase/auth-helpers-nextjs";
 import { Dispatch, SetStateAction } from "react";

@@ -11,7 +11,6 @@ export interface FoodsType {
           ingredient: string | null;
           food_memo: string | null;
           food_img_url: string[] | null;
-          
         };
         Insert: {
           id?: number;
@@ -22,7 +21,6 @@ export interface FoodsType {
           ingredient?: string | null;
           food_memo?: string | null;
           food_img_url?: string[] | null;
-          
         };
         Update: {
           id?: number;
@@ -33,7 +31,6 @@ export interface FoodsType {
           ingredient?: string | null;
           food_memo?: string | null;
           food_img_url?: string[] | null;
-          
         };
         Delete: {
           id: number;
@@ -44,7 +41,6 @@ export interface FoodsType {
           ingredient?: string | null;
           food_memo?: string | null;
           food_img_url?: string[] | null;
-          
         };
       };
     };

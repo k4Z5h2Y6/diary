@@ -33,9 +33,9 @@ export default function DiaryForm({
   const [diaryImgFiles, setDiaryImgFiles] = useState<File[] | null>([]);
 
   //カテゴリー呼び出し
-  const [diaryCategories, setDiaryCategories] = useState<CategoryType[]>([]);
+  const [categories, setCategories] = useState<CategoryType[]>([]);
   const [options, setOptions] = useState<OptionsCategoriesType[]>([]);
-  const [diaryCategoryLabel, setDiaryCategoryLabel] =
+  const [categoryLabel, setCategoryLabel] =
     useState<OptionsCategoriesType | null>(null);
 
   //カテゴリー追加ダイアログ
@@ -47,9 +47,10 @@ export default function DiaryForm({
 
   useEffect(() => {
     //サインアップ後のエラーアラート防止でif (user)
-    if (user) readCategories(user.id, setDiaryCategories);
+    if (user) readCategories(user.id, setCategories);
   }, []);
 
+  //渡されるdiaryDataがあるなら
   useEffect(() => {
     if (diaryData) {
       diaryTextRef.current!.value = diaryData[0].diary_text!;
@@ -58,22 +59,23 @@ export default function DiaryForm({
     }
   }, [diaryData]);
 
+  //カテゴリーのoptionsをフォーマット
   useEffect(() => {
     const options: OptionsCategoriesType[] = [];
-    for (let i = 0; i < diaryCategories.length; i++) {
+    for (let i = 0; i < categories.length; i++) {
       options.push({
-        id: diaryCategories[i].id,
-        label: diaryCategories[i].category_name,
+        id: categories[i].id,
+        label: categories[i].category_name,
       });
-      if (diaryCategory === diaryCategories[i].id) {
-        setDiaryCategoryLabel({
-          id: diaryCategories[i].id,
-          label: diaryCategories[i].category_name,
+      if (diaryCategory === categories[i].id) {
+        setCategoryLabel({
+          id: categories[i].id,
+          label: categories[i].category_name,
         });
       }
     }
     setOptions(options);
-  }, [diaryCategories, diaryCategory]);
+  }, [categories, diaryCategory]);
 
   const imgChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     if (event.target.files) {
@@ -135,7 +137,7 @@ export default function DiaryForm({
     setDiaryCategory(null);
     setDiaryImgUrls(null);
     setDiaryImgFiles(null);
-    setDiaryCategoryLabel(null)
+    setCategoryLabel(null)
   };
 
   const handleClickCancelImg = (index: number) => {
@@ -186,25 +188,24 @@ export default function DiaryForm({
         fullWidth
         sx={{ marginBottom: "16px" }}
       />
-      {diaryCategories ? (
+      {categories ? (
         <Autocomplete
           options={options}
-          value={diaryCategoryLabel}
+          value={categoryLabel}
           onChange={(event: any, newValue: OptionsCategoriesType | null) => {
             if (newValue) {
-              setDiaryCategoryLabel({ id: newValue.id, label: newValue.label });
+              setCategoryLabel({ id: newValue.id, label: newValue.label });
               setDiaryCategory(newValue.id);
             } else {
-              setDiaryCategoryLabel(null);
+              setCategoryLabel(null);
               setDiaryCategory(null);
             }
-            console.log(newValue);
           }}
           renderInput={(params) => (
             <TextField
               {...params}
               label="カテゴリー"
-              defaultValue={diaryCategoryLabel}
+              defaultValue={categoryLabel}
               InputLabelProps={{ shrink: true }}
               fullWidth
             />

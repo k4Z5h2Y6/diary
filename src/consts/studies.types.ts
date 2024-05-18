@@ -9,6 +9,7 @@ export interface StudiesType {
           update_at: string | null
           start_studying: string | null
           finish_studying: string | null
+          study_category: number | null
         }
         Insert: {
           id?: number
@@ -17,6 +18,7 @@ export interface StudiesType {
           update_at?: string | null
           start_studying?: string | null
           finish_studying?: string | null
+          study_category?: number | null
         }
         Update: {
           id?: number
@@ -25,6 +27,7 @@ export interface StudiesType {
           update_at: string | null
           start_studying?: string | null
           finish_studying?: string | null
+          study_category?: number | null
         }
         Delete: {
           id: number
@@ -33,6 +36,7 @@ export interface StudiesType {
           update_at?: string | null
           start_studying?: string | null
           finish_studying?: string | null
+          study_category?: number | null
         }
       }
     }
@@ -57,6 +61,7 @@ export interface UpdateStudyType {
   update_at: string;
   start_studying?: string | null;
   finish_studying?: string | null;
+  study_category?: number | null
 }
 
 export interface StudyDataType {
@@ -66,4 +71,5 @@ export interface StudyDataType {
   update_at: string | null
   start_studying: string | null
   finish_studying: string | null
+  study_category: number | null
 }

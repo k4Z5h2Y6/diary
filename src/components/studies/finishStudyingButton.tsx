@@ -2,18 +2,20 @@
 
 import { User } from "@supabase/auth-helpers-nextjs";
 import { Dispatch, SetStateAction, useState } from "react";
-import { readLatestStudy, updateFinishStudying } from "@/hooks/studies";
-import { UpdateFinishStudyingType } from "@/consts/studies.types";
+import { readLatestStudying, updateFinishStudying } from "@/hooks/studies";
+import { StudyDataType, UpdateFinishStudyingType } from "@/consts/studies.types";
 import { Alert, Button, Snackbar } from "@mui/material";
 
 export default function FinishStudyingButton({
   user,
   isStudying,
-  setIsStudying,
+  id,
+  setStudyingData
 }: {
   user: User | null;
   isStudying: boolean;
-  setIsStudying: Dispatch<SetStateAction<boolean | null>>;
+  id: number;
+  setStudyingData: Dispatch<SetStateAction<StudyDataType[] | null>>
 }) {
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
 
@@ -23,8 +25,8 @@ export default function FinishStudyingButton({
       update_at: currentDate,
       finish_studying: currentDate,
     };
-    await updateFinishStudying(user?.id!, newData, setIsOpenSnackbar);
-    await readLatestStudy(user?.id!, setIsStudying);
+    await updateFinishStudying(user?.id!, newData, id, setIsOpenSnackbar);
+    await readLatestStudying(user?.id!, setStudyingData);
   };
 
   const handleCloseSnackbar = (

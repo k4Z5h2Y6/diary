@@ -1,23 +1,26 @@
 "use client";
 import { User } from "@supabase/auth-helpers-nextjs";
-import { createStudy, readLatestStudy } from "@/hooks/studies";
+import { createStudy, readLatestStudying } from "@/hooks/studies";
 import { Alert, Button, Snackbar } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
+import { StudyDataType } from "@/consts/studies.types";
 
 export default function StartStudyingButton({
   user,
   isStudying,
-  setIsStudying,
+  studyCategory,
+  setStudyingData,
 }: {
   user: User | null;
   isStudying: boolean;
-  setIsStudying: Dispatch<SetStateAction<boolean | null>>;
+  studyCategory: number | null;
+  setStudyingData: Dispatch<SetStateAction<StudyDataType[] | null>>
 }) {
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
 
   const handleClickStartStudying = async () => {
-    await createStudy(user?.id!, setIsOpenSnackbar);
-    await readLatestStudy(user?.id!, setIsStudying);
+    await createStudy(user?.id!, studyCategory, setIsOpenSnackbar);
+    await readLatestStudying(user?.id!, setStudyingData);
   };
 
   const handleCloseSnackbar = (

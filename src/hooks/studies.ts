@@ -11,11 +11,13 @@ const supabase = createClientComponentClient<StudiesType>();
 
 export async function createStudy(
   userId: string,
+  studyCategory: number | null,
   setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>
 ) {
   try {
     const { error } = await supabase.from("studies").insert({
       user_id: userId,
+      study_category: studyCategory,
     });
     if (error) throw error;
     setIsOpenSnackbar(true);
@@ -25,10 +27,34 @@ export async function createStudy(
   }
 }
 
-//単数用
-export async function readLatestStudy(
+//finish_studyingがnullのstudy配列
+// export async function readLatestStudying(
+//   userId: string,
+//   setIsStudying: Dispatch<SetStateAction<boolean | null>>
+// ) {
+//   // "studies" テーブルから作成日が最新の行を取得するクエリを定義します
+//   try {
+//     const { data, error } = await supabase
+//       .from("studies")
+//       .select("*")
+//       .order("created_at", { ascending: false })
+//       .eq("user_id", userId)
+//       .eq("finish_studying", "null")
+//     if (error) throw error;
+
+//     setIsStudying(
+//       data[0]?.start_studying !== null && data[0]?.finish_studying === null
+//     );
+//   } catch (error) {
+//     // alert("作業読み込みエラー");
+//   } finally {
+//   }
+// }
+
+// finish_studyingがnullのstudy配列
+export async function readLatestStudying(
   userId: string,
-  setIsStudying: Dispatch<SetStateAction<boolean | null>>
+  setStudyingData: Dispatch<SetStateAction<StudyDataType[] | null>>
 ) {
   // "studies" テーブルから作成日が最新の行を取得するクエリを定義します
   try {
@@ -37,11 +63,9 @@ export async function readLatestStudy(
       .select("*")
       .order("created_at", { ascending: false })
       .eq("user_id", userId)
-      .limit(1);
+      .is("finish_studying", null) //nullの場合はis
     if (error) throw error;
-    setIsStudying(
-      data[0]?.start_studying !== null && data[0]?.finish_studying === null
-    );
+    setStudyingData(data)
   } catch (error) {
     alert("作業読み込みエラー");
   } finally {
@@ -70,6 +94,7 @@ export async function readLatestStudies(
 export async function updateFinishStudying(
   userId: string,
   newData: UpdateFinishStudyingType,
+  id: number,
   setIsOpenSnackbar: Dispatch<SetStateAction<boolean>>
 ) {
   try {
@@ -77,6 +102,7 @@ export async function updateFinishStudying(
       .from("studies")
       .update(newData)
       .eq("user_id", userId)
+      .eq("id", id)
       .order("created_at", { ascending: false }) // 作成日が最新の行を指定
       .limit(1);
     if (error) throw error;

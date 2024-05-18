@@ -1,62 +1,41 @@
 "use client";
-import {
-  User,
-  createClientComponentClient,
-} from "@supabase/auth-helpers-nextjs";
+
+import { User } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import StartStudyingButton from "./startStudyingButton";
 import FinishStudyingButton from "./finishStudyingButton";
-import { readLatestStudy } from "@/hooks/studies";
-import { StudiesType } from "@/consts/studies.types";
-import { Grid, Skeleton } from "@mui/material";
+import { readLatestStudying } from "@/hooks/studies";
+import { Autocomplete, Button, Grid, Skeleton, TextField } from "@mui/material";
+import { CategoryType, OptionsCategoriesType } from "@/consts/categories.types";
+import { readCategories } from "@/hooks/categories";
+import { StudyDataType } from "@/consts/studies.types";
+import { StudiesForm } from "./studiesForm";
+
+//fetcherの作成必要あり？
 
 export const LatestStudiesListener = ({ user }: { user: User | null }) => {
-  
-  const [isStudying, setIsStudying] = useState<boolean | null>(null);
-
-  // const supabase = createClientComponentClient<StudiesType>();
-  // useEffect(() => {
-  //   // Realtimeクライアントを使用してsleepsテーブルを監視
-  //   const subscription = supabase
-  //     .channel("studies")
-  //     .on(
-  //       "postgres_changes",
-  //       {
-  //         event: "*",
-  //         schema: "public",
-  //         table: "studies",
-  //       },
-  //       (payload) => {
-  //         // 変更後のデータに対しての処理を記載
-  //         readLatestStudy(setIsStudying);
-  //       }
-  //     )
-  //     .subscribe();
-
-  //   // コンポーネントがアンマウントされたときにサブスクリプションを解除
-  //   return () => {
-  //     subscription.unsubscribe();
-  //   };
-  // }, [supabase]);
+  const [studyingData, setStudyingData] = useState<StudyDataType[] | null>(
+    null
+  );
 
   useEffect(() => {
     //サインアップ後のエラーアラート防止でif (user)
-    if (user) readLatestStudy(user?.id!, setIsStudying);
+    if (user) {
+      readLatestStudying(user?.id!, setStudyingData);
+    }
   }, []);
 
   return (
     <>
-      {isStudying === null ? (
-        <Skeleton variant="rounded" height={36.5} />
+      {studyingData?.length! > 0 ? (
+        <>
+          {studyingData!.map((sd) => (
+            <StudiesForm key={sd.id} user={user} studyingData={sd} setStudyingData={setStudyingData}/>
+          ))}
+          <StudiesForm user={user} studyingData={null} setStudyingData={setStudyingData}/>
+        </>
       ) : (
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <StartStudyingButton user={user} isStudying={isStudying} setIsStudying={setIsStudying}/>
-          </Grid>
-          <Grid item xs={6}>
-            <FinishStudyingButton user={user} isStudying={isStudying} setIsStudying={setIsStudying}/>
-          </Grid>
-        </Grid>
+        <StudiesForm user={user} studyingData={null} setStudyingData={setStudyingData}/>
       )}
     </>
   );

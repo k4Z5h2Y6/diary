@@ -3,10 +3,10 @@ import { LatestSleepsListener } from "@/components/sleeps/latestSleepsListener";
 import { Database } from "@/consts/database.types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import { LatestStudiesListener } from "@/components/studies/latestStudiesListener";
 import { Container, Divider } from "@mui/material";
 import FoodForm from "@/components/foods/foodForm";
 import DiaryForm from "@/components/diaries/diaryForm";
+import { LatestStudiesListener } from "@/components/studies/latestStudiesListener";
 
 export default async function Home() {
   const supabase = createServerComponentClient<Database>({ cookies });

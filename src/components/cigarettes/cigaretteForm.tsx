@@ -90,14 +90,15 @@ export const CigarettesForm = ({
     if (latestCigaretteData) {
       if (latestCigaretteData.update_at) {
         //最新喫煙データに更新日付があった場合
-        const date = new Date(latestCigaretteData.update_at);
-        DoseResetCounter(date);
-        calculateNoSmokingTime(date);
+        const createdDate = new Date(latestCigaretteData.created_at);
+        const updateDate = new Date(latestCigaretteData.update_at);
+        DoseResetCounter(createdDate); //updateDateに設定するとdata画面で編集した際にエラー発生
+        calculateNoSmokingTime(updateDate);
       } else {
         //最新喫煙データに更新日付がなかった場合
-        const date = new Date(latestCigaretteData.created_at);
-        DoseResetCounter(date);
-        calculateNoSmokingTime(date);
+        const createdDate = new Date(latestCigaretteData.created_at);
+        DoseResetCounter(createdDate);
+        calculateNoSmokingTime(createdDate);
       }
     } else {
       setCigarettesCounter(0)

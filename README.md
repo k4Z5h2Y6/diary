@@ -31,6 +31,7 @@ https://diary-seven-rho.vercel.app/
 ![IMG_0383](https://github.com/k4Z5h2Y6/diary/assets/139014943/d2a376e3-7c79-48bc-bbc2-2731c42cc7d3)
 
 ### 補足
+- App Routerの理解を深めるために制作。
 - ルーティングはApp Routerを採用。
 - 個人用で作成しましたが、複数アカウントで利用可能。メールアドレスとパスワードでサインアップ、サインイン、サインアウト可能。
 - Apple製品で撮影された写真のデフォルトの拡張子であるheic形式の写真はアップロードできない。プラグインを入れれば対処可能。
